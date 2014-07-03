@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:shape="rectangle"
+    		android:useLevel="false" >
+    	<gradient
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
+        	android:useLevel="false"
+        	android:type="linear"
+        	android:angle="90"
+         />
+		<stroke
+        	android:width="0dp"
+        	android:color="#171717" />
+        <corners
+        	android:radius="0dp" />
+        <padding
+            android:left="0dp"
+            android:top="0dp"
+            android:right="0dp"
+            android:bottom="0dp" />
+		</shape>
+    </item>
+
+    <item android:state_focused="true" >
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:shape="rectangle"
+    		android:useLevel="false" >
+    	<gradient
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
+        	android:useLevel="false"
+        	android:type="linear"
+        	android:angle="90"
+         />
+		<stroke
+        	android:width="0dp"
+        	android:color="#171717" />
+        <corners
+        	android:radius="0dp" />
+        <padding
+            android:left="0dp"
+            android:top="0dp"
+            android:right="0dp"
+            android:bottom="0dp" />
+		</shape>
+    </item>
+
+    <item>        
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+    		android:shape="rectangle"
+    		android:useLevel="false" >
+    	<gradient
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
+        	android:useLevel="false"
+        	android:type="linear"
+        	android:angle="90"
+         />
+		<stroke
+        	android:width="0dp"
+        	android:color="#171717" />
+        <corners
+        	android:radius="0dp" />
+        <padding
+            android:left="0dp"
+            android:top="0dp"
+            android:right="0dp"
+            android:bottom="0dp" />
+		</shape>
+    </item>
+</selector>
