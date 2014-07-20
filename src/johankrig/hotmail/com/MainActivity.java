@@ -8,16 +8,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
 import android.support.v4.view.ViewPager;
 
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends FragmentActivity implements Communicator
 {
+	public MainFragment mFrag;
 	public ViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
-	boolean bool;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -26,10 +25,6 @@ public class MainActivity extends FragmentActivity
 		setContentView(R.layout.activity_main);
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
-		bool = false;
-		destination = "search";
-		
-		
 	}
 
 	@Override
@@ -38,29 +33,24 @@ public class MainActivity extends FragmentActivity
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
-	public Bundle getBundle()
-	
-	{
-		return bundle;
-	}
-	
+
+	//onClick method for mainMapButton found in fragment_route.xml
 	public void mainMapButton(View view)
 	{
 		viewPager.setCurrentItem(0, true);
 	}
-	
-	public void routeButton(View view)
+	@Override
+	public void getRoutes(Bundle bundle)
 	{
-		Fragment m_frag = ((MyAdapter) viewPager.getAdapter()).getCurrentFragment();
-		destination = ((MainFragment) m_frag).g_Destination();
-		
-		EditText searchBar = (EditText) findViewById(R.id.searchBar);
-		destination = searchBar.getText().toString();
-		bundle.putString("destination", destination);
-        viewPager.setCurrentItem(1, true);
+		viewPager.setCurrentItem(1, true);
+		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
+		rtFrag.update(bundle.getString("destination"), bundle.getDouble("latitude"), bundle.getDouble("longitude"));
 	}
-
+	@Override
+	public void respond()
+	{
+		viewPager.setCurrentItem(0, true);
+	}
 }
 
 class MyAdapter extends FragmentPagerAdapter
@@ -71,13 +61,18 @@ class MyAdapter extends FragmentPagerAdapter
 	}
 	
 	//slick as fuuuuuuuuu
-	private Fragment mCurrentFragment;
+	private MainFragment mainFrag;
+	private RouteFragment routeFrag;
 
-    public Fragment getCurrentFragment() 
+    public MainFragment getMainFragment() 
     {
-        return mCurrentFragment;
+        return mainFrag;
     }
-
+	public RouteFragment getRouteFragment()
+	{
+		return routeFrag;
+	}
+    
 	@Override
 	public Fragment getItem(int arg0) 
 	{
@@ -85,13 +80,13 @@ class MyAdapter extends FragmentPagerAdapter
 		if(arg0 == 0)
 		{
 			fragment = new MainFragment();
-			mCurrentFragment = fragment;
+			mainFrag = (MainFragment) fragment;
 		}
 		
 		if(arg0 == 1)
 		{
 			fragment = new RouteFragment();
-			mCurrentFragment = fragment;
+			routeFrag = (RouteFragment) fragment;
 		}
 		return fragment;
 	}

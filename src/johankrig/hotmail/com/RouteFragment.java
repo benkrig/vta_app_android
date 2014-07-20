@@ -1,7 +1,6 @@
 //RouteFragment.java - Benjamin Krig
 //This screen will be used to choose and view information about specific routes
 //Fragment locates destination and updates routes upon change of destination.
-//
 
 package johankrig.hotmail.com;
 
@@ -11,19 +10,13 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.app.AlertDialog.Builder;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -32,14 +25,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class RouteFragment extends Fragment
 {
 	//Global variables
 	public GoogleMap map;
     public LatLng destinationLatLng = new LatLng(0, 0);
+    public LatLng userLatLng = new LatLng(0,0);
+    Communicator comm;
     
     //Holds the String value of EditText searchBar field from MainFragment.java
 	private String destination;
@@ -48,24 +43,28 @@ public class RouteFragment extends Fragment
 	private Button routebtn1;
 	private Button routebtn2;
     private Button routebtn3;
-    Button btn;
-    private LatLng userloc = new LatLng(0, 0);
-    private double[] userlocation;
+    Button mainMapButton;
+    GeoAsyncTask findDestination = new GeoAsyncTask();
+    DirectionsAsyncTask drawRoute = new DirectionsAsyncTask();
+    
 	
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
         final View rootView = inflater.inflate(R.layout.fragment_route, container, false);
-
-        //Get String value of EditText searchBar field from MainFragment.java
-        
-        //Bundle mainActivityBundle = ((MainActivity) getActivity()).getBundle();
-    	//destination = mainActivityBundle.getString("destination");
+        comm = (Communicator) getActivity();
     	
-    	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION
-    	btn = (Button) rootView.findViewById(R.id.mainMapButton);
-    	btn.setText(destination);
+    	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION    	
+    	mainMapButton = (Button)rootView.findViewById(R.id.mainMapButton);
+    	mainMapButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v)
+            {
+                comm.respond();
+            }
+        });
         
     	//Set up map for RouteFragment
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routemap)).getMap();
@@ -82,13 +81,6 @@ public class RouteFragment extends Fragment
         //userlocation[0] = map.getMyLocation().getLatitude();
         //userlocation[1] = map.getMyLocation().getLongitude();
         
-        //IT IS CALLING THIS CODE ON APP STARTUP, CALL IT ONLY WHEN ROUTEBUTTON IS PRESSED
-        /* testing for error if(mainActivityBundle.getBoolean("update") == true)
-        {            	
-        	destination = mainActivityBundle.getString("destination");
-        	GeoAsyncTask findDestination = new GeoAsyncTask(destination);
-        	findDestination.execute();
-        }*/
     	
 
     	routebtn1 = (Button) rootView.findViewById(R.id.button1);
@@ -99,17 +91,8 @@ public class RouteFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-            	Bundle newBundle = ((MainActivity) getActivity()).getBundle();
-            	if(newBundle.getBoolean("update") == true);
-                {            	
-                	destination = newBundle.getString("destination");
-                	GeoAsyncTask findDestination = new GeoAsyncTask(destination);
-                	findDestination.execute();
-                }
             	//Route number is hard coded based on button number
-            	DirectionsAsyncTask route = new DirectionsAsyncTask(userlocation, destinationLatLng, 0);
-            	route.execute();
-                
+             	drawRoute.execute();
             }
         });
         
@@ -122,8 +105,7 @@ public class RouteFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-            	DirectionsAsyncTask route = new DirectionsAsyncTask(userlocation, destinationLatLng, 1);
-            	route.execute();
+            	drawRoute.execute();
 				
             }
         });
@@ -136,14 +118,13 @@ public class RouteFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-				DirectionsAsyncTask route = new DirectionsAsyncTask(userlocation, destinationLatLng, 2);
-            	route.execute();
+            	drawRoute.execute();
             }
         });
         
         return rootView;
-        
     }
+    
 	//decodes google polyline, formula has already been developed online.
 	private List<LatLng> decodePoly(String encoded) 
 	{
@@ -192,7 +173,7 @@ public class RouteFragment extends Fragment
 	{
 	    try 
 	    {
-	            //Tranform the reponse string into a JSON object
+	            //Tranform the String response RESULT into a JSON object
 	           final JSONObject json = new JSONObject(result);
 	           JSONArray routeArray = json.getJSONArray("routes");
 	           
@@ -211,7 +192,7 @@ public class RouteFragment extends Fragment
 	                LatLng src = list.get(z);
 	                LatLng dest = list.get(z+1);
 	                Polyline line = map.addPolyline(new PolylineOptions()
-	                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude,   dest.longitude))
+	                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
 	                .width(2)
 	                .color(Color.BLUE).geodesic(true));
 	           }
@@ -219,6 +200,7 @@ public class RouteFragment extends Fragment
 	    } 
 	    catch (JSONException e) 
 	    {
+            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
 
 	    }
 	} 
@@ -229,10 +211,11 @@ public class RouteFragment extends Fragment
 	    private ProgressDialog progressDialog;
 		private String DAPIKEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	    private long time = System.currentTimeMillis()/1000;
-	    private double[] uloc;
 	    private LatLng eloc;
+	    private LatLng uloc;
 
-	    private int route;
+	    //HARDCODED FOR NOW CHANGE THIS
+	    private int route = 1;
 		private String directionsurl;
 
 		//takes a LatLng for the start point and a string for the endpoint
@@ -240,15 +223,11 @@ public class RouteFragment extends Fragment
 		//then uses google directions api to get directions from the points
 		//if directions are received it will return a TRUE boolean, otherwise it will return a FALSE
 		
-		//Constructor
-		//Creates API call from Starting location and destinationLatLng
-		DirectionsAsyncTask( double[] userlocation , LatLng destinationLatLng, int routeNum)
-	    {
-			uloc = userlocation;
-	    	eloc = destinationLatLng;
-			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc[0] + "," + uloc[1] + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
-			route = routeNum;
-	    }
+		public void updateUserLocation(LatLng uloc, LatLng eloc)
+		{
+			this.uloc = new LatLng(uloc.latitude, uloc.longitude);
+			this.eloc = new LatLng(eloc.latitude, eloc.longitude);
+		}
 		
 	    @Override
 	    protected void onPreExecute() 
@@ -258,11 +237,14 @@ public class RouteFragment extends Fragment
 	        progressDialog.setMessage("Fetching route, Please wait...");
 	        progressDialog.setIndeterminate(true);
 	        progressDialog.show();
+			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
+	        
 	    }
 	    @Override
 	    protected String doInBackground(Void... params) 
 	    {
 	        JSONParser jParser = new JSONParser();
+	        //1 for directions api
 	        String json = jParser.getJSONFromUrl(directionsurl, 1);
 	        return json;
 	    }
@@ -290,18 +272,18 @@ public class RouteFragment extends Fragment
 		//takes a LatLng for the start point and a string for the endpoint
 		//using google geocode api finds the LatLng of the String Adress
 		//then uses google directions api to get directions from the points
-		GeoAsyncTask(String destination)
-	    {
+		public void updateDestination(String destination)
+		{
 			dest = destination;
 			geocodingurl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + dest + "&components=administrative_area:CA|country:US&key=" + DAPIKEY + "&sensor=true";
-	    }
+		}
 		
 	    @Override
 	    protected void onPreExecute() 
 	    {
 	        super.onPreExecute();
 	        progressDialog = new ProgressDialog(getActivity());
-	        progressDialog.setMessage("Finding route, Please wait...");
+	        progressDialog.setMessage("Finding destination, Please wait...");
 	        progressDialog.setIndeterminate(true);
 	        progressDialog.show();
 	    }
@@ -322,7 +304,7 @@ public class RouteFragment extends Fragment
 	        
 	        if(result!=null)
 	        {
-	           //Tranform the string into a json object
+	           //Transform the string into a json object
 	           try 
 	           {
 	        	   JSONObject json = new JSONObject(result);
@@ -330,32 +312,41 @@ public class RouteFragment extends Fragment
 	        	   JSONObject address = addresses.getJSONObject(0);
 	        	   JSONObject geometry = address.getJSONObject("geometry");
 	        	   JSONObject location = geometry.getJSONObject("location");
-	         	   
+	         	   location.get("lat");
 	        	   //Public LatLng in RouteFragment.java
-	        	   destinationLatLng = new LatLng ((location.getDouble("lat")), ((location.getDouble("lng"))));
+	        	   destinationLatLng = new LatLng ((Double.parseDouble(location.getString("lat"))),(Double.parseDouble(location.getString("lng"))));
 	        	   
 	        	   //then call directions async task with destination as param
 	           } 
 	           catch (JSONException e) 
 	           {
-	        	  
+		            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
+
 	           }
 	        }
 	        else
 	        {
-	        	Builder alert = new AlertDialog.Builder(getActivity().getApplicationContext());
-	            alert.setTitle("Error");
-	            alert.setMessage("Can't locate destination, please choose a new one!");
-	            alert.setPositiveButton("OK", null);
-	            alert.show();
+	            Toast.makeText(getActivity(), "No Location found", Toast.LENGTH_SHORT).show();
 	        }
 	    }
 	}
 
-	public void updateText(String dest) 
+	//gets user location and destination.
+	//recalls GeoAsyncTask and updates DrawPath variables
+	public void update(String dest, double latitude, double longitude) 
 	{
 		destination = dest;
-		btn.setText(dest);
+		mainMapButton.setText(destination);
+		
+		GeoAsyncTask getDestination = new GeoAsyncTask();
+		getDestination.updateDestination(destination);
+		getDestination.execute();
+		
+		//some error using latlngs............
+		userLatLng = new LatLng(latitude, longitude);
+        Toast.makeText(getActivity(), userLatLng.toString() + destinationLatLng.toString(), Toast.LENGTH_LONG).show();
+
+		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 	}
 	
 }
