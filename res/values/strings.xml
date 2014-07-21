@@ -6,8 +6,9 @@
     <string name="search_field">search</string>
     <string name="routes_button_string">Routes</string>
     <string name="route1">Route 1</string>
-    <string name="route2"></string>
-    <string name="route3">></string>
+    <string name="route2">Route 2</string>
+    <string name="route3">Route 3</string>
+    <string name="select_route">Use Route</string>
     <string name="directions">Back</string>
 
 </resources>

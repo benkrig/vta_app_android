@@ -225,10 +225,12 @@ containing a value of this type.
         public static final int vta=0x7f020020;
     }
     public static final class id {
-        public static final int action_settings=0x7f05000f;
+        public static final int action_settings=0x7f050011;
+        public static final int addressNameButton=0x7f05000f;
         public static final int button1=0x7f05000b;
         public static final int button2=0x7f05000c;
         public static final int button3=0x7f05000d;
+        public static final int button5=0x7f050010;
         public static final int hybrid=0x7f050004;
         public static final int linearLayout1=0x7f050006;
         public static final int mainMapButton=0x7f05000a;
@@ -350,7 +352,7 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060013;
-        public static final int directions=0x7f060022;
+        public static final int directions=0x7f060023;
         /**  Location client code resources (prefix with location_client) 
          */
         public static final int location_client_powered_by_google=0x7f06001a;
@@ -359,6 +361,7 @@ containing a value of this type.
         public static final int route3=0x7f060021;
         public static final int routes_button_string=0x7f06001e;
         public static final int search_field=0x7f06001d;
+        public static final int select_route=0x7f060022;
     }
     public static final class style {
         /** 

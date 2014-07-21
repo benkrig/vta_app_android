@@ -2,6 +2,11 @@
 //This screen will be used to choose and view information about specific routes
 //Fragment locates destination and updates routes upon change of destination.
 
+//TO DO: 
+//1. add button for route selection
+//2. add text based directions option
+
+
 package johankrig.hotmail.com;
 
 import johankrig.hotmail.com.R;
@@ -10,6 +15,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -34,6 +41,9 @@ public class RouteFragment extends Fragment
 	public GoogleMap map;
     public LatLng destinationLatLng = new LatLng(0, 0);
     public LatLng userLatLng = new LatLng(0,0);
+    LatLng updateLatLng;
+    
+    //Interface
     Communicator comm;
     
     //Holds the String value of EditText searchBar field from MainFragment.java
@@ -44,6 +54,7 @@ public class RouteFragment extends Fragment
 	private Button routebtn2;
     private Button routebtn3;
     Button mainMapButton;
+    Button addressNameButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute = new DirectionsAsyncTask();
     
@@ -55,8 +66,8 @@ public class RouteFragment extends Fragment
         final View rootView = inflater.inflate(R.layout.fragment_route, container, false);
         comm = (Communicator) getActivity();
     	
-    	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION    	
-    	mainMapButton = (Button)rootView.findViewById(R.id.mainMapButton);
+    	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION  
+        addressNameButton = (Button) rootView.findViewById(R.id.addressNameButton);
     	mainMapButton.setOnClickListener(new OnClickListener() 
         {
             @Override
@@ -71,15 +82,10 @@ public class RouteFragment extends Fragment
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         
-        /*ZOOM TO USER LOCATION AUTO
-        LatLng latLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-        CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 10);
-        map.moveCamera(update);*/ 
-        
-
-    	//SOME PROBLEM WITH THIS LINE
-        //userlocation[0] = map.getMyLocation().getLatitude();
-        //userlocation[1] = map.getMyLocation().getLongitude();
+        //could be error here
+        updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+        //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
         
     	
 
@@ -93,6 +99,10 @@ public class RouteFragment extends Fragment
             {
             	//Route number is hard coded based on button number
              	drawRoute.execute();
+                //could be error here
+                updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+                //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
             }
         });
         
@@ -105,8 +115,7 @@ public class RouteFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-            	drawRoute.execute();
-				
+            	drawRoute.execute();		
             }
         });
         routebtn3 = (Button) rootView.findViewById(R.id.button3);
@@ -191,7 +200,8 @@ public class RouteFragment extends Fragment
 	           {
 	                LatLng src = list.get(z);
 	                LatLng dest = list.get(z+1);
-	                Polyline line = map.addPolyline(new PolylineOptions()
+	                @SuppressWarnings("unused")
+					Polyline line = map.addPolyline(new PolylineOptions()
 	                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
 	                .width(2)
 	                .color(Color.BLUE).geodesic(true));
@@ -314,14 +324,12 @@ public class RouteFragment extends Fragment
 	        	   JSONObject location = geometry.getJSONObject("location");
 	         	   location.get("lat");
 	        	   //Public LatLng in RouteFragment.java
+	         	   //Something to do with JSON formatting, have to parse double from string
 	        	   destinationLatLng = new LatLng ((Double.parseDouble(location.getString("lat"))),(Double.parseDouble(location.getString("lng"))));
-	        	   
-	        	   //then call directions async task with destination as param
 	           } 
 	           catch (JSONException e) 
 	           {
-		            Toast.makeText(getActivity(), "Error", Toast.LENGTH_SHORT).show();
-
+		            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
 	           }
 	        }
 	        else
@@ -333,19 +341,19 @@ public class RouteFragment extends Fragment
 
 	//gets user location and destination.
 	//recalls GeoAsyncTask and updates DrawPath variables
-	public void update(String dest, double latitude, double longitude) 
+	public void update(String destination, double latitude, double longitude) 
 	{
-		destination = dest;
-		mainMapButton.setText(destination);
+		this.destination = destination;
+		addressNameButton.setText(this.destination);
 		
 		GeoAsyncTask getDestination = new GeoAsyncTask();
-		getDestination.updateDestination(destination);
+		//Send destination string to GeoAsyncTask and get the LatLng for the string
+		getDestination.updateDestination(this.destination);
 		getDestination.execute();
 		
-		//some error using latlngs............
+		//Get current user location
 		userLatLng = new LatLng(latitude, longitude);
-        Toast.makeText(getActivity(), userLatLng.toString() + destinationLatLng.toString(), Toast.LENGTH_LONG).show();
-
+		
 		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 	}
 	

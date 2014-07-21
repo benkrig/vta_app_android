@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/searchBar"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -21,7 +21,6 @@
                 android:background="#c8b1de"
                 android:ems="10"
                 android:inputType="textPostalAddress"
-                android:text="@string/search_field"
                 android:hint="@string/search_field"
 />
 
