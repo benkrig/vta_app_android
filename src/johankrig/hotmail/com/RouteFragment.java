@@ -56,19 +56,24 @@ public class RouteFragment extends Fragment
     Button mainMapButton;
     Button addressNameButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
-    DirectionsAsyncTask drawRoute = new DirectionsAsyncTask();
+    DirectionsAsyncTask drawRoute;
     
+
 	
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
-        final View rootView = inflater.inflate(R.layout.fragment_route, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_route, container, false);
         comm = (Communicator) getActivity();
     	
+        drawRoute = new DirectionsAsyncTask();
+        
     	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION  
         addressNameButton = (Button) rootView.findViewById(R.id.addressNameButton);
-    	mainMapButton.setOnClickListener(new OnClickListener() 
+    	
+        mainMapButton = (Button) rootView.findViewById(R.id.mainMapButton);
+        mainMapButton.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v)
@@ -83,9 +88,9 @@ public class RouteFragment extends Fragment
         map.getUiSettings().setMyLocationButtonEnabled(true);
         
         //could be error here
-        updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+        //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
         //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
+        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
         
     	
 
@@ -98,11 +103,17 @@ public class RouteFragment extends Fragment
             public void onClick(View v)
             {
             	//Route number is hard coded based on button number
-             	drawRoute.execute();
-                //could be error here
-                updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+            	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
+                {
+                	drawRoute = new DirectionsAsyncTask();
+                }
+                if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
+                {
+                	drawRoute.execute();
+                }                //could be error here
+                //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
                 //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
+                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
             }
         });
         
@@ -115,7 +126,14 @@ public class RouteFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-            	drawRoute.execute();		
+            	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
+                {
+                	drawRoute = new DirectionsAsyncTask();
+                }
+                if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
+                {
+                	drawRoute.execute();
+                }	
             }
         });
         routebtn3 = (Button) rootView.findViewById(R.id.button3);
@@ -127,12 +145,20 @@ public class RouteFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-            	drawRoute.execute();
+            	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
+                {
+                	drawRoute = new DirectionsAsyncTask();
+                }
+                if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
+                {
+                	drawRoute.execute();
+                }
             }
         });
         
         return rootView;
     }
+
     
 	//decodes google polyline, formula has already been developed online.
 	private List<LatLng> decodePoly(String encoded) 

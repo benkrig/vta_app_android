@@ -10,5 +10,6 @@
     <string name="route3">Route 3</string>
     <string name="select_route">Use Route</string>
     <string name="directions">Back</string>
-
+    <string name="searchBarText"> </string>
+    
 </resources>

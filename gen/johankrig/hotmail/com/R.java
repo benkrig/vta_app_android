@@ -360,6 +360,7 @@ containing a value of this type.
         public static final int route2=0x7f060020;
         public static final int route3=0x7f060021;
         public static final int routes_button_string=0x7f06001e;
+        public static final int searchBarText=0x7f060024;
         public static final int search_field=0x7f06001d;
         public static final int select_route=0x7f060022;
     }

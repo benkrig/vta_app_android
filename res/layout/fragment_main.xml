@@ -22,6 +22,8 @@
                 android:ems="10"
                 android:inputType="textPostalAddress"
                 android:hint="@string/search_field"
+                android:text="@string/searchBarText"
+                android:imeOptions="actionDone"
 />
 
             <Button

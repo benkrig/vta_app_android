@@ -119,6 +119,7 @@ int string route1 0x7f06001f
 int string route2 0x7f060020
 int string route3 0x7f060021
 int string routes_button_string 0x7f06001e
+int string searchBarText 0x7f060024
 int string search_field 0x7f06001d
 int string select_route 0x7f060022
 int style AppBaseTheme 0x7f090000
