@@ -229,7 +229,7 @@ public class RouteFragment extends Fragment
 	                @SuppressWarnings("unused")
 					Polyline line = map.addPolyline(new PolylineOptions()
 	                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-	                .width(2)
+	                .width(3)
 	                .color(Color.BLUE).geodesic(true));
 	           }
 
@@ -380,6 +380,13 @@ public class RouteFragment extends Fragment
 		//Get current user location
 		userLatLng = new LatLng(latitude, longitude);
 		
+		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+	}
+	public void testmethod(LatLng dest)
+	{
+		GPSTracker gps = new GPSTracker(getActivity());
+		userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+		destinationLatLng = dest;
 		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 	}
 	

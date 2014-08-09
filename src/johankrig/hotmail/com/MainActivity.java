@@ -1,5 +1,7 @@
 package johankrig.hotmail.com;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import johankrig.hotmail.com.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -50,6 +52,15 @@ public class MainActivity extends FragmentActivity implements Communicator
 	public void respond()
 	{
 		viewPager.setCurrentItem(0, true);
+	}
+	
+	@Override
+	public void returnRoutes(LatLng destination)
+	{
+		viewPager.setCurrentItem(1, true);
+		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
+		//rtFrag.update(bundle.getString("destination"), bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+		rtFrag.testmethod(destination);
 	}
 }
 
