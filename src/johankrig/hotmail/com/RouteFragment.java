@@ -12,6 +12,8 @@ package johankrig.hotmail.com;
 import johankrig.hotmail.com.R;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,6 +59,7 @@ public class RouteFragment extends Fragment
     Button addressNameButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute;
+    MyTimerTask bus;
     
 
 	
@@ -109,11 +112,15 @@ public class RouteFragment extends Fragment
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
-                	drawRoute.execute();
+                	drawRoute.execute(); 
                 }                //could be error here
                 //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
                 //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
                 //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
+
+            	MyTimerTask myTask = new MyTimerTask(getActivity(), map);
+                Timer myTimer = new Timer();
+                myTimer.schedule(myTask, 3000, 1000); 
             }
         });
         
@@ -281,7 +288,7 @@ public class RouteFragment extends Fragment
 	    {
 	        JSONParser jParser = new JSONParser();
 	        //1 for directions api
-	        String json = jParser.getJSONFromUrl(directionsurl, 1);
+	        String json = jParser.getDirectionApiJsonResponse(directionsurl);
 	        return json;
 	    }
 	    @Override
@@ -348,7 +355,6 @@ public class RouteFragment extends Fragment
 	        	   JSONObject address = addresses.getJSONObject(0);
 	        	   JSONObject geometry = address.getJSONObject("geometry");
 	        	   JSONObject location = geometry.getJSONObject("location");
-	         	   location.get("lat");
 	        	   //Public LatLng in RouteFragment.java
 	         	   //Something to do with JSON formatting, have to parse double from string
 	        	   destinationLatLng = new LatLng ((Double.parseDouble(location.getString("lat"))),(Double.parseDouble(location.getString("lng"))));

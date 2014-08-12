@@ -62,6 +62,7 @@ public class MainActivity extends FragmentActivity implements Communicator
 		//rtFrag.update(bundle.getString("destination"), bundle.getDouble("latitude"), bundle.getDouble("longitude"));
 		rtFrag.testmethod(destination);
 	}
+
 }
 
 class MyAdapter extends FragmentPagerAdapter

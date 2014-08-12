@@ -7,6 +7,7 @@ import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import johankrig.hotmail.com.R;
 import android.content.Context;
@@ -102,6 +103,7 @@ public class MainFragment extends Fragment
                 {
                 	geoTask.execute(destination);
                 }
+                
             }
         });
 	}
@@ -113,6 +115,9 @@ public class MainFragment extends Fragment
 	{
 		return data;
 	}
+
+		
+	
 }
 
 

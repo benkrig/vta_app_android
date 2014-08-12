@@ -93,6 +93,7 @@ class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
         		
         		// Locate the first location
         		if(i==0)
+        			
         			map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
             	
         	}

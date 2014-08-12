@@ -10,4 +10,5 @@ public interface Communicator {
 	public void getRoutes(Bundle bundle);
 	
 	public void returnRoutes(LatLng destination);
+	
 }
