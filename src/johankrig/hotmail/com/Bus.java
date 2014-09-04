@@ -5,17 +5,17 @@ public class Bus {
 	String vehicleID;
 	String lat;
 	String lng;
-//	String timestamp;
+	String timestamp;
 	
 	
 
 
-	public Bus(String vehicleID, String lat, String lng) {
+	public Bus(String vehicleID, String lat, String lng, String timestamp) {
 		// TODO Auto-generated constructor stub
 		this.vehicleID = vehicleID;
 		this.lat = lat;
 		this.lng = lng;
-		//this.timestamp = timestamp;
+		this.timestamp = timestamp;
 	}
 
 

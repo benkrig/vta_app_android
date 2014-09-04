@@ -59,7 +59,8 @@ public class RouteFragment extends Fragment
     Button addressNameButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute;
-    MyTimerTask bus;
+    GetBusLocationTask bus;
+    GPSTracker gps;
     
 
 	
@@ -85,6 +86,8 @@ public class RouteFragment extends Fragment
             }
         });
         
+        gps = new GPSTracker(getActivity());
+        
     	//Set up map for RouteFragment
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routemap)).getMap();
         map.setMyLocationEnabled(true);
@@ -106,6 +109,11 @@ public class RouteFragment extends Fragment
             public void onClick(View v)
             {
             	//Route number is hard coded based on button number
+            	if(gps.canGetLocation())
+            	{
+            		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(gps.getLatitude(), gps.getLongitude())));
+            	}
+
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
@@ -118,7 +126,7 @@ public class RouteFragment extends Fragment
                 //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
                 //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
 
-            	MyTimerTask myTask = new MyTimerTask(getActivity(), map);
+            	GetBusLocationTask myTask = new GetBusLocationTask(map);
                 Timer myTimer = new Timer();
                 myTimer.schedule(myTask, 3000, 1000); 
             }

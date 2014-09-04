@@ -18,12 +18,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	
+	private final String region = " San Jose";
 	Context context;
 	LatLng latLng;
 	MarkerOptions markerOptions;
 	GoogleMap map;
 	String markerString = "Get Route";
-	final int MAX_RESULTS = 5;
+	final int MAX_RESULTS = 7;
 	GPSTracker gps;
 
 	
@@ -44,10 +45,14 @@ class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
     	{      
     		try 
     		{
+    			//right here you will make a call to JSONParser to get the json response
+    			//from the google places api.
+    			//parse the data returned from the response and take the top 5
+    			//results and turn them into addresses
         		//GEOCODER IS REUTNRING ALL KINDS OF ADDRESSES wtffff
         		Geocoder geocoder = new Geocoder(context);
         		
-        		addresses = geocoder.getFromLocationName(locationName, MAX_RESULTS);
+        		addresses = geocoder.getFromLocationName(locationName + region, MAX_RESULTS);
         	}
         	catch (Exception e) 
         	{

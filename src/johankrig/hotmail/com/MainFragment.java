@@ -40,9 +40,12 @@ public class MainFragment extends Fragment
             Bundle savedInstanceState) 
 	{
 		rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
+        
+
+		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
+
         
 		return rootView;
     }
@@ -52,7 +55,7 @@ public class MainFragment extends Fragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		comm = (Communicator) getActivity();
-
+		
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
 
 		//center map on user

@@ -184,6 +184,13 @@ public class JSONParser
 		return json;	
 	}
     
+    public String getSearchBarAddress(String locationName)
+    {
+    	
+    	
+    	return json;
+    }
+    
     public String getGeoLocationApiResponse(String url)
     {
 

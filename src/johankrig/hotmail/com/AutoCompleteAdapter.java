@@ -20,11 +20,12 @@ import com.google.android.gms.maps.GoogleMap;
 
 class AutoCompleteAdapter extends ArrayAdapter<Address> implements Filterable 
 {
- 
+	private final String region = " San Jose";
 	private LayoutInflater mInflater;
 	private Geocoder mGeocoder;
 	private StringBuilder mSb = new StringBuilder();
 	GoogleMap map;
+	private final int numberofDropDownAddresses = 4;
 	
 	public AutoCompleteAdapter(final Context context, GoogleMap googlemap) 
 	{
@@ -79,7 +80,7 @@ class AutoCompleteAdapter extends ArrayAdapter<Address> implements Filterable
 				{
 					try 
 					{
-						addressList = mGeocoder.getFromLocationName((String) constraint, 4);
+						addressList = mGeocoder.getFromLocationName((String) constraint + region, numberofDropDownAddresses);
 					} 
 					catch (IOException e) 
 					{
