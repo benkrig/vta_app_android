@@ -21,7 +21,9 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -225,10 +227,11 @@ public class RouteFragment extends Fragment
 	    {
 	            //Tranform the String response RESULT into a JSON object
 	           final JSONObject json = new JSONObject(result);
+	           //Get the Routes Array from the JsonObject
 	           JSONArray routeArray = json.getJSONArray("routes");
 	           
 	           //Select which route to draw
-	           //test to see if route exists... add this feature...
+	           //Throws a JSONException if no route is found at index routeNumber
 	           JSONObject routes = routeArray.getJSONObject(routeNumber);
 	           
 	           //Select overview_polyline
@@ -236,7 +239,7 @@ public class RouteFragment extends Fragment
 	           String encodedString = overviewPolylines.getString("points");
 	           List<LatLng> list = decodePoly(encodedString);
 
-	           //Draw ALL the points in the LatLng List onto map
+	           //Draw lines between ALL points from LatLng List list onto map
 	           for(int z = 0; z < list.size() - 1; z++)
 	           {
 	                LatLng src = list.get(z);
@@ -247,12 +250,50 @@ public class RouteFragment extends Fragment
 	                .width(3)
 	                .color(Color.BLUE).geodesic(true));
 	           }
+	           //routes -> legs -> steps -> transit_details -> arrival/location_stop -> location latlng
+	           JSONArray legs = routes.getJSONArray("legs");
+	           JSONObject leg = legs.getJSONObject(0);
+	           JSONArray steps = leg.getJSONArray("steps");
+	           //for each step, draw bus stops on map
+	           for (int z = 0; z < steps.length(); z ++)
+	           {
+		           	JSONObject step = steps.getJSONObject(z);
+		           	if(step.has("transit_details"))
+		           	{
+		           		JSONObject transit_details = step.getJSONObject("transit_details");
+		           
+		           		JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
+		           		JSONObject arrival_location = arrival_stop.getJSONObject("location");
+
+		           		MarkerOptions markerOptions = new MarkerOptions();
+		           		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
+		           		markerOptions.title(transit_details.getString("headsign"));
+		           		markerOptions.snippet(arrival_stop.getString("name"));
+		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		           		map.addMarker(markerOptions);
+		           		
+		           		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
+		           		JSONObject departure_location = departure_stop.getJSONObject("location");
+		           		
+		           		markerOptions = new MarkerOptions();
+		           		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
+		           		markerOptions.title(transit_details.getString("headsign"));
+		           		markerOptions.snippet(departure_stop.getString("name"));
+		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		           		map.addMarker(markerOptions);
+		    		}
+		    		//add markers to map
+		           
+	           }
+
+
+	           //Draw ALL stops along route
 
 	    } 
 	    catch (JSONException e) 
 	    {
-            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
-
+	    	//Called if no route is found at Index routeNumber
+            Toast.makeText(getActivity(), "No route found :: E: "+e.toString(), Toast.LENGTH_LONG).show();
 	    }
 	} 
 	
@@ -269,11 +310,6 @@ public class RouteFragment extends Fragment
 	    private int route = 1;
 		private String directionsurl;
 
-		//takes a LatLng for the start point and a string for the endpoint
-		//using google geocode api finds the LatLng of the String Adress
-		//then uses google directions api to get directions from the points
-		//if directions are received it will return a TRUE boolean, otherwise it will return a FALSE
-		
 		public void updateUserLocation(LatLng uloc, LatLng eloc)
 		{
 			this.uloc = new LatLng(uloc.latitude, uloc.longitude);
