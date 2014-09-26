@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	
-	private final String region = " San Jose";
+	private String region = " San Jose, CA";
 	Context context;
 	LatLng latLng;
 	MarkerOptions markerOptions;
@@ -26,6 +26,7 @@ class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	String markerString = "Get Route";
 	final int MAX_RESULTS = 7;
 	GPSTracker gps;
+	String locationName;
 
 	
 	public GeocoderAsyncTask(Context c, GoogleMap m)
@@ -34,11 +35,14 @@ class GeocoderAsyncTask extends AsyncTask<String, Void, List<Address>>{
 		context = c;
 		gps = new GPSTracker(context);
 	}
+	public void setLocation(String newLocation)
+	{
+		locationName = newLocation;
+	}
 
     @Override
     protected List<Address> doInBackground(String... params) {
         
-    	String locationName = params[0];
         List<Address> addresses = null;
 
     	if(gps.canGetLocation() == true)

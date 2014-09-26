@@ -11,4 +11,6 @@ public interface Communicator {
 	
 	public void returnRoutes(LatLng destination);
 	
+	public void updateDirectionsList(String JSON);
+	
 }

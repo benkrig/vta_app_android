@@ -32,6 +32,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -123,10 +124,7 @@ public class RouteFragment extends Fragment
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
                 	drawRoute.execute(); 
-                }                //could be error here
-                //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-                //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
-                //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
+                }
 
             	GetBusLocationTask myTask = new GetBusLocationTask(map);
                 Timer myTimer = new Timer();
@@ -175,6 +173,7 @@ public class RouteFragment extends Fragment
         
         return rootView;
     }
+    
 
     
 	//decodes google polyline, formula has already been developed online.
@@ -345,6 +344,7 @@ public class RouteFragment extends Fragment
 	        if(result!=null)
 	        {
 	            drawPath(result, route);
+	            comm.updateDirectionsList(result);
 	        }
 	    }
 	}

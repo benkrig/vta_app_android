@@ -1,5 +1,8 @@
 package johankrig.hotmail.com;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import johankrig.hotmail.com.R;
@@ -10,11 +13,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.support.v4.view.ViewPager;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
 {
+	private ListView mainListView;  
+	private ArrayAdapter<String> listAdapter;  
+	  
 	public MainFragment mFrag;
 	public ViewPager viewPager;
 	public String destination;
@@ -59,8 +67,14 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		viewPager.setCurrentItem(1, true);
 		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
-		//rtFrag.update(bundle.getString("destination"), bundle.getDouble("latitude"), bundle.getDouble("longitude"));
 		rtFrag.testmethod(destination);
+	}
+
+	@Override
+	public void updateDirectionsList(String JSON) 
+	{
+		DirectionsFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).getDirectionsFragment();
+		directionsFragment.updateDirectionsList(JSON);
 	}
 
 }
@@ -75,6 +89,7 @@ class MyAdapter extends FragmentPagerAdapter
 	//slick as fuuuuuuuuu
 	private MainFragment mainFrag;
 	private RouteFragment routeFrag;
+	private DirectionsFragment directionsFrag;
 
     public MainFragment getMainFragment() 
     {
@@ -83,6 +98,10 @@ class MyAdapter extends FragmentPagerAdapter
 	public RouteFragment getRouteFragment()
 	{
 		return routeFrag;
+	}
+	public DirectionsFragment getDirectionsFragment()
+	{
+		return directionsFrag;
 	}
     
 	@Override
@@ -100,12 +119,17 @@ class MyAdapter extends FragmentPagerAdapter
 			fragment = new RouteFragment();
 			routeFrag = (RouteFragment) fragment;
 		}
+		if(arg0 == 2)
+		{
+			fragment = new DirectionsFragment();
+			directionsFrag = (DirectionsFragment) fragment;
+		}
 		return fragment;
 	}
 
 	@Override
 	public int getCount() 
 	{
-		return 2;
+		return 3;
 	}
 }

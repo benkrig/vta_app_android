@@ -20,7 +20,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 class AutoCompleteAdapter extends ArrayAdapter<Address> implements Filterable 
 {
-	private final String region = " San Jose";
+	private final String region = " San Jose, CA";
 	private LayoutInflater mInflater;
 	private Geocoder mGeocoder;
 	private StringBuilder mSb = new StringBuilder();

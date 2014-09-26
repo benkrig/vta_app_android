@@ -14,6 +14,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,6 @@ public class MainFragment extends Fragment
 	private Button addressSearchButton;
 	public Communicator comm;
 	private String destination = "";
-	private Bundle data = new Bundle();
 	GeocoderAsyncTask geoTask;
 	GPSTracker gps;
 	
@@ -39,7 +39,16 @@ public class MainFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
-		rootView = inflater.inflate(R.layout.fragment_main, container, false);
+		if (rootView!= null) {
+	        ViewGroup parent = (ViewGroup) rootView.getParent();
+	        if (parent != null)
+	            parent.removeView(rootView);
+	    }
+	    try {
+	        rootView= inflater.inflate(R.layout.fragment_main, container, false);
+	    } catch (InflateException e) {
+	        /* map is already there, just return view as it is */
+	    }
         
 
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
@@ -82,41 +91,23 @@ public class MainFragment extends Fragment
             public void onClick(View v)
             {
         		destination = searchBar.getEditableText().toString();
-
-        		Bundle newData = new Bundle();
-        		
-        		newData.putString("destination", destination);
-                newData.putInt("fragment", 1);
-                if(gps.canGetLocation() == true)
-                {
-                	newData.putDouble("latitude", gps.getLatitude());
-                	newData.putDouble("longitude", gps.getLongitude());
-                }
-                setData(newData);
                 
                 //AsyncTask can only execute ONCE
                 //Status.FINISHED, create a new instance : this sets mStatus to PENDING
                 //Status.PENDING, execute.
                 if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
                 {
-                	//geoTask = new FindLocationsAsync(getActivity(), map);
                 	geoTask = new GeocoderAsyncTask(getActivity(), map);
                 }
                 if(geoTask.getStatus() == AsyncTask.Status.PENDING)
                 {
-                	geoTask.execute(destination);
+                	geoTask.setLocation(destination);
+                	geoTask.execute();
                 }
+                else{}
                 
             }
         });
-	}
-	public void setData(Bundle newData)
-	{
-		data = newData;
-	}
-	public Bundle getData()
-	{
-		return data;
 	}
 
 		
@@ -142,61 +133,7 @@ class InfoWindowClickAdapter implements OnInfoWindowClickListener
 		Toast.makeText(context, 
 				marker.getSnippet() + marker.getId(), 
 				Toast.LENGTH_SHORT).show();
-		//put data in bundle
-		
-		//send bundle through interface to RouteFragment and get dem routes boiiii
 		comm.returnRoutes(marker.getPosition());
 	}
 	
 }
-
-/*
-Timer simple TimerTask Java Android example
-Posted on September 26, 2011 by admin	
-
-TimerTask with updating of TextView here
-
- 
-package cz.okhelp.timer;
- 
-import java.util.Timer;
-import java.util.TimerTask;
- 
-import android.app.Activity;
-import android.os.Bundle;
-import android.widget.TextView;
- 
-public class TimerActivity extends Activity {
-TextView hTextView;
-@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        hTextView = (TextView)findViewById(R.id.idTextView);
-        MyTimerTask myTask = new MyTimerTask();
-        Timer myTimer = new Timer();
-//        public void schedule (TimerTask task, long delay, long period) 
-//        Schedule a task for repeated fixed-delay execution after a specific delay.
-//
-//        Parameters
-//        task  the task to schedule. 
-//        delay  amount of time in milliseconds before first execution. 
-//        period  amount of time in milliseconds between subsequent executions. 
- 
-        myTimer.schedule(myTask, 3000, 1500);        
- 
-    }
-class MyTimerTask extends TimerTask {
-	  public void run() {
-		  // ERROR
-		 hTextView.setText("Impossible");
-		 // how update TextView in link below  
-                 // http://android.okhelp.cz/timer-task-timertask-run-cancel-android-example/
- 
-	    System.out.println("");
-	  }
-	}
- 
- 
-}
-*/
