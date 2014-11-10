@@ -49,17 +49,12 @@ public class GetBusLocationTask extends TimerTask
 		{
 			DrawBus draw = new DrawBus();
 			draw.execute();
-			Log.e("RUN METHOD", markerList.toString());
 			firstRun = false;
-
-			
 		}
 		else
 		{
 			DrawBus draw = new DrawBus();
 			draw.execute();
-			Log.e("Secondrun", markerList.toString());
-
 		}
 		
 	}

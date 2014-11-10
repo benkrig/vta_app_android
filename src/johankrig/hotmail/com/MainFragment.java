@@ -82,7 +82,7 @@ public class MainFragment extends Fragment
 
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
-		searchBar.setAdapter(new AutoCompleteAdapter(getActivity(), map));
+		searchBar.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line));
 		
 		addressSearchButton = (Button) getActivity().findViewById(R.id.routeMenuButton);
 		addressSearchButton.setOnClickListener(new OnClickListener() 

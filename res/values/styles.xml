@@ -17,7 +17,7 @@
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         </style>
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+    <style name="MyActionBar" parent="@android:style/Theme.NoTitleBar">
         	<item name="android:background">@drawable/gradbg</item>
         </style>
 

@@ -3,8 +3,6 @@
 //Fragment locates destination and updates routes upon change of destination.
 
 //TO DO: 
-//1. add button for route selection
-//2. add text based directions option
 
 
 package johankrig.hotmail.com;
@@ -32,12 +30,12 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class RouteFragment extends Fragment
@@ -46,27 +44,22 @@ public class RouteFragment extends Fragment
 	public GoogleMap map;
     public LatLng destinationLatLng = new LatLng(0, 0);
     public LatLng userLatLng = new LatLng(0,0);
-    LatLng updateLatLng;
+    Timer myTimer = new Timer();
+    GetBusLocationTask myTask = null;
     
     //Interface
     Communicator comm;
-    
-    //Holds the String value of EditText searchBar field from MainFragment.java
-	private String destination;
 	
 	//Private variables
 	private Button routebtn1;
 	private Button routebtn2;
     private Button routebtn3;
-    Button mainMapButton;
-    Button addressNameButton;
+    ImageButton mainMapButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute;
     GetBusLocationTask bus;
     GPSTracker gps;
     
-
-	
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -74,36 +67,38 @@ public class RouteFragment extends Fragment
         View rootView = inflater.inflate(R.layout.fragment_route, container, false);
         comm = (Communicator) getActivity();
     	
-        drawRoute = new DirectionsAsyncTask();
-        
-    	//SET A BUTTON OR TEXT FIELD TO SHOW CURRENT DESTINATION  
-        addressNameButton = (Button) rootView.findViewById(R.id.addressNameButton);
-    	
-        mainMapButton = (Button) rootView.findViewById(R.id.mainMapButton);
-        mainMapButton.setOnClickListener(new OnClickListener() 
-        {
-            @Override
-            public void onClick(View v)
-            {
-                comm.respond();
-            }
-        });
-        
         gps = new GPSTracker(getActivity());
         
     	//Set up map for RouteFragment
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routemap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
+        //This button returns the user to home search screen
+        
+        mainMapButton = (ImageButton) rootView.findViewById(R.id.addressNameButton);
+        mainMapButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v)
+            {
+            	
+            	//Erase variables
+            	map.clear();
+            	
+            	//Return to home search screen
+                comm.respond();
+                
+            }
+        });
+        
         
         //could be error here
         //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
         //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
         
-    	
 
-    	routebtn1 = (Button) rootView.findViewById(R.id.button1);
+    	routebtn1 = (Button) rootView.findViewById(R.id.routebutton1);
     	//OnClick ROUTEBUTTON1
     	//Main route directions will be drawn onto map
         routebtn1.setOnClickListener(new OnClickListener() 
@@ -112,27 +107,30 @@ public class RouteFragment extends Fragment
             public void onClick(View v)
             {
             	//Route number is hard coded based on button number
-            	if(gps.canGetLocation())
-            	{
-            		map.animateCamera(CameraUpdateFactory.newLatLng(new LatLng(gps.getLatitude(), gps.getLongitude())));
-            	}
 
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
+                	drawRoute.setRouteNumber(0);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
+                	map.clear();
+                	drawRoute.setRouteNumber(0);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 	drawRoute.execute(); 
                 }
-
-            	GetBusLocationTask myTask = new GetBusLocationTask(map);
+                
                 Timer myTimer = new Timer();
+                if(myTask !=null){
+                myTask.cancel();}
+            	myTask = new GetBusLocationTask(map);
                 myTimer.schedule(myTask, 3000, 1000); 
             }
         });
         
-        routebtn2 = (Button) rootView.findViewById(R.id.button2);
+        routebtn2 = (Button) rootView.findViewById(R.id.routebutton2);
     	//OnClick ROUTEBUTTON2
     	//Alternate route 1 directions will be drawn onto map
         routebtn2.setOnClickListener(new OnClickListener() 
@@ -140,18 +138,30 @@ public class RouteFragment extends Fragment
             @Override
             public void onClick(View v) 
             {
-            	//Route number is hard coded based on button number
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
+                	drawRoute.setRouteNumber(1);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
+                	map.clear();
+                	drawRoute.setRouteNumber(1);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 	drawRoute.execute();
-                }	
+                }
+
+                Timer myTimer = new Timer();
+                if(myTask !=null){
+                myTask.cancel();}
+            	myTask = new GetBusLocationTask(map);
+                myTimer.schedule(myTask, 3000, 1000); 
+
             }
         });
-        routebtn3 = (Button) rootView.findViewById(R.id.button3);
+        
+        routebtn3 = (Button) rootView.findViewById(R.id.routebutton3);
     	//OnClick ROUTEBUTTON3
     	//Alternate route 2 directions will be drawn onto map
         routebtn3.setOnClickListener(new OnClickListener() 
@@ -163,11 +173,22 @@ public class RouteFragment extends Fragment
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
+                	drawRoute.setRouteNumber(2);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
+                	map.clear();
+                	drawRoute.setRouteNumber(2);
+            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 	drawRoute.execute();
                 }
+
+                Timer myTimer = new Timer();
+                if(myTask !=null){
+                myTask.cancel();}
+            	myTask = new GetBusLocationTask(map);
+                myTimer.schedule(myTask, 3000, 1000); 
             }
         });
         
@@ -309,6 +330,10 @@ public class RouteFragment extends Fragment
 	    private int route = 1;
 		private String directionsurl;
 
+		public void setRouteNumber(int num)
+		{
+			route = num;
+		}
 		public void updateUserLocation(LatLng uloc, LatLng eloc)
 		{
 			this.uloc = new LatLng(uloc.latitude, uloc.longitude);
@@ -318,7 +343,7 @@ public class RouteFragment extends Fragment
 	    @Override
 	    protected void onPreExecute() 
 	    {
-	        super.onPreExecute(); 
+	        super.onPreExecute();
 	        progressDialog = new ProgressDialog(getActivity());
 	        progressDialog.setMessage("Fetching route, Please wait...");
 	        progressDialog.setIndeterminate(true);
@@ -414,29 +439,18 @@ public class RouteFragment extends Fragment
 	        }
 	    }
 	}
-
-	//gets user location and destination.
-	//recalls GeoAsyncTask and updates DrawPath variables
-	public void update(String destination, double latitude, double longitude) 
-	{
-		this.destination = destination;
-		addressNameButton.setText(this.destination);
-		
-		GeoAsyncTask getDestination = new GeoAsyncTask();
-		//Send destination string to GeoAsyncTask and get the LatLng for the string
-		getDestination.updateDestination(this.destination);
-		getDestination.execute();
-		
-		//Get current user location
-		userLatLng = new LatLng(latitude, longitude);
-		
-		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
-	}
-	public void testmethod(LatLng dest)
+	
+//updates userLatLng, destinationLatLng
+	public void updateFragment(LatLng dest)
 	{
 		GPSTracker gps = new GPSTracker(getActivity());
 		userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 		destinationLatLng = dest;
+		
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 10));
+		
+		
+		drawRoute = new DirectionsAsyncTask();
 		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 	}
 	

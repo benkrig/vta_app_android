@@ -49,13 +49,7 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		viewPager.setCurrentItem(0, true);
 	}
-	@Override
-	public void getRoutes(Bundle bundle)
-	{
-		viewPager.setCurrentItem(1, true);
-		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
-		rtFrag.update(bundle.getString("destination"), bundle.getDouble("latitude"), bundle.getDouble("longitude"));
-	}
+
 	@Override
 	public void respond()
 	{
@@ -67,7 +61,7 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		viewPager.setCurrentItem(1, true);
 		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
-		rtFrag.testmethod(destination);
+		rtFrag.updateFragment(destination);
 	}
 
 	@Override
