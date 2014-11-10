@@ -1,13 +1,11 @@
 package johankrig.hotmail.com;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import johankrig.hotmail.com.R;
 import android.content.Context;
@@ -30,31 +28,32 @@ public class MainFragment extends Fragment
 	private GoogleMap map;
 	private View rootView;
 	private Button addressSearchButton;
-	public Communicator comm;
-	private String destination = "";
-	GeocoderAsyncTask geoTask;
-	GPSTracker gps;
-	
+	private Communicator comm;
+	private String searchString = "";
+	private AddressSearchAsyncTask geoTask;
+	private GPSTracker gps;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
-		if (rootView!= null) {
+		if (rootView!= null) 
+		{
 	        ViewGroup parent = (ViewGroup) rootView.getParent();
 	        if (parent != null)
 	            parent.removeView(rootView);
 	    }
-	    try {
+	    try 
+	    {
 	        rootView= inflater.inflate(R.layout.fragment_main, container, false);
-	    } catch (InflateException e) {
+	    } 
+	    catch (InflateException e) 
+	    {
 	        /* map is already there, just return view as it is */
 	    }
         
-
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
-
         
 		return rootView;
     }
@@ -72,14 +71,10 @@ public class MainFragment extends Fragment
 		if(gps.canGetLocation())
 		{
 			LatLng updateLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-			@SuppressWarnings("unused")
-			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
 		}
 		
-		
-    	geoTask = new GeocoderAsyncTask(getActivity(), map);
-
+    	geoTask = new AddressSearchAsyncTask(getActivity(), map);
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
 		searchBar.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line));
@@ -90,18 +85,18 @@ public class MainFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-        		destination = searchBar.getEditableText().toString();
+        		searchString = searchBar.getEditableText().toString();
                 
                 //AsyncTask can only execute ONCE
                 //Status.FINISHED, create a new instance : this sets mStatus to PENDING
                 //Status.PENDING, execute.
                 if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
                 {
-                	geoTask = new GeocoderAsyncTask(getActivity(), map);
+                	geoTask = new AddressSearchAsyncTask(getActivity(), map);
                 }
                 if(geoTask.getStatus() == AsyncTask.Status.PENDING)
                 {
-                	geoTask.setLocation(destination);
+                	geoTask.setLocation(searchString);
                 	geoTask.execute();
                 }
                 else{}

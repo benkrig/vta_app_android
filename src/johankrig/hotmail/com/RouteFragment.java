@@ -54,6 +54,7 @@ public class RouteFragment extends Fragment
 	private Button routebtn1;
 	private Button routebtn2;
     private Button routebtn3;
+    private ImageButton textDirectionsButton;
     ImageButton mainMapButton;
     GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute;
@@ -75,7 +76,7 @@ public class RouteFragment extends Fragment
         map.getUiSettings().setMyLocationButtonEnabled(true);
         //This button returns the user to home search screen
         
-        mainMapButton = (ImageButton) rootView.findViewById(R.id.addressNameButton);
+        mainMapButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
         mainMapButton.setOnClickListener(new OnClickListener() 
         {
             @Override
@@ -189,6 +190,15 @@ public class RouteFragment extends Fragment
                 myTask.cancel();}
             	myTask = new GetBusLocationTask(map);
                 myTimer.schedule(myTask, 3000, 1000); 
+            }
+        });
+        textDirectionsButton = (ImageButton) rootView.findViewById(R.id.textDirectionsButton);
+        textDirectionsButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v) 
+            {
+            	comm.gotoTextDirections();
             }
         });
         
@@ -369,7 +379,7 @@ public class RouteFragment extends Fragment
 	        if(result!=null)
 	        {
 	            drawPath(result, route);
-	            comm.updateDirectionsList(result);
+	            comm.updateDirectionsList(result, route);
 	        }
 	    }
 	}
@@ -452,6 +462,8 @@ public class RouteFragment extends Fragment
 		
 		drawRoute = new DirectionsAsyncTask();
 		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+    	drawRoute.setRouteNumber(0);
+		drawRoute.execute();
 	}
 	
 }

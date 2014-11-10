@@ -3,19 +3,29 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:padding="5dp" >
- 
+
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-         >
-    </ImageView>
- 
-    <TextView
-        android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+id/label" >
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:src="@drawable/backbtn"
+        android:contentDescription="" />
+
+    <TextView
+        android:id="@+id/directionsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    
+    <TextView
+        android:id="@+id/directionsDetails"
+        android:maxLines="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+ 	>
     </TextView>
+
+
  
 </LinearLayout>
