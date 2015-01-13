@@ -1,7 +1,5 @@
 package johankrig.hotmail.com;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -13,17 +11,12 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.support.v4.view.ViewPager;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
-{
-	private ListView mainListView;  
-	private ArrayAdapter<String> listAdapter;  
-	  
-	public MainFragment mFrag;
+{	  
+	public LocationSearchFragment mFrag;
 	public ViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
@@ -59,8 +52,8 @@ public class MainActivity extends FragmentActivity implements Communicator
 	@Override
 	public void returnRoutes(LatLng destination)
 	{
-		viewPager.setCurrentItem(1, true);
-		RouteFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
+		viewPager.setCurrentItem(1);
+		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
 		rtFrag.updateFragment(destination);
 	}
 
@@ -80,6 +73,13 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		viewPager.setCurrentItem(1);
 	}
+	@Override
+	public void getPlaceDetails(LatLng location, String place)
+	{
+		viewPager.setCurrentItem(3);
+		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
+		placeFragment.initialize(location, place);
+	}
 
 }
 
@@ -91,21 +91,26 @@ class MyAdapter extends FragmentPagerAdapter
 	}
 	
 	//slick as fuuuuuuuuu
-	private MainFragment mainFrag;
-	private RouteFragment routeFrag;
+	private LocationSearchFragment mainFrag;
+	private RouteSelectionFragment routeFrag;
 	private DirectionsFragment directionsFrag;
+	private PlaceFragment placeFrag;
 
-    public MainFragment getMainFragment() 
+    public LocationSearchFragment getMainFragment() 
     {
         return mainFrag;
     }
-	public RouteFragment getRouteFragment()
+	public RouteSelectionFragment getRouteFragment()
 	{
 		return routeFrag;
 	}
 	public DirectionsFragment getDirectionsFragment()
 	{
 		return directionsFrag;
+	}
+	public PlaceFragment getPlaceFragment()
+	{
+		return placeFrag;
 	}
     
 	@Override
@@ -114,19 +119,24 @@ class MyAdapter extends FragmentPagerAdapter
 		Fragment fragment = null;
 		if(arg0 == 0)
 		{
-			fragment = new MainFragment();
-			mainFrag = (MainFragment) fragment;
+			fragment = new LocationSearchFragment();
+			mainFrag = (LocationSearchFragment) fragment;
 		}
 		
 		if(arg0 == 1)
 		{
-			fragment = new RouteFragment();
-			routeFrag = (RouteFragment) fragment;
+			fragment = new RouteSelectionFragment();
+			routeFrag = (RouteSelectionFragment) fragment;
 		}
 		if(arg0 == 2)
 		{
 			fragment = new DirectionsFragment();
 			directionsFrag = (DirectionsFragment) fragment;
+		}
+		if(arg0 == 3)
+		{
+			fragment = new PlaceFragment();
+			placeFrag = (PlaceFragment) fragment;
 		}
 		return fragment;
 	}
@@ -134,6 +144,6 @@ class MyAdapter extends FragmentPagerAdapter
 	@Override
 	public int getCount() 
 	{
-		return 3;
+		return 4;
 	}
 }

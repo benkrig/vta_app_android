@@ -1,7 +1,7 @@
 
 
 
-//add custom infowindo on marker click, add more detail to text directions,
+//add custom infowindow on marker click, add more detail to text directions,
 
 //smooth transitions between all screens
 
@@ -28,6 +28,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -40,6 +42,8 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     private final String OUT_JSON = "/json";
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	private final int MAX_RESULTS = 7;
+	//In meters
+	private final int RADIUS = 10000;
 
 	Context context;
 	MarkerOptions markerOptions;
@@ -54,6 +58,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 		this.context = context;
 		this.gps = new GPSTracker(context);
 	}
+	
 	public void setLocation(String newKeyword)
 	{
 		searchKeyword = newKeyword;
@@ -62,7 +67,6 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     @Override
     protected List<Address> doInBackground(String... params)
     {
-        
         List<Address> addresses = null;
         addresses = this.getAddresses(searchKeyword, gps);
         
@@ -74,7 +78,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     {
         if(addresses == null || addresses.size() == 0)
         {
-            Toast.makeText(context, "No addresses found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Nothing nearby found!", Toast.LENGTH_SHORT).show();
         }
         else
         {
@@ -94,7 +98,10 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         		markerOptions.title(address.getFeatureName());
         		markerOptions.snippet(addressText + " "
         				+ markerString);
-        		
+        		  BitmapDescriptor iconColorBitmap 
+        		   = BitmapDescriptorFactory.defaultMarker(
+        		     BitmapDescriptorFactory.HUE_VIOLET);
+        		markerOptions.icon(iconColorBitmap);
         		map.addMarker(markerOptions);
         		
         		//center map on first location
@@ -121,7 +128,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
             StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + TYPE_NEARBY + OUT_JSON);
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
-            endpointURL.append("&radius=5000");
+            endpointURL.append("&radius="+RADIUS);
             endpointURL.append("&keyword=" + URLEncoder.encode(keyword, "utf8"));
             
             Log.e(LOG_TAG, "endpointURL: " + endpointURL);

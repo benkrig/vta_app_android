@@ -1,0 +1,100 @@
+
+    
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:tools="http://schemas.android.com/tools"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	tools:context=".RouteSelectionFragment"
+        android:id="@+id/linearLayout1"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageButton
+                android:id="@+id/directionsBackButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/rtbtn"
+				android:contentDescription="@string/desc"
+                android:src="@drawable/backbutton" />
+            <Button
+                android:id="@+id/metaforaGenericNoClickButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight="3"
+                android:text="@string/metaforaString"
+                android:background="@drawable/rtbtn" />
+
+            <ImageButton
+                android:id="@+id/useRouteButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/rtbtn"
+                android:contentDescription="@string/desc"
+                android:src="@drawable/chooseroute"
+                 />
+        </LinearLayout>
+
+        <fragment
+            android:id="@+id/routeselectionmap"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            android:layout_gravity="center"
+            android:layout_weight="1" 
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00ffffff"
+            android:gravity="bottom" >
+
+            <ImageButton
+                android:id="@+id/textDirectionsButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/backbtn"
+                android:src="@drawable/directionsicon"
+                android:contentDescription="@string/directions" />
+
+            <Button
+                android:id="@+id/routebutton1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rtbtn"
+                android:text="@string/route1" />
+
+            <Button
+                android:id="@+id/routebutton2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rtbtn"
+                android:text="@string/route2" />
+
+            <Button
+                android:id="@+id/routebutton3"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/rtbtn"
+                android:text="@string/route3" />
+        </LinearLayout>
+
+    </LinearLayout>

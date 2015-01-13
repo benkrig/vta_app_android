@@ -28,8 +28,7 @@ public class DirectionsFragment extends Fragment
     Communicator comm;
 	private ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
-	private
-	String DirectionsJSON;
+	private String DirectionsJSON;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 

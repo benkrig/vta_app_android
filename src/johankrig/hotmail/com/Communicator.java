@@ -14,4 +14,6 @@ public interface Communicator
 
 	public void gotoRouteSelection();
 	
+	public void getPlaceDetails(LatLng location, String place);
+	
 }
