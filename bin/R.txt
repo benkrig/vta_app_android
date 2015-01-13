@@ -111,13 +111,11 @@ int id classic 0x7f070011
 int id directionsBackButton 0x7f070018
 int id directionsDetails 0x7f070017
 int id directionsText 0x7f070016
-int id gotoRoutesButton 0x7f07002d
 int id grayscale 0x7f070012
 int id holo_dark 0x7f070005
 int id holo_light 0x7f070006
 int id hybrid 0x7f070004
 int id linearLayout1 0x7f07001c
-int id location 0x7f07002c
 int id logo 0x7f070015
 int id mainmap 0x7f07001f
 int id match_parent 0x7f07000c
@@ -128,7 +126,8 @@ int id none 0x7f070000
 int id normal 0x7f070001
 int id pager 0x7f070014
 int id phone 0x7f07002b
-int id placeInfoButton 0x7f070028
+int id placeGetRoutesButton 0x7f07002d
+int id placeInfoBackButton 0x7f070028
 int id production 0x7f070007
 int id routeDirectionTextView 0x7f070022
 int id routeMenuButton 0x7f07001e
@@ -146,6 +145,7 @@ int id terrain 0x7f070003
 int id textDirectionsButton 0x7f070021
 int id textDirectionsListView 0x7f07001b
 int id useRouteButton 0x7f070023
+int id website 0x7f07002c
 int id wrap_content 0x7f07000d
 int integer google_play_services_version 0x7f080000
 int layout activity_main 0x7f030000

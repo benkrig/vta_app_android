@@ -19,10 +19,14 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 
@@ -35,8 +39,11 @@ public class PlaceFragment extends Fragment
 	TextView placeName;
 	TextView placeAddress;
 	TextView placePhone;
-	
-	//JSONObject detailsJSON = new JSONObject();
+	TextView placeWeb;
+	LatLng placeLoc;
+
+	ImageButton mainMapButton;
+	Button getRoutesButton;
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -46,6 +53,29 @@ public class PlaceFragment extends Fragment
         placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
+        
+        mainMapButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
+        mainMapButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v)
+            {
+            	//Return to home search screen
+                comm.respond();
+            }
+        });
+        
+        getRoutesButton = (Button) rootView.findViewById(R.id.placeGetRoutesButton);
+        getRoutesButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v)
+            {
+            	//Return to home search screen
+            	comm.returnRoutes(placeLoc);
+            }
+        });
+        
         
         return rootView;
 	}
@@ -57,12 +87,15 @@ public class PlaceFragment extends Fragment
     	placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
+    	placeWeb = (TextView) rootView.findViewById(R.id.website);
+
         comm = (Communicator) getActivity();
 	}
 
     
     public void initialize(LatLng location, String keyword)
     {
+    	placeLoc = new LatLng(location.latitude, location.longitude);
 	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
 	    getPlace.execute();
     }
@@ -73,19 +106,19 @@ public class PlaceFragment extends Fragment
 	    {
 			JSONObject detailsJSON = new JSONObject(result.toString());
 
-	    	Log.d("73", ""+detailsJSON.names());
-
 			placeName.setText(detailsJSON.getString("name"));
-	    	Log.d("ini", detailsJSON.getString("name"));
-
-	    	Log.d("ini", detailsJSON.getString("formatted_address"));
-
 			placeAddress.setText(detailsJSON.getString("formatted_address"));
+			float size = placeAddress.getTextSize();
+			
+			placePhone.setTextSize(size/2);
 			placePhone.setText(detailsJSON.getString("formatted_phone_number"));
+			
+			placeWeb.setTextSize(size/2);
+			placeWeb.setText(detailsJSON.getString("website"));
+			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
 		} 
 	    
 	    catch (JSONException e) {
-			// TODO Auto-generated catch block
         	Log.e("details ", "101", e);
 		}
 	}

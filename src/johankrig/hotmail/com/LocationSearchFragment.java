@@ -126,7 +126,6 @@ class InfoWindowClickAdapter implements OnInfoWindowClickListener
 				marker.getSnippet() + marker.getId(), 
 				Toast.LENGTH_SHORT).show();
         Log.d("locationsearch", "oninfowindowclicked");
-
 		comm.getPlaceDetails(marker.getPosition(), marker.getTitle());
 		//comm.returnRoutes(marker.getPosition());
 	}

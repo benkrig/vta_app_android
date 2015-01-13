@@ -432,13 +432,11 @@ containing a value of this type.
         public static final int directionsBackButton=0x7f070018;
         public static final int directionsDetails=0x7f070017;
         public static final int directionsText=0x7f070016;
-        public static final int gotoRoutesButton=0x7f07002d;
         public static final int grayscale=0x7f070012;
         public static final int holo_dark=0x7f070005;
         public static final int holo_light=0x7f070006;
         public static final int hybrid=0x7f070004;
         public static final int linearLayout1=0x7f07001c;
-        public static final int location=0x7f07002c;
         public static final int logo=0x7f070015;
         public static final int mainmap=0x7f07001f;
         public static final int match_parent=0x7f07000c;
@@ -449,7 +447,8 @@ containing a value of this type.
         public static final int normal=0x7f070001;
         public static final int pager=0x7f070014;
         public static final int phone=0x7f07002b;
-        public static final int placeInfoButton=0x7f070028;
+        public static final int placeGetRoutesButton=0x7f07002d;
+        public static final int placeInfoBackButton=0x7f070028;
         public static final int production=0x7f070007;
         public static final int routeDirectionTextView=0x7f070022;
         public static final int routeMenuButton=0x7f07001e;
@@ -467,6 +466,7 @@ containing a value of this type.
         public static final int textDirectionsButton=0x7f070021;
         public static final int textDirectionsListView=0x7f07001b;
         public static final int useRouteButton=0x7f070023;
+        public static final int website=0x7f07002c;
         public static final int wrap_content=0x7f07000d;
     }
     public static final class integer {

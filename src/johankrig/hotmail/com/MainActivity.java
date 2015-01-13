@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 
 public class MainActivity extends FragmentActivity implements Communicator
 {	  
-	public LocationSearchFragment mFrag;
 	public ViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
@@ -37,16 +36,12 @@ public class MainActivity extends FragmentActivity implements Communicator
 		return true;
 	}
 
-	//onClick method for mainMapButton found in fragment_route.xml
-	public void mainMapButton(View view)
-	{
-		viewPager.setCurrentItem(0, true);
-	}
+
 
 	@Override
 	public void respond()
 	{
-		viewPager.setCurrentItem(0, true);
+		viewPager.setCurrentItem(0);
 	}
 	
 	@Override
