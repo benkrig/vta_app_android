@@ -66,10 +66,12 @@
         		android:textStyle="bold"/>
      
     	<!--  Name Value -->
+
     		<TextView
-        		android:id="@+id/name"
-        		android:layout_width="fill_parent"
-        		android:layout_height="wrap_content"/>
+    		    android:id="@+id/name"
+    		    android:layout_width="fill_parent"
+    		    android:layout_height="wrap_content"
+    		    android:paddingBottom="15dip" />
      
 		    <!-- Address Label -->
 		    <TextView
@@ -83,7 +85,8 @@
 		    <TextView
 		        android:id="@+id/address"
 		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"/>
+		        android:layout_height="wrap_content"
+		        android:paddingBottom="15dip"/>
 		     
 		    <!-- Phone Number Label -->
 
@@ -102,13 +105,25 @@
 		            android:id="@+id/website"
 		            android:layout_width="fill_parent"
 		            android:layout_height="wrap_content"
-		            android:layout_weight="1" />
+		            android:layout_weight="1"
+		             android:linksClickable="true" />
 
 		    </LinearLayout>
 		     
 		     
 		    <!-- Location Value -->
-		 
+
+		    <TextView
+		        android:id="@+id/textView1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="Reviews:" />
+
+		    <RatingBar
+		        android:id="@+id/placeRating"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        style="?android:attr/ratingBarStyleSmall" />
  
 </LinearLayout>
         </RelativeLayout>

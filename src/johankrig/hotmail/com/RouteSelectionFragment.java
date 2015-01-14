@@ -76,7 +76,7 @@ public class RouteSelectionFragment extends Fragment
     	}
     	try 
     	{
-    		rootView= inflater.inflate(R.layout.fragment_route_selection, container, false);
+    		rootView = inflater.inflate(R.layout.fragment_route_selection, container, false);
     	} 
     	catch (InflateException e) 
     	{

@@ -101,7 +101,7 @@ int drawable rtbtn 0x7f020026
 int drawable vta 0x7f020027
 int drawable walking_man 0x7f020028
 int id RouteMap 0x7f070020
-int id action_settings 0x7f07002e
+int id action_settings 0x7f070030
 int id address 0x7f07002a
 int id book_now 0x7f070010
 int id buyButton 0x7f07000a
@@ -126,8 +126,9 @@ int id none 0x7f070000
 int id normal 0x7f070001
 int id pager 0x7f070014
 int id phone 0x7f07002b
-int id placeGetRoutesButton 0x7f07002d
+int id placeGetRoutesButton 0x7f07002f
 int id placeInfoBackButton 0x7f070028
+int id placeRating 0x7f07002e
 int id production 0x7f070007
 int id routeDirectionTextView 0x7f070022
 int id routeMenuButton 0x7f07001e
@@ -144,6 +145,7 @@ int id strict_sandbox 0x7f070009
 int id terrain 0x7f070003
 int id textDirectionsButton 0x7f070021
 int id textDirectionsListView 0x7f07001b
+int id textView1 0x7f07002d
 int id useRouteButton 0x7f070023
 int id website 0x7f07002c
 int id wrap_content 0x7f07000d

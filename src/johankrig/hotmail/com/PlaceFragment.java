@@ -19,6 +19,7 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 
@@ -40,6 +42,8 @@ public class PlaceFragment extends Fragment
 	TextView placeAddress;
 	TextView placePhone;
 	TextView placeWeb;
+	RatingBar placeRating;
+	
 	LatLng placeLoc;
 
 	ImageButton mainMapButton;
@@ -53,6 +57,7 @@ public class PlaceFragment extends Fragment
         placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
+        placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
         
         mainMapButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
         mainMapButton.setOnClickListener(new OnClickListener() 
@@ -88,13 +93,21 @@ public class PlaceFragment extends Fragment
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
+        placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
 
+    	
         comm = (Communicator) getActivity();
 	}
 
     
     public void initialize(LatLng location, String keyword)
     {
+    	placeName.setText("");
+		placeAddress.setText("");		
+		placePhone.setText("");
+		placeWeb.setText("");		
+		placeRating.setRating((float) 0.0);
+		
     	placeLoc = new LatLng(location.latitude, location.longitude);
 	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
 	    getPlace.execute();
@@ -108,14 +121,22 @@ public class PlaceFragment extends Fragment
 
 			placeName.setText(detailsJSON.getString("name"));
 			placeAddress.setText(detailsJSON.getString("formatted_address"));
+			//placeAddress.setLines(1);
+			
 			float size = placeAddress.getTextSize();
 			
-			placePhone.setTextSize(size/2);
+			
+			//placePhone.setTextSize((size/2));
 			placePhone.setText(detailsJSON.getString("formatted_phone_number"));
 			
-			placeWeb.setTextSize(size/2);
-			placeWeb.setText(detailsJSON.getString("website"));
+			//placeWeb.setTextSize((size/2));
+			//placeWeb.setLines(1);
+
+			String link = "<a href="+detailsJSON.getString("website")+">"+detailsJSON.getString("website")+"</a>";
 			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
+			placeWeb.setText(Html.fromHtml(link));
+			
+			placeRating.setRating((float) detailsJSON.getDouble("rating"));
 		} 
 	    
 	    catch (JSONException e) {
