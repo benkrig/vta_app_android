@@ -136,6 +136,7 @@ public class PlaceFragment extends Fragment
 			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
 			placeWeb.setText(Html.fromHtml(link));
 			
+			placeRating.setStepSize((float) 2.0);
 			placeRating.setRating((float) detailsJSON.getDouble("rating"));
 		} 
 	    
