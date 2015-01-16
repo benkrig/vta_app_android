@@ -66,7 +66,7 @@ public class PlaceFragment extends Fragment
             public void onClick(View v)
             {
             	//Return to home search screen
-                comm.respond();
+                comm.goToLocationSearch();
             }
         });
         

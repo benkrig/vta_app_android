@@ -42,7 +42,7 @@ public class DirectionsFragment extends Fragment
             public void onClick(View v)
             {            	
             	//Return to home search screen
-                comm.gotoRouteSelection();
+                comm.goToLocationSearch();
                 
             }
         });

@@ -1,5 +1,6 @@
 package johankrig.hotmail.com;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -37,7 +38,7 @@ public class LocationSearchFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
-		if (rootView!= null) 
+		if (rootView != null) 
 		{
 	        ViewGroup parent = (ViewGroup) rootView.getParent();
 	        if (parent != null)
@@ -45,7 +46,7 @@ public class LocationSearchFragment extends Fragment
 	    }
 	    try 
 	    {
-	        rootView= inflater.inflate(R.layout.fragment_main, container, false);
+	        rootView = inflater.inflate(R.layout.fragment_main, container, false);
 	    } 
 	    catch (InflateException e) 
 	    {
@@ -55,6 +56,9 @@ public class LocationSearchFragment extends Fragment
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
+        
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+				37.3333, -121.9000), 18.0f));
         
 		return rootView;
     }

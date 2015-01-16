@@ -16,7 +16,7 @@ import android.support.v4.view.ViewPager;
 
 public class MainActivity extends FragmentActivity implements Communicator
 {	  
-	public ViewPager viewPager;
+	public NoSwipeViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
 	
@@ -25,8 +25,9 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		viewPager = (ViewPager) findViewById(R.id.pager);
+		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 	}
 
 	@Override
@@ -37,19 +38,33 @@ public class MainActivity extends FragmentActivity implements Communicator
 	}
 
 
+	//Communicator methods
 
 	@Override
-	public void respond()
+	public void goToLocationSearch()
 	{
-		viewPager.setCurrentItem(0);
+		viewPager.setCurrentItem(0, false);
 	}
 	
 	@Override
 	public void returnRoutes(LatLng destination)
 	{
-		viewPager.setCurrentItem(1);
+		viewPager.setCurrentItem(1, false);
 		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
 		rtFrag.updateFragment(destination);
+	}
+
+	@Override
+	public void gotoTextDirections()
+	{
+		viewPager.setCurrentItem(2, false);
+	}
+	@Override
+	public void getPlaceDetails(LatLng location, String place)
+	{
+		viewPager.setCurrentItem(3, false);
+		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
+		placeFragment.initialize(location, place);
 	}
 
 	@Override
@@ -57,23 +72,6 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		DirectionsFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).getDirectionsFragment();
 		directionsFragment.updateDirectionsList(JSON, routeNumber);
-	}
-	@Override
-	public void gotoTextDirections()
-	{
-		viewPager.setCurrentItem(2);
-	}
-	@Override
-	public void gotoRouteSelection()
-	{
-		viewPager.setCurrentItem(1);
-	}
-	@Override
-	public void getPlaceDetails(LatLng location, String place)
-	{
-		viewPager.setCurrentItem(3);
-		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
-		placeFragment.initialize(location, place);
 	}
 
 }

@@ -106,7 +106,7 @@ public class RouteSelectionFragment extends Fragment
             	map.clear();
             	
             	//Return to home search screen
-                comm.respond();
+                comm.goToLocationSearch();
                 
             }
         });
