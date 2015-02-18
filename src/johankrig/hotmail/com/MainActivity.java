@@ -16,7 +16,8 @@ import android.support.v4.view.ViewPager;
 
 public class MainActivity extends FragmentActivity implements Communicator
 {	  
-	public NoSwipeViewPager viewPager;
+	//public NoSwipeViewPager viewPager;
+	public ViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
 	
@@ -25,9 +26,9 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
+		viewPager = (ViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
-		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
+		//viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 	}
 
 	@Override
@@ -43,13 +44,13 @@ public class MainActivity extends FragmentActivity implements Communicator
 	@Override
 	public void goToLocationSearch()
 	{
-		viewPager.setCurrentItem(0, false);
+		viewPager.setCurrentItem(0);
 	}
 	
 	@Override
 	public void returnRoutes(LatLng destination)
 	{
-		viewPager.setCurrentItem(1, false);
+		viewPager.setCurrentItem(1);
 		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
 		rtFrag.updateFragment(destination);
 	}
@@ -57,14 +58,16 @@ public class MainActivity extends FragmentActivity implements Communicator
 	@Override
 	public void gotoTextDirections()
 	{
-		viewPager.setCurrentItem(2, false);
+		viewPager.setCurrentItem(2);
 	}
 	@Override
 	public void getPlaceDetails(LatLng location, String place)
 	{
-		viewPager.setCurrentItem(3, false);
+		
+		viewPager.setCurrentItem(3);
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place);
+
 	}
 
 	@Override

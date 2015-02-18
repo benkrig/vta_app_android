@@ -57,8 +57,6 @@ public class LocationSearchFragment extends Fragment
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
         
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-				37.3333, -121.9000), 18.0f));
         
 		return rootView;
     }
@@ -70,7 +68,9 @@ public class LocationSearchFragment extends Fragment
 		comm = (Communicator) getActivity();
 		
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
-
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+				37.3333, -121.9000), 18.0f));
+        
 		//center map on user
 		gps = new GPSTracker(getActivity());
 		if(gps.canGetLocation())
@@ -126,7 +126,6 @@ class InfoWindowClickAdapter implements OnInfoWindowClickListener
 	@Override
 	public void onInfoWindowClick(Marker marker) 
 	{
-
 		comm.getPlaceDetails(marker.getPosition(), marker.getTitle());
 	}
 	

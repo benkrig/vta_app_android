@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,12 +53,38 @@ public class PlaceFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
-        rootView = inflater.inflate(R.layout.place, container, false);
-
-        placeName = (TextView) rootView.findViewById(R.id.name);
+    	if (rootView != null) 
+		{
+	        ViewGroup parent = (ViewGroup) rootView.getParent();
+	        if (parent != null)
+	            parent.removeView(rootView);
+	    }
+	    try 
+	    {
+	        rootView = inflater.inflate(R.layout.place, container, false);
+	    } 
+	    catch (InflateException e) 
+	    {
+	        /* map is already there, just return view as it is */
+	    }
+        //rootView = inflater.inflate(R.layout.place, container, false);
+        
+        return rootView;
+	}
+    
+    @Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+    	super.onActivityCreated(savedInstanceState);
+    	
+    	placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
+    	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
+
+    	
+        comm = (Communicator) getActivity();
         
         mainMapButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
         mainMapButton.setOnClickListener(new OnClickListener() 
@@ -81,22 +108,6 @@ public class PlaceFragment extends Fragment
             }
         });
         
-        
-        return rootView;
-	}
-    
-    @Override
-	public void onActivityCreated(Bundle savedInstanceState)
-	{
-    	super.onActivityCreated(savedInstanceState);
-    	placeName = (TextView) rootView.findViewById(R.id.name);
-        placeAddress = (TextView) rootView.findViewById(R.id.address);
-        placePhone = (TextView) rootView.findViewById(R.id.phone);
-    	placeWeb = (TextView) rootView.findViewById(R.id.website);
-        placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
-
-    	
-        comm = (Communicator) getActivity();
 	}
 
     
