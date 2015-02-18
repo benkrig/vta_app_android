@@ -15,7 +15,9 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import android.content.Intent;
 import android.location.Address;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -45,7 +48,9 @@ public class PlaceFragment extends Fragment
 	private String phone;
 	private String web;
 	private float rating;
-	
+	private PlaceMobileArrayAdapter placeAdapter;
+	private ListView placeReviewListView;
+
 	TextView placeName;
 	TextView placeAddress;
 	TextView placePhone;
@@ -54,7 +59,7 @@ public class PlaceFragment extends Fragment
 	
 	LatLng placeLoc;
 
-	ImageButton mainMapButton;
+	ImageButton locationSearchButton;
 	Button getRoutesButton;
 	
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +91,8 @@ public class PlaceFragment extends Fragment
     	
         comm = (Communicator) getActivity();
         
+        placeReviewListView = (ListView) rootView.findViewById(R.id.placeReviewList);  
+
 
     	placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
@@ -93,9 +100,21 @@ public class PlaceFragment extends Fragment
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
     	
+        placeWeb.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View arg0) 
+            {
+            	if(web != null)
+            	{
+            		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(web));
+            		startActivity(browserIntent);
+            	}
+            }
+        });
         
-        mainMapButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
-        mainMapButton.setOnClickListener(new OnClickListener() 
+        locationSearchButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
+        locationSearchButton.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v)
@@ -140,8 +159,10 @@ public class PlaceFragment extends Fragment
     	}
     }
     
-	public void update(JSONObject result) 
+	public void updatePlace(JSONObject result) 
 	{
+		String[] details = null;
+		int[] dates = null;
 	    try 
 	    {
 	    	
@@ -170,13 +191,29 @@ public class PlaceFragment extends Fragment
 			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
 			placeWeb.setText(Html.fromHtml(link));
 			
+			
+			JSONArray reviews = detailsJSON.getJSONArray("reviews");
+			details = new String[reviews.length()];
+			dates = new int[reviews.length()];
+			for(int i = 0; i < reviews.length(); i++)
+			{
+				JSONObject tmp = reviews.getJSONObject(i);
+				details[i] = tmp.getString("text");
+				dates[i] = tmp.getInt("time");
+			}
 			placeRating.setStepSize((float) 2.0);
 			placeRating.setRating((float) detailsJSON.getDouble("rating"));
 		} 
 	    
-	    catch (JSONException e) {
+	    catch (JSONException e) 
+	    {
         	Log.e("details ", "101", e);
 		}
+	    
+	    String[] test = {"test", "123"};
+
+        placeAdapter = new PlaceMobileArrayAdapter(getActivity(), details, dates);
+        placeReviewListView.setAdapter(placeAdapter);
 	}
 
 //working
@@ -335,7 +372,7 @@ public class PlaceFragment extends Fragment
 	    }
 	    protected void onPostExecute(JSONObject result) 
 	    {
-		    update(result);
+		    updatePlace(result);
 	    }
 	}
 }

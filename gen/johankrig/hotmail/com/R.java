@@ -422,7 +422,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int RouteMap=0x7f070020;
-        public static final int action_settings=0x7f070031;
+        public static final int action_settings=0x7f070034;
         public static final int address=0x7f07002b;
         public static final int book_now=0x7f070010;
         public static final int buyButton=0x7f07000a;
@@ -448,9 +448,12 @@ containing a value of this type.
         public static final int pager=0x7f070014;
         public static final int phone=0x7f07002c;
         public static final int placeBaseLinearLayout=0x7f070028;
-        public static final int placeGetRoutesButton=0x7f070030;
+        public static final int placeGetRoutesButton=0x7f070031;
         public static final int placeInfoBackButton=0x7f070029;
         public static final int placeRating=0x7f07002f;
+        public static final int placeReviewDate=0x7f070033;
+        public static final int placeReviewList=0x7f070030;
+        public static final int placeReviewText=0x7f070032;
         public static final int production=0x7f070007;
         public static final int routeDirectionTextView=0x7f070022;
         public static final int routeMenuButton=0x7f07001e;
@@ -483,6 +486,7 @@ containing a value of this type.
         public static final int fragment_route=0x7f030004;
         public static final int fragment_route_selection=0x7f030005;
         public static final int place=0x7f030006;
+        public static final int placerow=0x7f030007;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;

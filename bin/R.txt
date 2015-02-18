@@ -101,7 +101,7 @@ int drawable rtbtn 0x7f020026
 int drawable vta 0x7f020027
 int drawable walking_man 0x7f020028
 int id RouteMap 0x7f070020
-int id action_settings 0x7f070031
+int id action_settings 0x7f070034
 int id address 0x7f07002b
 int id book_now 0x7f070010
 int id buyButton 0x7f07000a
@@ -127,9 +127,12 @@ int id normal 0x7f070001
 int id pager 0x7f070014
 int id phone 0x7f07002c
 int id placeBaseLinearLayout 0x7f070028
-int id placeGetRoutesButton 0x7f070030
+int id placeGetRoutesButton 0x7f070031
 int id placeInfoBackButton 0x7f070029
 int id placeRating 0x7f07002f
+int id placeReviewDate 0x7f070033
+int id placeReviewList 0x7f070030
+int id placeReviewText 0x7f070032
 int id production 0x7f070007
 int id routeDirectionTextView 0x7f070022
 int id routeMenuButton 0x7f07001e
@@ -158,6 +161,7 @@ int layout fragment_main 0x7f030003
 int layout fragment_route 0x7f030004
 int layout fragment_route_selection 0x7f030005
 int layout place 0x7f030006
+int layout placerow 0x7f030007
 int menu main 0x7f0a0000
 int string action_settings 0x7f06001b
 int string app_name 0x7f06001a
