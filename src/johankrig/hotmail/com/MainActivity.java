@@ -2,7 +2,6 @@ package johankrig.hotmail.com;
 
 
 import com.google.android.gms.maps.model.LatLng;
-
 import johankrig.hotmail.com.R;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,13 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
 import android.view.View;
-import android.support.v4.view.ViewPager;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
 {	  
-	//public NoSwipeViewPager viewPager;
-	public ViewPager viewPager;
+	public NoSwipeViewPager viewPager;
 	public String destination;
 	public Bundle bundle = new Bundle();
 	
@@ -26,9 +23,13 @@ public class MainActivity extends FragmentActivity implements Communicator
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		viewPager = (ViewPager) findViewById(R.id.pager);
+		
+		//Create no swipe view pager (see NoSwipeViewPager.java)
+		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
-		//viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
+		viewPager.setOffscreenPageLimit(3);
+		//disable over scroll in app
+		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 	}
 
 	@Override
@@ -40,7 +41,6 @@ public class MainActivity extends FragmentActivity implements Communicator
 
 
 	//Communicator methods
-
 	@Override
 	public void goToLocationSearch()
 	{
@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity implements Communicator
 		viewPager.setCurrentItem(3);
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place);
-
+		
 	}
 
 	@Override
@@ -79,6 +79,8 @@ public class MainActivity extends FragmentActivity implements Communicator
 
 }
 
+
+//pager adapter class
 class MyAdapter extends FragmentPagerAdapter
 {
 	public MyAdapter(FragmentManager fm) 
@@ -87,6 +89,7 @@ class MyAdapter extends FragmentPagerAdapter
 	}
 	
 	//slick as fuuuuuuuuu
+	//create and maintain each fragment dynamically
 	private LocationSearchFragment mainFrag;
 	private RouteSelectionFragment routeFrag;
 	private DirectionsFragment directionsFrag;

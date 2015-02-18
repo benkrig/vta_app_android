@@ -1,6 +1,5 @@
 package johankrig.hotmail.com;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
@@ -13,7 +12,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Toast;
 
 
 public class LocationSearchFragment extends Fragment
@@ -50,7 +47,7 @@ public class LocationSearchFragment extends Fragment
 	    } 
 	    catch (InflateException e) 
 	    {
-	        /* map is already there, just return view as it is */
+	        //map is already there, just return view as it is
 	    }
         
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
@@ -69,7 +66,7 @@ public class LocationSearchFragment extends Fragment
 		
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-				37.3333, -121.9000), 18.0f));
+				37.3333, -121.9000), 12.0f));
         
 		//center map on user
 		gps = new GPSTracker(getActivity());
@@ -90,6 +87,7 @@ public class LocationSearchFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+            	searchBar.dismissDropDown();
         		searchString = searchBar.getEditableText().toString();
                 
                 //AsyncTask can only execute ONCE
@@ -103,9 +101,7 @@ public class LocationSearchFragment extends Fragment
                 {
                 	geoTask.setLocation(searchString);
                 	geoTask.execute();
-                }
-                else{}
-                
+                }                
             }
         });
 	}

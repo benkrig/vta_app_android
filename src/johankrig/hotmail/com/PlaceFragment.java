@@ -39,6 +39,13 @@ public class PlaceFragment extends Fragment
 	Communicator comm;
 	private View rootView;
 	
+	
+	private String name;
+	private String address;
+	private String phone;
+	private String web;
+	private float rating;
+	
 	TextView placeName;
 	TextView placeAddress;
 	TextView placePhone;
@@ -67,7 +74,7 @@ public class PlaceFragment extends Fragment
 	    {
 	        /* map is already there, just return view as it is */
 	    }
-        //rootView = inflater.inflate(R.layout.place, container, false);
+
         
         return rootView;
 	}
@@ -77,14 +84,15 @@ public class PlaceFragment extends Fragment
 	{
     	super.onActivityCreated(savedInstanceState);
     	
+        comm = (Communicator) getActivity();
+        
+
     	placeName = (TextView) rootView.findViewById(R.id.name);
         placeAddress = (TextView) rootView.findViewById(R.id.address);
         placePhone = (TextView) rootView.findViewById(R.id.phone);
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
-
     	
-        comm = (Communicator) getActivity();
         
         mainMapButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
         mainMapButton.setOnClickListener(new OnClickListener() 
@@ -113,22 +121,37 @@ public class PlaceFragment extends Fragment
     
     public void initialize(LatLng location, String keyword)
     {
-    	placeName.setText("");
-		placeAddress.setText("");		
-		placePhone.setText("");
-		placeWeb.setText("");		
-		placeRating.setRating((float) 0.0);
-		
-    	placeLoc = new LatLng(location.latitude, location.longitude);
-	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
-	    getPlace.execute();
+    	//initialize new place if it is not already initialized
+    	if(location.equals(placeLoc))
+    	{
+        	//place already loaded
+    		placeName.setText(name);
+    		placeAddress.setText(address);		
+    		placePhone.setText(phone);
+    		placeWeb.setText(web);		
+    		placeRating.setRating(rating);
+    	}
+    	else
+    	{
+    		//clear and get new place
+        	placeLoc = new LatLng(location.latitude, location.longitude);
+    	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
+    	    getPlace.execute();
+    	}
     }
+    
 	public void update(JSONObject result) 
 	{
-
 	    try 
 	    {
+	    	
 			JSONObject detailsJSON = new JSONObject(result.toString());
+	    	
+			name = detailsJSON.getString("name");
+	    	address = detailsJSON.getString("formatted_address");
+	    	phone = detailsJSON.getString("formatted_phone_number");
+	    	web = detailsJSON.getString("website");
+	    	rating = (float) detailsJSON.getDouble("rating");
 
 			placeName.setText(detailsJSON.getString("name"));
 			placeAddress.setText(detailsJSON.getString("formatted_address"));
@@ -217,7 +240,7 @@ public class PlaceFragment extends Fragment
 	        }
 	    return result;
 	}
-//working
+	//working
 	public String getPlaceID(LatLng location, String name)
 	{
 		final String LOG_TAG = "VTA";
@@ -312,7 +335,6 @@ public class PlaceFragment extends Fragment
 	    }
 	    protected void onPostExecute(JSONObject result) 
 	    {
-	        //setDetails(result);
 		    update(result);
 	    }
 	}
