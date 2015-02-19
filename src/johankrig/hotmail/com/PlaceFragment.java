@@ -154,71 +154,109 @@ public class PlaceFragment extends Fragment
     	else
     	{
     		//clear and get new place
+    		clearPlace();
+    		
         	placeLoc = new LatLng(location.latitude, location.longitude);
     	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
     	    getPlace.execute();
     	}
     }
     
+	private void clearPlace() 
+	{
+		
+		placeName.setText("");
+		placeAddress.setText("");		
+		placePhone.setText("");
+		placeWeb.setText("");		
+		placeRating.setRating(0);
+	}
+
 	public void updatePlace(JSONObject result) 
 	{
-		String[] details = null;
-		String[] reviewerNames = null;
-		int[] dates = null;
-		float[] ratings = null;
-	    try 
+		String[] placeReviewsDetails = {};
+		String[] reviewerNames = {};
+		int[] reviewDates = {};
+		float[] reviewRatings = {};
+		
+	    try
 	    {
-	    	
-			JSONObject detailsJSON = new JSONObject(result.toString());
-	    	
-			name = detailsJSON.getString("name");
-	    	address = detailsJSON.getString("formatted_address");
-	    	phone = detailsJSON.getString("formatted_phone_number");
-	    	web = detailsJSON.getString("website");
-	    	rating = (float) detailsJSON.getDouble("rating");
-
-			placeName.setText(detailsJSON.getString("name"));
-			placeAddress.setText(detailsJSON.getString("formatted_address"));
-			placePhone.setText(detailsJSON.getString("formatted_phone_number"));
-
-			String link = "<a href="+detailsJSON.getString("website")+">"+detailsJSON.getString("website")+"</a>";
-			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
-			placeWeb.setText(Html.fromHtml(link));
-			
-			
-			JSONArray reviews = detailsJSON.getJSONArray("reviews");
-			details = new String[reviews.length()];
-			reviewerNames = new String[reviews.length()];
-			dates = new int[reviews.length()];
-			ratings = new float[reviews.length()];
-			
-			for(int i = 0; i < reviews.length(); i++)
-			{
-				JSONObject tmp = reviews.getJSONObject(i);
-				details[i] = tmp.getString("text");
-				reviewerNames[i] = tmp.getString("author_name");
-				dates[i] = tmp.getInt("time");
-				JSONArray rating = tmp.getJSONArray("aspects");
-	        	JSONObject rating1 = rating.getJSONObject(0);
-				ratings[i] = (float) rating1.getDouble("rating");
-
-			}
-			placeRating.setStepSize((float) 0.25);
-			placeRating.setRating((float) detailsJSON.getDouble("rating"));
-		} 
+	    	//if google has reviews for this location
+	    	if(result != null)
+	    	{
+				JSONObject detailsJSON = new JSONObject(result.toString());
+		    	
+				if(detailsJSON.has("name"))
+				{
+					name = detailsJSON.getString("name");
+					placeName.setText(name);
+	
+				}
+				
+				if(detailsJSON.has("formatted_address"))
+				{
+					address = detailsJSON.getString("formatted_address");
+					placeAddress.setText(address);
+	
+				}
+		    	
+				if(detailsJSON.has("formatted_phone_number"))
+				{
+			    	phone = detailsJSON.getString("formatted_phone_number");
+					placePhone.setText(phone);
+				}
+				
+				if(detailsJSON.has("website"))
+				{
+			    	web = detailsJSON.getString("website");
+					String link = "<a href="+ web +">"+detailsJSON.getString("website")+"</a>";
+					placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
+					placeWeb.setText(Html.fromHtml(link));
+				}
+				
+				if(detailsJSON.has("rating"))
+				{
+					rating = (float) detailsJSON.getDouble("rating");
+					placeRating.setStepSize((float) 0.25);
+					placeRating.setRating((float) detailsJSON.getDouble("rating"));
+				}
+				
+				JSONArray reviews = detailsJSON.getJSONArray("reviews");
+				if(!reviews.isNull(0))
+				{
+					placeReviewsDetails = new String[reviews.length()];
+					reviewerNames = new String[reviews.length()];
+					reviewDates = new int[reviews.length()];
+					reviewRatings = new float[reviews.length()];
+					
+					for(int i = 0; i < reviews.length(); i++)
+					{
+						JSONObject tmp = reviews.getJSONObject(i);
+						placeReviewsDetails[i] = tmp.getString("text");
+						reviewerNames[i] = tmp.getString("author_name");
+						reviewDates[i] = tmp.getInt("time");
+						JSONArray rating = tmp.getJSONArray("aspects");
+			        	JSONObject rating1 = rating.getJSONObject(0);
+						reviewRatings[i] = (float) rating1.getDouble("rating");
+		
+					}
+				}
+			} 
+	    }
 	    
 	    catch (JSONException e) 
 	    {
         	Log.e("details ", "101", e);
 		}
 	    
-        placeAdapter = new PlaceMobileArrayAdapter(getActivity(), details, reviewerNames, dates, ratings);
+        placeAdapter = new PlaceMobileArrayAdapter(getActivity(), placeReviewsDetails, reviewerNames, reviewDates, reviewRatings);
         placeReviewListView.setDividerHeight(2);
         placeReviewListView.setAdapter(placeAdapter);
 	}
 
-//working
-	private JSONObject getDetails(String place_id) {
+	//working
+	private JSONObject getDetails(String place_id) 
+	{
 		final String LOG_TAG = "VTA";
 	    final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
 	    final String TYPE_DETAILS = "/details";
@@ -366,8 +404,7 @@ public class PlaceFragment extends Fragment
 	    protected JSONObject doInBackground(Void... params) 
 	    {
 
-		    String placeid = getPlaceID(location, keyword);
-		    place_id = placeid;
+		    String place_id = getPlaceID(location, keyword);
 		    place_details = getDetails(place_id);
 	        return place_details;
 	    }
