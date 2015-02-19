@@ -9,7 +9,7 @@
         android:layout_height="wrap_content" >
 
         <ImageView
-            android:id="@+id/logo"
+            android:id="@+id/reviewerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -20,7 +20,7 @@
             android:id="@+id/directionsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/logo"
+            android:layout_toRightOf="@id/reviewerName"
             android:layout_toLeftOf="@+id/directionsDetails"
             
              />

@@ -138,7 +138,7 @@ public class DirectionsFragment extends Fragment
  
 		View rowView = inflater.inflate(R.layout.directionsrow, parent, false);
 		
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.logo);
+		ImageView imageView = (ImageView) rowView.findViewById(R.id.reviewerName);
 
 		TextView directionsText = (TextView) rowView.findViewById(R.id.directionsText);
 		TextView directionsDetails = (TextView) rowView.findViewById(R.id.directionsDetails);

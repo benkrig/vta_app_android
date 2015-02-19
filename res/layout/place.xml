@@ -114,7 +114,7 @@
 		    <!-- Location Value -->
 
 		    <TextView
-		        android:id="@+id/textView1"
+		        android:id="@+id/reviewUserName"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:text="Reviews:" />
@@ -133,6 +133,7 @@
 
 		        <ListView
 		            android:id="@+id/placeReviewList"
+		            android:paddingTop="5dp"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content" >
 		        </ListView>

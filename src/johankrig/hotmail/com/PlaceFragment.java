@@ -47,6 +47,7 @@ public class PlaceFragment extends Fragment
 	private String address;
 	private String phone;
 	private String web;
+	
 	private float rating;
 	private PlaceMobileArrayAdapter placeAdapter;
 	private ListView placeReviewListView;
@@ -162,7 +163,9 @@ public class PlaceFragment extends Fragment
 	public void updatePlace(JSONObject result) 
 	{
 		String[] details = null;
+		String[] reviewerNames = null;
 		int[] dates = null;
+		float[] ratings = null;
 	    try 
 	    {
 	    	
@@ -176,16 +179,7 @@ public class PlaceFragment extends Fragment
 
 			placeName.setText(detailsJSON.getString("name"));
 			placeAddress.setText(detailsJSON.getString("formatted_address"));
-			//placeAddress.setLines(1);
-			
-			float size = placeAddress.getTextSize();
-			
-			
-			//placePhone.setTextSize((size/2));
 			placePhone.setText(detailsJSON.getString("formatted_phone_number"));
-			
-			//placeWeb.setTextSize((size/2));
-			//placeWeb.setLines(1);
 
 			String link = "<a href="+detailsJSON.getString("website")+">"+detailsJSON.getString("website")+"</a>";
 			placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
@@ -194,14 +188,22 @@ public class PlaceFragment extends Fragment
 			
 			JSONArray reviews = detailsJSON.getJSONArray("reviews");
 			details = new String[reviews.length()];
+			reviewerNames = new String[reviews.length()];
 			dates = new int[reviews.length()];
+			ratings = new float[reviews.length()];
+			
 			for(int i = 0; i < reviews.length(); i++)
 			{
 				JSONObject tmp = reviews.getJSONObject(i);
 				details[i] = tmp.getString("text");
+				reviewerNames[i] = tmp.getString("author_name");
 				dates[i] = tmp.getInt("time");
+				JSONArray rating = tmp.getJSONArray("aspects");
+	        	JSONObject rating1 = rating.getJSONObject(0);
+				ratings[i] = (float) rating1.getDouble("rating");
+
 			}
-			placeRating.setStepSize((float) 2.0);
+			placeRating.setStepSize((float) 0.25);
 			placeRating.setRating((float) detailsJSON.getDouble("rating"));
 		} 
 	    
@@ -210,9 +212,8 @@ public class PlaceFragment extends Fragment
         	Log.e("details ", "101", e);
 		}
 	    
-	    String[] test = {"test", "123"};
-
-        placeAdapter = new PlaceMobileArrayAdapter(getActivity(), details, dates);
+        placeAdapter = new PlaceMobileArrayAdapter(getActivity(), details, reviewerNames, dates, ratings);
+        placeReviewListView.setDividerHeight(2);
         placeReviewListView.setAdapter(placeAdapter);
 	}
 

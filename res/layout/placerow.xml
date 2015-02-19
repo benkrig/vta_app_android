@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <ImageView
-            android:id="@+id/logo"
+        <TextView
+            android:id="@+id/reviewerName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -20,7 +20,7 @@
             android:id="@+id/placeReviewText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/logo"
+            android:layout_toRightOf="@id/reviewerName"
             android:layout_toLeftOf="@+id/placeReviewDate"
              />
 
@@ -31,6 +31,16 @@
             android:layout_alignParentRight="true"
             android:padding="5dip"
 			 />
+
+        <RatingBar
+            android:id="@+id/userRating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/placeReviewDate"
+            android:layout_alignParentRight="true"
+             />
+
     </RelativeLayout>
 
 </LinearLayout>
