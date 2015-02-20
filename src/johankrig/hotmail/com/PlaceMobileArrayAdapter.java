@@ -52,6 +52,7 @@ import android.widget.TextView;
 		placeReviewDates.setText(date.toString());
 		
 		placeReviewDetails.setText(reviewDetails[position]);
+		placeReviewRatings.setStepSize((float) 0.25);
 		placeReviewRatings.setRating(reviewRatings[position]);
 		 
 		return rowView;

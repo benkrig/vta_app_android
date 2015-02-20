@@ -229,10 +229,10 @@ public class PlaceFragment extends Fragment
 						placeReviewsDetails[i] = tmp.getString("text");
 						reviewerNames[i] = tmp.getString("author_name");
 						reviewDates[i] = tmp.getInt("time");
+						Log.d("infos", tmp.getJSONArray("aspects").toString());
 						JSONArray rating = tmp.getJSONArray("aspects");
 			        	JSONObject rating1 = rating.getJSONObject(0);
 						reviewRatings[i] = (float) rating1.getDouble("rating");
-		
 					}
 				}
 			} 
@@ -244,7 +244,6 @@ public class PlaceFragment extends Fragment
 		}
 	    
         placeAdapter = new PlaceMobileArrayAdapter(getActivity(), placeReviewsDetails, reviewerNames, reviewDates, reviewRatings);
-        placeReviewListView.setDividerHeight(2);
         placeReviewListView.setAdapter(placeAdapter);
 	}
 

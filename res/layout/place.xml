@@ -47,7 +47,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1"
+            android:background="@color/white" >
             
             <LinearLayout
 	    		android:layout_width="match_parent"
@@ -85,7 +86,8 @@
 		        android:id="@+id/address"
 		        android:layout_width="fill_parent"
 		        android:layout_height="wrap_content"
-		        android:paddingBottom="15dip"/>
+		        android:paddingBottom="12dip"
+				/>
 		     
 		    <!-- Phone Number Label -->
 
@@ -98,6 +100,9 @@
 		            android:id="@+id/phone"
 		            android:layout_width="fill_parent"
 		            android:layout_height="wrap_content"
+		            android:paddingBottom="5dp"
+		            android:autoLink="phone" 
+    				android:linksClickable="true"
 		            android:layout_weight="1" />
 
 		        <TextView
@@ -117,7 +122,8 @@
 		        android:id="@+id/reviewUserName"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:text="Reviews:" />
+		        android:text="Reviews:"
+		        android:textStyle="bold" />
 
 		    <RatingBar
 		        android:id="@+id/placeRating"
@@ -133,7 +139,9 @@
 
 		        <ListView
 		            android:id="@+id/placeReviewList"
-		            android:paddingTop="5dp"
+		            android:paddingTop="5dp"		            
+		            android:divider="@color/purple"
+		            android:dividerHeight="1.0dp"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content" >
 		        </ListView>

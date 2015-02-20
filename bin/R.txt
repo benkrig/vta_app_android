@@ -40,8 +40,9 @@ int color common_signin_btn_light_text_default 0x7f050004
 int color common_signin_btn_light_text_disabled 0x7f050006
 int color common_signin_btn_light_text_focused 0x7f050007
 int color common_signin_btn_light_text_pressed 0x7f050005
-int color common_signin_btn_text_dark 0x7f050017
-int color common_signin_btn_text_light 0x7f050018
+int color common_signin_btn_text_dark 0x7f050019
+int color common_signin_btn_text_light 0x7f05001a
+int color purple 0x7f050018
 int color wallet_bright_foreground_disabled_holo_light 0x7f05000f
 int color wallet_bright_foreground_holo_dark 0x7f05000a
 int color wallet_bright_foreground_holo_light 0x7f050010
@@ -55,8 +56,9 @@ int color wallet_hint_foreground_holo_dark 0x7f050012
 int color wallet_hint_foreground_holo_light 0x7f050011
 int color wallet_holo_blue_light 0x7f050015
 int color wallet_link_text_light 0x7f050016
-int color wallet_primary_text_holo_light 0x7f050019
-int color wallet_secondary_text_holo_dark 0x7f05001a
+int color wallet_primary_text_holo_light 0x7f05001b
+int color wallet_secondary_text_holo_dark 0x7f05001c
+int color white 0x7f050017
 int dimen activity_horizontal_margin 0x7f090000
 int dimen activity_vertical_margin 0x7f090001
 int drawable backbtn 0x7f020000

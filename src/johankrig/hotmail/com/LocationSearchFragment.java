@@ -7,7 +7,6 @@ import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-
 import johankrig.hotmail.com.R;
 import android.content.Context;
 import android.os.AsyncTask;
