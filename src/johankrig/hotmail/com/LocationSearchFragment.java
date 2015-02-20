@@ -3,6 +3,7 @@ package johankrig.hotmail.com;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -17,6 +18,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
@@ -53,10 +57,28 @@ public class LocationSearchFragment extends Fragment
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
-        
-        
+        //Hide keyboard on map click
+        map.setOnMapClickListener(new OnMapClickListener()
+        {
+			@Override
+			public void onMapClick(LatLng point) 
+			{
+				hideKeyBoard();
+			}
+        	
+        });
+                
 		return rootView;
     }
+	
+	//hide keyboard
+	public void hideKeyBoard()
+	{
+		InputMethodManager inputManager = (InputMethodManager)
+                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); 
+    	inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                   InputMethodManager.HIDE_NOT_ALWAYS);
+	}
 	
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState)
@@ -80,14 +102,29 @@ public class LocationSearchFragment extends Fragment
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
 		searchBar.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line));
+		//hide keyboard once user selects item
+		searchBar.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) 
+			{
+				hideKeyBoard();
+			}
+			
+		});
 		
 		addressSearchButton = (Button) getActivity().findViewById(R.id.routeMenuButton);
 		addressSearchButton.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v)
-            {
+            {            	
+            	//hide keyboard and search bar
             	searchBar.dismissDropDown();
+            	hideKeyBoard();
+            	
         		searchString = searchBar.getEditableText().toString();
                 
                 //AsyncTask can only execute ONCE

@@ -3,13 +3,17 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.model.LatLng;
 import johankrig.hotmail.com.R;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
@@ -24,11 +28,13 @@ public class MainActivity extends FragmentActivity implements Communicator
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
+		//Ensure keyboard is not showing on startup
+		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
 		//Create no swipe view pager (see NoSwipeViewPager.java)
 		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 		viewPager.setOffscreenPageLimit(3);
-		//disable over scroll in app
 		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
 	}
 

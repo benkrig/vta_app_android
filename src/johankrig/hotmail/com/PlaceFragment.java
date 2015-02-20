@@ -6,17 +6,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import android.content.Intent;
-import android.location.Address;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -393,7 +387,6 @@ public class PlaceFragment extends Fragment
 	{
 		private LatLng location;
 		private String keyword;
-		private String place_id;
 		private JSONObject place_details;
 
 		GetPlacesIDTask(LatLng location, String keyword)
