@@ -416,11 +416,12 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f020021;
         public static final int ic_plusone_standard_off_client=0x7f020022;
         public static final int ic_plusone_tall_off_client=0x7f020023;
-        public static final int powered_by_google_dark=0x7f020024;
-        public static final int powered_by_google_light=0x7f020025;
-        public static final int rtbtn=0x7f020026;
-        public static final int vta=0x7f020027;
-        public static final int walking_man=0x7f020028;
+        public static final int locationicon=0x7f020024;
+        public static final int powered_by_google_dark=0x7f020025;
+        public static final int powered_by_google_light=0x7f020026;
+        public static final int rtbtn=0x7f020027;
+        public static final int vta=0x7f020028;
+        public static final int walking_man=0x7f020029;
     }
     public static final class id {
         public static final int RouteMap=0x7f070020;

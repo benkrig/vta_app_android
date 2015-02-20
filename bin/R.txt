@@ -97,11 +97,12 @@ int drawable ic_plusone_medium_off_client 0x7f020020
 int drawable ic_plusone_small_off_client 0x7f020021
 int drawable ic_plusone_standard_off_client 0x7f020022
 int drawable ic_plusone_tall_off_client 0x7f020023
-int drawable powered_by_google_dark 0x7f020024
-int drawable powered_by_google_light 0x7f020025
-int drawable rtbtn 0x7f020026
-int drawable vta 0x7f020027
-int drawable walking_man 0x7f020028
+int drawable locationicon 0x7f020024
+int drawable powered_by_google_dark 0x7f020025
+int drawable powered_by_google_light 0x7f020026
+int drawable rtbtn 0x7f020027
+int drawable vta 0x7f020028
+int drawable walking_man 0x7f020029
 int id RouteMap 0x7f070020
 int id action_settings 0x7f070035
 int id address 0x7f07002b

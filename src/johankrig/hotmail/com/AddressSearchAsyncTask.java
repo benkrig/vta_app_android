@@ -101,7 +101,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         		  BitmapDescriptor iconColorBitmap 
         		   = BitmapDescriptorFactory.defaultMarker(
         		     BitmapDescriptorFactory.HUE_VIOLET);
-        		markerOptions.icon(iconColorBitmap);
+        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
         		map.addMarker(markerOptions);
         		
         		//center map on first location
