@@ -1,17 +1,31 @@
 package johankrig.hotmail.com;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import johankrig.hotmail.com.R;
 import android.content.Context;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +80,18 @@ public class LocationSearchFragment extends Fragment
 			}
         	
         });
+        
+        map.setOnMapLongClickListener(new OnMapLongClickListener()
+        {
+			@Override
+			public void onMapLongClick(LatLng point) 
+			{
+				//GeoTask get location at Marker
+				GetMarkerFromTouch getad = new GetMarkerFromTouch(getActivity(), point);
+				getad.execute();
+			}
+        	
+        });
                 
 		return rootView;
     }
@@ -76,11 +102,8 @@ public class LocationSearchFragment extends Fragment
 		InputMethodManager inputManager = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); 
 		View focusedView = getActivity().getCurrentFocus();
-	    /*
-	     * If no view is focused, an NPE will be thrown
-	     * 
-	     * Maxim Dmitriev
-	     */
+	    
+		//Checks for NullPointerException
 	    if (focusedView != null) 
 	    {
 	        inputManager.hideSoftInputFromWindow(focusedView.getWindowToken(),
@@ -150,6 +173,120 @@ public class LocationSearchFragment extends Fragment
             }
         });
 	}
+	
+	public void createMarkerFromTouch(Address address)
+	{
+		MarkerOptions markerOptions = new MarkerOptions();
+		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
+		markerOptions.title("Let's go here!");
+		markerOptions.snippet("to " + address.getAddressLine(0));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+		map.addMarker(markerOptions);
+	}
+	
+	class GetMarkerFromTouch extends AsyncTask<String, Address, Address>
+	{
+		
+	    private final String LOG_TAG = "VTA";
+	    //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=API_KEY
+	    private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/geocode";
+	    private final String OUT_JSON = "/json?";
+	    private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
+		//In meters
+
+		Context context;
+		LatLng latlng;
+		
+		public GetMarkerFromTouch(Context context, LatLng latlng)
+		{
+			this.latlng = latlng;
+			this.context = context;
+		}
+
+	    @Override
+	    protected Address doInBackground(String... params)
+	    {
+	        Address address = null;
+	        address = this.getAddresses(latlng);
+	        
+	        return address;
+	    }
+
+	    @Override
+	    protected void onPostExecute(Address address) 
+	    {
+	    	//do stuff with address
+	    	createMarkerFromTouch(address);
+	    }
+	    
+
+	    public Address getAddresses(LatLng latlng) 
+	    {
+	    	Address addressresult = new Address(Locale.US);
+	        HttpURLConnection conn = null;
+	        StringBuilder jsonResults = new StringBuilder();
+	        
+	        //Send request to PLACES API
+	        try 
+	        {
+
+	            StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + OUT_JSON);
+	            endpointURL.append("latlng="+this.latlng.latitude+","+this.latlng.longitude);
+	            endpointURL.append("&key=" + API_KEY);
+
+	            Log.e(LOG_TAG, "endpointURL: " + endpointURL);
+
+	            URL url = new URL(endpointURL.toString());
+	            conn = (HttpURLConnection) url.openConnection();
+	            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+
+	            // Load the results into a StringBuilder
+	            int read;
+	            char[] buff = new char[1024];
+	            while ((read = in.read(buff)) != -1) 
+	            {
+	                jsonResults.append(buff, 0, read);
+	            }
+	        } 
+	        catch (MalformedURLException e) 
+	        {
+	            Log.e(LOG_TAG, "Error processing Places API URL", e);
+	            return addressresult;
+	        } 
+	        catch (IOException e) 
+	        {
+	            Log.e(LOG_TAG, "Error connecting to Places API", e);
+	            return addressresult;
+	        } 
+	        finally 
+	        {
+	            if (conn != null) 
+	            {
+	                conn.disconnect();
+	            }
+	        }
+
+	        //process PLACES API response
+	        try 
+	        {
+	            // Create a JSON object hierarchy from the results
+	            JSONObject jsonObj = new JSONObject(jsonResults.toString());
+	            JSONArray results = jsonObj.getJSONArray("results");
+
+	            //get formatted address of first result
+	            JSONObject result = results.getJSONObject(0);
+	            addressresult.setLatitude(latlng.latitude);
+	            addressresult.setLongitude(latlng.longitude);
+
+	            addressresult.setAddressLine(0, result.getString("formatted_address"));
+	        }
+	        catch (JSONException e) 
+	        {
+	            Log.e(LOG_TAG, "Cannot process JSON results", e);
+	        }
+	        return addressresult;
+	    }
+	}
 }
 
 
@@ -171,3 +308,5 @@ class InfoWindowClickAdapter implements OnInfoWindowClickListener
 	}
 	
 }
+
+
