@@ -26,7 +26,8 @@
             android:layout_height="fill_parent"
             android:layout_weight="3"
             android:background="@drawable/rtbtn"
-            android:text="@string/metaforaString" />
+            android:text="@string/metaforaString"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/spacebutton"
@@ -48,7 +49,10 @@
             android:id="@+id/textDirectionsListView"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1" >
+            android:layout_weight="1" 
+            android:divider="@color/white"
+            android:dividerHeight="2dp"
+            >
         </ListView>
     </LinearLayout>
 

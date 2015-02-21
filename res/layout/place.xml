@@ -29,6 +29,7 @@
                 android:layout_height="fill_parent"
                 android:layout_weight="3"
                 android:text="@string/metaforaString"
+                android:textColor="@color/white"
                 android:background="@drawable/rtbtn" />
 
             <ImageButton
@@ -164,7 +165,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/backbtn"
-                android:text="Get routes" />
+                android:text="Get routes"
+                android:textColor="@color/white"
+                 />
         </LinearLayout>
 
     </LinearLayout>
