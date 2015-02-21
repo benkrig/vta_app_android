@@ -3,7 +3,9 @@
 
     <string name="app_name">VTAdemo</string>
     <string name="action_settings">Settings</string>
-    <string name="search_field">   search</string>
+    <string name="menu_about_string">About</string>
+    <string name="menu_website_string">Website</string>
+    <string name="search_field">search</string>
     <string name="routes_button_string">Find</string>
     <string name="route1">1</string>
     <string name="route2">2</string>

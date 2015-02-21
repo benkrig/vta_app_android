@@ -303,6 +303,8 @@ public class PlaceFragment extends Fragment
 	        {
 	            // Create a JSON object hierarchy from the results
 	            jsonObj = new JSONObject(jsonResults.toString());
+	            
+	            //IF THIS RETURNS NULL PUT UP A NO PLACE INFO PAGE INSTEAD
 	            result = jsonObj.getJSONObject("result");
 	        } 
 	        catch (JSONException e) 

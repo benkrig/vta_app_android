@@ -351,20 +351,19 @@ public class RouteSelectionFragment extends Fragment
 
 		           		MarkerOptions markerOptions = new MarkerOptions();
 		           		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
-		           		markerOptions.title(transit_details.getString("headsign"));
-		           		markerOptions.snippet(arrival_stop.getString("name"));
+		           		markerOptions.title("At " + arrival_stop.getString("name"));
+		           		markerOptions.snippet("to " + transit_details.getString("headsign"));
 		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
 		           		map.addMarker(markerOptions);
 		           		
-		           		
-		           		
+		         
 		           		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
 		           		JSONObject departure_location = departure_stop.getJSONObject("location");
 		           		
 		           		markerOptions = new MarkerOptions();
 		           		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
-		           		markerOptions.title(transit_details.getString("headsign"));
-		           		markerOptions.snippet(departure_stop.getString("name"));
+		           		markerOptions.title("At " + departure_stop.getString("name"));
+		           		markerOptions.snippet("to " + transit_details.getString("headsign"));
 		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
 		           		map.addMarker(markerOptions);
 		    		}

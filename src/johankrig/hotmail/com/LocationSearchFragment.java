@@ -48,6 +48,7 @@ public class LocationSearchFragment extends Fragment
 	private String searchString = "";
 	private AddressSearchAsyncTask geoTask;
 	private GPSTracker gps;
+	private Button clearSearchBarButton;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -172,6 +173,19 @@ public class LocationSearchFragment extends Fragment
                 }                
             }
         });
+		
+		clearSearchBarButton = (Button) getActivity().findViewById(R.id.clearSearchBarButton);
+		clearSearchBarButton.setOnClickListener(new OnClickListener()
+		{
+
+			@Override
+			public void onClick(View v) 
+			{
+				map.clear();
+				searchBar.setText("");
+			}
+			
+		});
 	}
 	
 	public void createMarkerFromTouch(Address address)

@@ -43,7 +43,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	private final int MAX_RESULTS = 20;
 	//In meters
-	private final int RADIUS = 10000;
+	private final int RADIUS = 20000;
 
 	Context context;
 	MarkerOptions markerOptions;

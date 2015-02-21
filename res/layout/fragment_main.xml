@@ -27,6 +27,16 @@
 />
 
             <Button
+                android:id="@+id/clearSearchBarButton"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:background="#c8b1de"
+                android:layout_gravity="center"
+                android:text="x"
+                android:textColor="@color/white" />
+
+            <Button
                 android:id="@+id/routeMenuButton"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

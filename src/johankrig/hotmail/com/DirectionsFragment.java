@@ -9,6 +9,7 @@ import johankrig.hotmail.com.R;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,13 @@ public class DirectionsFragment extends Fragment
 	private ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
 	private String DirectionsJSON;
+	View footerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
+        footerView = inflater.inflate(R.layout.directions_footer_row, null, false);;
 
         directionsBackButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
         directionsBackButton.setOnClickListener(new OnClickListener() 
@@ -53,6 +56,7 @@ public class DirectionsFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
     	super.onActivityCreated(savedInstanceState);
+        
         mainListView = (ListView) rootView.findViewById(R.id.textDirectionsListView);  
         comm = (Communicator) getActivity();
 	}
@@ -99,6 +103,40 @@ public class DirectionsFragment extends Fragment
 	           }
 	           
 	           directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations);
+	           
+	           TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
+	           JSONObject firstleg = legs.getJSONObject(0);
+	           JSONObject lastleg = legs.getJSONObject(legs.length()-1);
+	           Log.d("firstlegs", firstleg.getString("start_address"));
+	           Log.d("lastleg", lastleg.getString("end_address"));
+	           Log.d("footerview", footerView.toString());
+	           Log.d("footerviewtext", footer1.toString());
+
+
+	           footer1.setText(firstleg.getString("start_address") + " to " + lastleg.getString("end_address"));
+	           
+	           TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
+	           int distanceMeters = 0;
+	           for(int c = 0; c < legs.length(); c++)
+	           {
+	        	   JSONObject curleg = legs.getJSONObject(c);
+	        	   JSONObject distance = curleg.getJSONObject("distance");
+	        	   distanceMeters += distance.getInt("value");
+	           }
+	           footer2.setText("Total distance: " + (int)(distanceMeters * 0.00062137) + " mi");
+
+	           TextView footer3 = (TextView) footerView.findViewById(R.id.directionsTime);
+	           int seconds = 0;
+	           for(int c = 0; c < legs.length(); c++)
+	           {
+	        	   JSONObject curleg = legs.getJSONObject(c);
+	        	   JSONObject duration = curleg.getJSONObject("duration");
+	        	   seconds += duration.getInt("value");
+	           }
+	           Log.d("seconds", ""+seconds);
+	           footer3.setText("Total time: " + ((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins (includes bus wait times)");
+	           
+	           mainListView.addFooterView(footerView);
 	           mainListView.setAdapter(directionsAdapter);
 	           
 
