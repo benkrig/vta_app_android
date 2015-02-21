@@ -48,15 +48,22 @@ public class MainActivity extends FragmentActivity implements Communicator
 
 	//Communicator methods
 	@Override
+	public void startupSlide()
+	{
+		viewPager.setCurrentItem(1, true);
+
+	}
+	
+	@Override
 	public void goToLocationSearch()
 	{
-		viewPager.setCurrentItem(0, false);
+		viewPager.setCurrentItem(1, false);
 	}
 	
 	@Override
 	public void returnRoutes(LatLng destination)
 	{
-		viewPager.setCurrentItem(1, false);
+		viewPager.setCurrentItem(2, false);
 		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
 		rtFrag.updateFragment(destination);
 	}
@@ -64,12 +71,12 @@ public class MainActivity extends FragmentActivity implements Communicator
 	@Override
 	public void gotoTextDirections()
 	{
-		viewPager.setCurrentItem(2, false);
+		viewPager.setCurrentItem(3, false);
 	}
 	@Override
 	public void getPlaceDetails(LatLng location, String place)
 	{	
-		viewPager.setCurrentItem(3, false);
+		viewPager.setCurrentItem(4, false);
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place);
 		
@@ -95,14 +102,20 @@ class MyAdapter extends FragmentPagerAdapter
 	
 	//slick as fuuuuuuuuu
 	//create and maintain each fragment dynamically
-	private LocationSearchFragment mainFrag;
+	private LocationSearchFragment locationsearchFrag;
 	private RouteSelectionFragment routeFrag;
 	private DirectionsFragment directionsFrag;
 	private PlaceFragment placeFrag;
+	private StartupFragment startFrag;
 
+	
+	public StartupFragment getStartFragment()
+	{
+		return startFrag;
+	}
     public LocationSearchFragment getMainFragment() 
     {
-        return mainFrag;
+        return locationsearchFrag;
     }
 	public RouteSelectionFragment getRouteFragment()
 	{
@@ -123,21 +136,26 @@ class MyAdapter extends FragmentPagerAdapter
 		Fragment fragment = null;
 		if(arg0 == 0)
 		{
-			fragment = new LocationSearchFragment();
-			mainFrag = (LocationSearchFragment) fragment;
+			fragment = new StartupFragment();
+			startFrag = (StartupFragment) fragment;
 		}
 		
 		if(arg0 == 1)
 		{
+			fragment = new LocationSearchFragment();
+			locationsearchFrag = (LocationSearchFragment) fragment;
+		}
+		if(arg0 == 2)
+		{
 			fragment = new RouteSelectionFragment();
 			routeFrag = (RouteSelectionFragment) fragment;
 		}
-		if(arg0 == 2)
+		if(arg0 == 3)
 		{
 			fragment = new DirectionsFragment();
 			directionsFrag = (DirectionsFragment) fragment;
 		}
-		if(arg0 == 3)
+		if(arg0 == 4)
 		{
 			fragment = new PlaceFragment();
 			placeFrag = (PlaceFragment) fragment;

@@ -41,7 +41,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     private final String TYPE_NEARBY = "/nearbysearch";
     private final String OUT_JSON = "/json";
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
-	private final int MAX_RESULTS = 7;
+	private final int MAX_RESULTS = 20;
 	//In meters
 	private final int RADIUS = 10000;
 
@@ -88,21 +88,16 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         	for(int index = 0; index < MAX_RESULTS && index < addresses.size(); index++)
         	{
         		final Address address = (Address) addresses.get(index);
-
         		//Creating an instance of GeoPoint, to display in Google Map
         		final LatLng markerLatLng = new LatLng(address.getLatitude(), address.getLongitude());
 
-        		String addressText = address.getAddressLine(0);
         		markerOptions = new MarkerOptions();
         		markerOptions.position(markerLatLng);
-        		markerOptions.title(address.getFeatureName());
-        		markerOptions.snippet(addressText + " "
-        				+ markerString);
-        		  BitmapDescriptor iconColorBitmap 
-        		   = BitmapDescriptorFactory.defaultMarker(
-        		     BitmapDescriptorFactory.HUE_VIOLET);
+        		markerOptions.title("Let's go to " + address.getFeatureName());
+        		markerOptions.snippet("at " + address.getAddressLine(0));
         		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
         		map.addMarker(markerOptions);
+        		
         		
         		//center map on first location
         		if(index == 0)

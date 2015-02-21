@@ -151,7 +151,7 @@ public class PlaceFragment extends Fragment
     		clearPlace();
     		
         	placeLoc = new LatLng(location.latitude, location.longitude);
-    	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword);
+    	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword.substring(11));
     	    getPlace.execute();
     	}
     }

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="100"
+        android:background="@color/purple"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            
+                  android:shadowColor="@color/white"
+                  android:shadowDx="1"
+                  android:shadowDy="1"
+                  android:shadowRadius="2"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="50sp"
+            android:textColor="@color/white"
+            android:text="METAFORA" />
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView1"
+            android:layout_centerHorizontal="true"
+            android:text="transportation simplified"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="metafora.co"
+            android:autoLink="web"
+			android:textColorLink="@android:color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cityscape"
+        android:layout_weight="1"
+        android:scaleType="fitXY" >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+             >
+
+            <Button
+                android:id="@+id/letsgoButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/purple"
+                android:paddingLeft="40dp"
+                android:paddingRight="40dp"
+                android:text="let's go"
+                android:textColor="@color/white"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</LinearLayout>
