@@ -2,7 +2,6 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -76,8 +75,17 @@ public class LocationSearchFragment extends Fragment
 	{
 		InputMethodManager inputManager = (InputMethodManager)
                 getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); 
-    	inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                   InputMethodManager.HIDE_NOT_ALWAYS);
+		View focusedView = getActivity().getCurrentFocus();
+	    /*
+	     * If no view is focused, an NPE will be thrown
+	     * 
+	     * Maxim Dmitriev
+	     */
+	    if (focusedView != null) 
+	    {
+	        inputManager.hideSoftInputFromWindow(focusedView.getWindowToken(),
+	                InputMethodManager.HIDE_NOT_ALWAYS);
+	    }
 	}
 	
 	@Override
