@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import com.google.android.gms.maps.model.LatLng;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -387,21 +389,34 @@ public class PlaceFragment extends Fragment
 		private LatLng location;
 		private String keyword;
 		private JSONObject place_details;
+		private ProgressDialog progressDialog;
 
 		GetPlacesIDTask(LatLng location, String keyword)
 		{
 			this.location = location;
 			this.keyword = keyword;
 		}
+		@Override
+	    protected void onPreExecute() 
+	    {
+	        super.onPreExecute();
+	        progressDialog = new ProgressDialog(getActivity());
+	        progressDialog.setMessage("Getting details...");
+	        progressDialog.setIndeterminate(true);
+	        progressDialog.show();
+	        
+	    }
+		
 	    protected JSONObject doInBackground(Void... params) 
 	    {
-
+	    	
 		    String place_id = getPlaceID(location, keyword);
 		    place_details = getDetails(place_id);
 	        return place_details;
 	    }
 	    protected void onPostExecute(JSONObject result) 
 	    {
+	    	progressDialog.hide();
 		    updatePlace(result);
 	    }
 	}

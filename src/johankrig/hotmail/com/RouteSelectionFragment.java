@@ -307,9 +307,9 @@ public class RouteSelectionFragment extends Fragment
 		        		   @SuppressWarnings("unused")
 							Polyline line = map.addPolyline(new PolylineOptions()
 			                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-			                .width(6)
+			                .width(9)
 			                
-			                .color(Color.MAGENTA).geodesic(true));
+			                .color(Color.argb(150, 255, 102, 126)).geodesic(true));
 	    	           }
 	        	   }
 	        	   
@@ -326,8 +326,10 @@ public class RouteSelectionFragment extends Fragment
 		        		   @SuppressWarnings("unused")
 		        		   Polyline line = map.addPolyline(new PolylineOptions()
 			                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-			                .width(6)
-			                .color(Color.BLUE).geodesic(true));
+			                .width(9)
+			                .color(Color.argb(150, 0, 0, 255)).geodesic(true)
+			                );
+		        		   
 	    	           }
 	        	   }
 	           }
@@ -413,7 +415,6 @@ public class RouteSelectionFragment extends Fragment
 	        progressDialog.setIndeterminate(true);
 	        progressDialog.show();
 			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
-	        
 	    }
 	    @Override
 	    protected String doInBackground(Void... params) 

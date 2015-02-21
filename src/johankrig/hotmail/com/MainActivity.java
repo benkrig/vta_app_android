@@ -76,10 +76,16 @@ public class MainActivity extends FragmentActivity implements Communicator
 	@Override
 	public void getPlaceDetails(LatLng location, String place)
 	{	
-		viewPager.setCurrentItem(4, false);
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place);
-		
+		viewPager.setCurrentItem(4, false);
+
+	}
+	
+	@Override 
+	public void gotoRouteSelection()
+	{
+		viewPager.setCurrentItem(2, false);
 	}
 
 	@Override
@@ -88,6 +94,8 @@ public class MainActivity extends FragmentActivity implements Communicator
 		DirectionsFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).getDirectionsFragment();
 		directionsFragment.updateDirectionsList(JSON, routeNumber);
 	}
+	
+	
 
 }
 
