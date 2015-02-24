@@ -30,14 +30,15 @@ public class DirectionsFragment extends Fragment
 	private ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
 	private String DirectionsJSON;
+	View headerView;
 	View footerView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
-        footerView = inflater.inflate(R.layout.directions_footer_row, null, false);;
-
+        footerView = inflater.inflate(R.layout.directions_footer_row, null, false);
+        headerView = inflater.inflate(R.layout.directions_footer_row, null, false);
         directionsBackButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
         directionsBackButton.setOnClickListener(new OnClickListener() 
         {
@@ -76,6 +77,14 @@ public class DirectionsFragment extends Fragment
 	           JSONObject leg = legs.getJSONObject(0);
 	           JSONArray steps = leg.getJSONArray("steps");
 	           
+	           JSONObject departure_time = leg.getJSONObject("departure_time");
+	           JSONObject arrival_time = leg.getJSONObject("arrival_time");
+	           
+	           String departTime = departure_time.getString("text");
+	           String arrivalTime = arrival_time.getString("text");
+
+
+	           
 	           String[] instructions = new String[steps.length()];
 	           String[] travel_modes = new String[steps.length()];
 	           String[] distances = new String[steps.length()];
@@ -101,9 +110,19 @@ public class DirectionsFragment extends Fragment
 	        	   instructions[index] = html_instructions;
 	        	   travel_modes[index] = travel_mode;
 	           }
+	           if(directionsAdapter == null)
+	           {
+	        	   directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations);
+	           }
+	           //create header view
+	           TextView header1 = (TextView) headerView.findViewById(R.id.directionsLocation);
+	           header1.setText("Depart at: " + departTime);
+	           TextView header2 = (TextView) headerView.findViewById(R.id.directionsDistance);
+	           header2.setText("Arrive at: " + arrivalTime);
+	           TextView header3 = (TextView) headerView.findViewById(R.id.directionsDistance);
+	           //end header view
 	           
-	           directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations);
-	           
+	           //set footer view
 	           TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
 	           JSONObject firstleg = legs.getJSONObject(0);
 	           JSONObject lastleg = legs.getJSONObject(legs.length()-1);
@@ -133,12 +152,25 @@ public class DirectionsFragment extends Fragment
 	        	   JSONObject duration = curleg.getJSONObject("duration");
 	        	   seconds += duration.getInt("value");
 	           }
-	           Log.d("seconds", ""+seconds);
 	           footer3.setText("Total time: " + ((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins (includes bus wait times)");
-	           
-	           mainListView.addFooterView(footerView);
-	           mainListView.setAdapter(directionsAdapter);
-	           
+	           //end footer
+	           if(mainListView.getAdapter() == null)
+	           {
+		           mainListView.setAdapter(directionsAdapter);	 
+
+		           mainListView.addHeaderView(headerView);
+		           mainListView.addFooterView(footerView);
+	           }
+	           else
+	           {	           
+	        	   mainListView.removeHeaderView(headerView);
+	        	   mainListView.removeFooterView(footerView);
+
+		           mainListView.addHeaderView(headerView);
+		           mainListView.addFooterView(footerView);
+		           
+	        	   directionsAdapter.notifyDataSetChanged();
+	           }
 
  	   	}
 		catch (JSONException e) 
@@ -173,7 +205,7 @@ public class DirectionsFragment extends Fragment
 	{
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
- 
+		
 		View rowView = inflater.inflate(R.layout.directionsrow, parent, false);
 		
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.reviewerName);

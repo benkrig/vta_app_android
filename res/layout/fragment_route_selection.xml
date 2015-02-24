@@ -35,6 +35,14 @@
                 android:textColor="@color/white"
                 android:background="@drawable/rtbtn" />
 
+            <ProgressBar
+                android:id="@+id/routeProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/purple"
+                android:indeterminate="true"
+                android:layout_weight=".5" />
+
             <ImageButton
                 android:id="@+id/useRouteButton"
                 style="?android:attr/buttonBarButtonStyle"

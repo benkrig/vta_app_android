@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import com.google.android.gms.maps.model.LatLng;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,7 +27,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -37,7 +38,8 @@ public class PlaceFragment extends Fragment
 {
 	Communicator comm;
 	private View rootView;
-	
+	private ProgressBar loadProgress = null;
+	private RelativeLayout placeLayout = null;
 	
 	private String name;
 	private String address;
@@ -76,8 +78,9 @@ public class PlaceFragment extends Fragment
 	    {
 	        /* map is already there, just return view as it is */
 	    }
-
-        
+	    loadProgress = (ProgressBar) rootView.findViewById(R.id.placeLoadBar);
+	    placeLayout = (RelativeLayout) rootView.findViewById(R.id.placeRelativeLayout);
+	    
         return rootView;
 	}
     
@@ -149,6 +152,7 @@ public class PlaceFragment extends Fragment
     	}
     	else
     	{
+        	placeLayout.setVisibility(View.INVISIBLE);
     		//clear and get new place
     		clearPlace();
     		
@@ -391,7 +395,6 @@ public class PlaceFragment extends Fragment
 		private LatLng location;
 		private String keyword;
 		private JSONObject place_details;
-		private ProgressDialog progressDialog;
 
 		GetPlacesIDTask(LatLng location, String keyword)
 		{
@@ -402,10 +405,7 @@ public class PlaceFragment extends Fragment
 	    protected void onPreExecute() 
 	    {
 	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(getActivity());
-	        progressDialog.setMessage("Getting details...");
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
+	        loadProgress.setVisibility(View.VISIBLE);
 	        
 	    }
 		
@@ -418,7 +418,8 @@ public class PlaceFragment extends Fragment
 	    }
 	    protected void onPostExecute(JSONObject result) 
 	    {
-	    	progressDialog.hide();
+	    	placeLayout.setVisibility(View.VISIBLE);
+	        loadProgress.setVisibility(View.GONE);
 		    updatePlace(result);
 	    }
 	}

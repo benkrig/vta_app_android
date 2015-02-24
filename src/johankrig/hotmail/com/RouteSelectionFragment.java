@@ -43,6 +43,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class RouteSelectionFragment extends Fragment
     public LatLng userLatLng = new LatLng(0,0);
     Timer myTimer = new Timer();
     GetBusLocationTask myTask = null;
+    public ProgressBar loadProgress = null;
     
     //Interface
     Communicator comm;
@@ -89,6 +91,7 @@ public class RouteSelectionFragment extends Fragment
     		/* map is already there, just return view as it is */
     	}
     	
+    	loadProgress = (ProgressBar) rootView.findViewById(R.id.routeProgressBar);
         comm = (Communicator) getActivity();
     	
         gps = new GPSTracker(getActivity());
@@ -161,7 +164,7 @@ public class RouteSelectionFragment extends Fragment
 		        time.setText(strTimeToShow + " "+ am_pm);
 		        
 
-		        
+		        map.clear();
 				GPSTracker gps = new GPSTracker(getActivity());
 				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 				
@@ -457,7 +460,6 @@ public class RouteSelectionFragment extends Fragment
 	//
 	private class DirectionsAsyncTask extends AsyncTask<Void, Void, String>
 	{
-	    private ProgressDialog progressDialog;
 		private String DAPIKEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	    private long time = System.currentTimeMillis()/1000;
 	    private LatLng eloc;
@@ -485,10 +487,7 @@ public class RouteSelectionFragment extends Fragment
 	    protected void onPreExecute() 
 	    {
 	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(getActivity());
-	        progressDialog.setMessage("Fetching route, Please wait...");
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
+	        loadProgress.setVisibility(View.VISIBLE);
 			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
 	    }
 	    @Override
@@ -502,8 +501,8 @@ public class RouteSelectionFragment extends Fragment
 	    @Override
 	    protected void onPostExecute(String result) 
 	    {
-	        super.onPostExecute(result);   
-	        progressDialog.hide();        
+	        super.onPostExecute(result);  
+	        loadProgress.setVisibility(View.GONE);
 	        
 	        //BAD TEST, RESULT WILL NEVER RETURN A NULL, FIX THIS
 	        if(result!=null)
@@ -517,7 +516,6 @@ public class RouteSelectionFragment extends Fragment
 
 	private class GeoAsyncTask extends AsyncTask<Void, Void, String>
 	{
-	    private ProgressDialog progressDialog;
 		private String DAPIKEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	    private String dest;
 	    private String geocodingurl;
@@ -535,10 +533,7 @@ public class RouteSelectionFragment extends Fragment
 	    protected void onPreExecute() 
 	    {
 	        super.onPreExecute();
-	        progressDialog = new ProgressDialog(getActivity());
-	        progressDialog.setMessage("Finding destination, Please wait...");
-	        progressDialog.setIndeterminate(true);
-	        progressDialog.show();
+	        loadProgress.setVisibility(View.VISIBLE);
 	    }
 	    
 	    @Override
@@ -553,7 +548,7 @@ public class RouteSelectionFragment extends Fragment
 	    protected void onPostExecute(String result) 
 	    {
 	        super.onPostExecute(result);   
-	        progressDialog.hide(); 
+	        loadProgress.setVisibility(View.GONE);
 	        
 	        if(result!=null)
 	        {
