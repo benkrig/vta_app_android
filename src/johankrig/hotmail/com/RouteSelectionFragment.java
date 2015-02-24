@@ -9,6 +9,7 @@ package johankrig.hotmail.com;
 
 import johankrig.hotmail.com.R;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 
@@ -25,11 +26,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -38,6 +43,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class RouteSelectionFragment extends Fragment
@@ -118,6 +124,72 @@ public class RouteSelectionFragment extends Fragment
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
         
 
+        class mytimepicker extends DialogFragment implements
+        TimePickerDialog.OnTimeSetListener 
+        {
+        	Button time = null;
+        	public mytimepicker(Button time)
+        	{
+        		this.time = time;
+        	}
+		    @Override
+		    public Dialog onCreateDialog(Bundle savedInstanceState) 
+		    {
+		    	
+		        final Calendar c = Calendar.getInstance();
+		        int hour = c.get(Calendar.HOUR_OF_DAY);
+		        int minute = c.get(Calendar.MINUTE);
+		        
+		        return new TimePickerDialog(getActivity(), this, hour, minute,
+		                DateFormat.is24HourFormat(getActivity()));
+		    }
+		
+		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+		    {
+		    	String am_pm = "";
+
+		        Calendar datetime = Calendar.getInstance();
+		        datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		        datetime.set(Calendar.MINUTE, minute);
+
+		        if (datetime.get(Calendar.AM_PM) == Calendar.AM)
+		            am_pm = "AM";
+		        else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
+		            am_pm = "PM";
+		        
+		    	String strTimeToShow = String.format("%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+		        time.setText(strTimeToShow + " "+ am_pm);
+		        
+
+		        
+				GPSTracker gps = new GPSTracker(getActivity());
+				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+				
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+				
+				drawRoute = new DirectionsAsyncTask();
+				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+		    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
+				drawRoute.setRouteNumber(0);
+				drawRoute.execute();
+		    }
+		}
+        
+        final Button time = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
+        time.setOnClickListener(new OnClickListener()
+        {
+
+			@Override
+			public void onClick(View v) 
+			{
+				DialogFragment newFragment = new mytimepicker(time);
+                newFragment.show(getFragmentManager(), "timePicker");	
+                
+			}
+        	
+        });
+        
+        
     	routebtn1 = (Button) rootView.findViewById(R.id.routebutton1);
     	//OnClick ROUTEBUTTON1
     	//Main route directions will be drawn onto map
@@ -404,6 +476,10 @@ public class RouteSelectionFragment extends Fragment
 			this.uloc = new LatLng(uloc.latitude, uloc.longitude);
 			this.eloc = new LatLng(eloc.latitude, eloc.longitude);
 		}
+		public void setTime(long time)
+		{
+			this.time = time;
+		}
 		
 	    @Override
 	    protected void onPreExecute() 
@@ -433,6 +509,7 @@ public class RouteSelectionFragment extends Fragment
 	        if(result!=null)
 	        {
 	            drawPath(result, route);
+	            Log.d("json", result+"");
 	            comm.updateDirectionsList(result, route);
 	        }
 	    }

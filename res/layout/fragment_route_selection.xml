@@ -23,13 +23,15 @@
                 android:background="@drawable/rtbtn"
 				android:contentDescription="@string/desc"
                 android:src="@drawable/backbutton" />
+
+
             <Button
-                android:id="@+id/metaforaGenericNoClickButton"
+                android:id="@+id/selectRouteDepartTime"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="fill_parent"
                 android:layout_weight="3"
-                android:text="@string/metaforaString"
+                android:text="@string/choose_time"
                 android:textColor="@color/white"
                 android:background="@drawable/rtbtn" />
 
