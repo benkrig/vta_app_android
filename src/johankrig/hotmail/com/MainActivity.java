@@ -60,7 +60,6 @@ public class MainActivity extends FragmentActivity implements Communicator
 	public void startupSlide()
 	{
 		viewPager.setCurrentItem(1, true);
-
 	}
 	
 	@Override

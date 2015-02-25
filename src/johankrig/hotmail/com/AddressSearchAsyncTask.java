@@ -24,6 +24,9 @@ import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -41,7 +44,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     private final String TYPE_NEARBY = "/nearbysearch";
     private final String OUT_JSON = "/json";
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
-	private final int MAX_RESULTS = 20;
+	private final int MAX_RESULTS = 40;
 	//In meters
 	private final int RADIUS = 20000;
 
@@ -51,19 +54,29 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	String markerString = "\nGet Route";
 	GPSTracker gps;
 	String searchKeyword;
+	ProgressBar searchProgress;
+	private Button addressSearchButton;
 	
-	public AddressSearchAsyncTask(Context context, GoogleMap map)
+	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress, Button addressSearchButton)
 	{
 		this.map = map;
 		this.context = context;
 		this.gps = new GPSTracker(context);
+		this.searchProgress = searchProgress;
+		this.addressSearchButton = addressSearchButton;
 	}
 	
 	public void setLocation(String newKeyword)
 	{
 		searchKeyword = newKeyword;
 	}
-
+	@Override 
+	protected void onPreExecute()
+	{
+		addressSearchButton.setVisibility(View.GONE);
+		searchProgress.setVisibility(View.VISIBLE);
+	}
+	
     @Override
     protected List<Address> doInBackground(String... params)
     {
@@ -76,6 +89,9 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     @Override
     protected void onPostExecute(List<Address> addresses) 
     {
+    	searchProgress.setVisibility(View.GONE);
+    	addressSearchButton.setVisibility(View.VISIBLE);
+    	
         if(addresses == null || addresses.size() == 0)
         {
             Toast.makeText(context, "Nothing nearby found!", Toast.LENGTH_SHORT).show();
@@ -123,7 +139,8 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
             StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + TYPE_NEARBY + OUT_JSON);
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
-            endpointURL.append("&radius="+RADIUS);
+           // endpointURL.append("&radius="+RADIUS);
+            endpointURL.append("&rankby=distance");
             endpointURL.append("&keyword=" + URLEncoder.encode(keyword, "utf8"));
             
             Log.e(LOG_TAG, "endpointURL: " + endpointURL);

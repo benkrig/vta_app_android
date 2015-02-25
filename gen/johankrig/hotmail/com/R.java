@@ -327,6 +327,7 @@ containing a value of this type.
         public static final int zOrderOnTop=0x7f010010;
     }
     public static final class color {
+        public static final int backgroundblue=0x7f05001c;
         public static final int common_action_bar_splitter=0x7f050009;
         /**  Sign-in Button Colors 
          */
@@ -339,9 +340,13 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f050006;
         public static final int common_signin_btn_light_text_focused=0x7f050007;
         public static final int common_signin_btn_light_text_pressed=0x7f050005;
-        public static final int common_signin_btn_text_dark=0x7f050019;
-        public static final int common_signin_btn_text_light=0x7f05001a;
+        public static final int common_signin_btn_text_dark=0x7f05001e;
+        public static final int common_signin_btn_text_light=0x7f05001f;
+        public static final int exitblue=0x7f05001b;
         public static final int purple=0x7f050018;
+        public static final int rowblue=0x7f05001d;
+        public static final int rowpurple=0x7f050019;
+        public static final int searchpurple=0x7f05001a;
         public static final int wallet_bright_foreground_disabled_holo_light=0x7f05000f;
         /** 
          Wallet colors to support consistent Wallet fragment holo dark UI in client application
@@ -360,8 +365,8 @@ containing a value of this type.
         public static final int wallet_hint_foreground_holo_light=0x7f050011;
         public static final int wallet_holo_blue_light=0x7f050015;
         public static final int wallet_link_text_light=0x7f050016;
-        public static final int wallet_primary_text_holo_light=0x7f05001b;
-        public static final int wallet_secondary_text_holo_dark=0x7f05001c;
+        public static final int wallet_primary_text_holo_light=0x7f050020;
+        public static final int wallet_secondary_text_holo_dark=0x7f050021;
         public static final int white=0x7f050017;
     }
     public static final class dimen {
@@ -425,73 +430,79 @@ containing a value of this type.
         public static final int walking_man=0x7f02002a;
     }
     public static final class id {
-        public static final int RouteMap=0x7f070024;
-        public static final int TextView01=0x7f07003e;
-        public static final int action_settings=0x7f070041;
-        public static final int address=0x7f070035;
+        public static final int RouteMap=0x7f070027;
+        public static final int TextView01=0x7f070042;
+        public static final int action_settings=0x7f070047;
+        public static final int address=0x7f070039;
+        public static final int arriveTextView=0x7f070019;
         public static final int book_now=0x7f070010;
         public static final int buyButton=0x7f07000a;
         public static final int buy_now=0x7f07000f;
         public static final int buy_with_google=0x7f07000e;
         public static final int classic=0x7f070011;
-        public static final int clearSearchBarButton=0x7f070021;
-        public static final int dateOfReview=0x7f07003c;
-        public static final int directionsBackButton=0x7f07001b;
-        public static final int directionsDetails=0x7f07001a;
+        public static final int clearSearchBarButton=0x7f070023;
+        public static final int dateOfReview=0x7f070040;
+        public static final int departTextView=0x7f070018;
+        public static final int directionsBackButton=0x7f07001d;
+        public static final int directionsDetails=0x7f07001c;
         public static final int directionsDistance=0x7f070017;
         public static final int directionsLocation=0x7f070015;
-        public static final int directionsText=0x7f070019;
+        public static final int directionsText=0x7f07001b;
         public static final int directionsTime=0x7f070016;
         public static final int grayscale=0x7f070012;
         public static final int holo_dark=0x7f070005;
         public static final int holo_light=0x7f070006;
         public static final int hybrid=0x7f070004;
-        public static final int letsgoButton=0x7f070040;
-        public static final int linearLayout1=0x7f07001f;
-        public static final int mainmap=0x7f070023;
+        public static final int letsgoButton=0x7f070046;
+        public static final int linearLayout1=0x7f070021;
+        public static final int locationSearchProgressBar=0x7f070025;
+        public static final int mainmap=0x7f070026;
         public static final int match_parent=0x7f07000c;
-        public static final int menu_about=0x7f070042;
-        public static final int menu_website=0x7f070043;
-        public static final int metaforaGenericNoClickButton=0x7f07001c;
+        public static final int menu_about=0x7f070048;
+        public static final int menu_website=0x7f070049;
+        public static final int metaforaGenericNoClickButton=0x7f07001e;
         public static final int monochrome=0x7f070013;
-        public static final int name=0x7f070034;
+        public static final int name=0x7f070038;
         public static final int none=0x7f070000;
         public static final int normal=0x7f070001;
         public static final int pager=0x7f070014;
-        public static final int phone=0x7f070036;
-        public static final int placeBaseLinearLayout=0x7f07002e;
-        public static final int placeGetRoutesButton=0x7f070033;
-        public static final int placeInfoBackButton=0x7f07002f;
-        public static final int placeLoadBar=0x7f070030;
-        public static final int placeRating=0x7f070039;
-        public static final int placeRelativeLayout=0x7f070031;
-        public static final int placeReviewList=0x7f07003a;
+        public static final int phone=0x7f07003a;
+        public static final int placeBaseLinearLayout=0x7f070031;
+        public static final int placeGetRoutesButton=0x7f070036;
+        public static final int placeInfoBackButton=0x7f070032;
+        public static final int placeLoadBar=0x7f070033;
+        public static final int placeLoadButton=0x7f070037;
+        public static final int placeRating=0x7f07003d;
+        public static final int placeRelativeLayout=0x7f070034;
+        public static final int placeReviewList=0x7f07003e;
         public static final int production=0x7f070007;
-        public static final int reviewUserName=0x7f070038;
-        public static final int reviewerName=0x7f070018;
-        public static final int routeDirectionTextView=0x7f070026;
-        public static final int routeMenuButton=0x7f070022;
-        public static final int routeProgressBar=0x7f070028;
-        public static final int routebutton1=0x7f07002b;
-        public static final int routebutton2=0x7f07002c;
-        public static final int routebutton3=0x7f07002d;
-        public static final int routeselectionmap=0x7f07002a;
+        public static final int reviewUserName=0x7f07003c;
+        public static final int reviewerName=0x7f07001a;
+        public static final int routeDirectionTextView=0x7f070029;
+        public static final int routeMenuButton=0x7f070024;
+        public static final int routeProgressBar=0x7f07002b;
+        public static final int routebutton1=0x7f07002e;
+        public static final int routebutton2=0x7f07002f;
+        public static final int routebutton3=0x7f070030;
+        public static final int routeselectionmap=0x7f07002d;
         public static final int sandbox=0x7f070008;
         public static final int satellite=0x7f070002;
-        public static final int searchBar=0x7f070020;
-        public static final int selectRouteDepartTime=0x7f070027;
+        public static final int searchBar=0x7f070022;
+        public static final int selectRouteDepartTime=0x7f07002a;
         public static final int selectionDetails=0x7f07000b;
-        public static final int spacebutton=0x7f07001d;
+        public static final int spacebutton=0x7f07001f;
+        public static final int startScreenLoadingText=0x7f070045;
+        public static final int startScreenProgressBar=0x7f070044;
         public static final int strict_sandbox=0x7f070009;
         public static final int terrain=0x7f070003;
-        public static final int textDirectionsButton=0x7f070025;
-        public static final int textDirectionsListView=0x7f07001e;
-        public static final int textView1=0x7f070032;
-        public static final int textView2=0x7f07003f;
-        public static final int useRouteButton=0x7f070029;
-        public static final int userReviewDetails=0x7f07003d;
-        public static final int userReviewRating=0x7f07003b;
-        public static final int website=0x7f070037;
+        public static final int textDirectionsButton=0x7f070028;
+        public static final int textDirectionsListView=0x7f070020;
+        public static final int textView1=0x7f070035;
+        public static final int textView2=0x7f070043;
+        public static final int useRouteButton=0x7f07002c;
+        public static final int userReviewDetails=0x7f070041;
+        public static final int userReviewRating=0x7f07003f;
+        public static final int website=0x7f07003b;
         public static final int wrap_content=0x7f07000d;
     }
     public static final class integer {
@@ -500,15 +511,16 @@ containing a value of this type.
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int directions_footer_row=0x7f030001;
-        public static final int directionsrow=0x7f030002;
-        public static final int fragment_directions=0x7f030003;
-        public static final int fragment_main=0x7f030004;
-        public static final int fragment_route=0x7f030005;
-        public static final int fragment_route_selection=0x7f030006;
-        public static final int no_place_info=0x7f030007;
-        public static final int place=0x7f030008;
-        public static final int placereviewrow=0x7f030009;
-        public static final int startuppage=0x7f03000a;
+        public static final int directions_header_row=0x7f030002;
+        public static final int directionsrow=0x7f030003;
+        public static final int fragment_directions=0x7f030004;
+        public static final int fragment_main=0x7f030005;
+        public static final int fragment_route=0x7f030006;
+        public static final int fragment_route_selection=0x7f030007;
+        public static final int no_place_info=0x7f030008;
+        public static final int place=0x7f030009;
+        public static final int placereviewrow=0x7f03000a;
+        public static final int startuppage=0x7f03000b;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;

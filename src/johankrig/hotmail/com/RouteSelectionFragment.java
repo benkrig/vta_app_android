@@ -120,13 +120,6 @@ public class RouteSelectionFragment extends Fragment
             }
         });
         
-        
-        //could be error here
-        //updateLatLng = new LatLng(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-        //CameraUpdate update = CameraUpdateFactory.newLatLngZoom(updateLatLng, 10);
-        //map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
-        
-
         class mytimepicker extends DialogFragment implements
         TimePickerDialog.OnTimeSetListener 
         {
@@ -170,6 +163,10 @@ public class RouteSelectionFragment extends Fragment
 				
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 				
+				if(drawRoute != null)
+				{
+					drawRoute.cancel(true);
+				}
 				drawRoute = new DirectionsAsyncTask();
 				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 		    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
@@ -203,17 +200,21 @@ public class RouteSelectionFragment extends Fragment
             {
             	//Route number is hard coded based on button number
 
+            	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
+            	{
+            		drawRoute.cancel(true);
+                	drawRoute = new DirectionsAsyncTask();
+            	}
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
-                	drawRoute.setRouteNumber(0);
-            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
                 	map.clear();
                 	drawRoute.setRouteNumber(0);
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+    		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute(); 
                 }
                 
@@ -233,17 +234,21 @@ public class RouteSelectionFragment extends Fragment
             @Override
             public void onClick(View v) 
             {
+            	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
+            	{
+            		drawRoute.cancel(true);
+                	drawRoute = new DirectionsAsyncTask();
+            	}
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
-                	drawRoute.setRouteNumber(1);
-            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
                 	map.clear();
                 	drawRoute.setRouteNumber(1);
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+    		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute();
                 }
 
@@ -265,23 +270,29 @@ public class RouteSelectionFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
+            	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
+            	{
+                	drawRoute = new DirectionsAsyncTask();
+            	}
             	if(drawRoute.getStatus() == AsyncTask.Status.FINISHED)
                 {
                 	drawRoute = new DirectionsAsyncTask();
-                	drawRoute.setRouteNumber(2);
-            		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
                 }
                 if(drawRoute.getStatus() == AsyncTask.Status.PENDING)
                 {
+                	
                 	map.clear();
                 	drawRoute.setRouteNumber(2);
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+    		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute();
                 }
 
                 Timer myTimer = new Timer();
-                if(myTask !=null){
-                myTask.cancel();}
+                if(myTask !=null)
+                {
+                	myTask.cancel();
+                }
             	myTask = new GetBusLocationTask(map);
                 myTimer.schedule(myTask, 3000, 1000); 
             }
@@ -384,7 +395,7 @@ public class RouteSelectionFragment extends Fragment
 			                .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
 			                .width(9)
 			                
-			                .color(Color.argb(150, 255, 102, 126)).geodesic(true));
+			                .color(Color.argb(190, 255, 102, 126)).geodesic(true));
 	    	           }
 	        	   }
 	        	   
@@ -585,7 +596,10 @@ public class RouteSelectionFragment extends Fragment
 		
 		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 		
-		
+		if(drawRoute !=null)
+		{
+			drawRoute.cancel(true);
+		}
 		drawRoute = new DirectionsAsyncTask();
 		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
     	drawRoute.setRouteNumber(0);

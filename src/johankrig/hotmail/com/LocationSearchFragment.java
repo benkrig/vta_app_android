@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 
 public class LocationSearchFragment extends Fragment
@@ -49,6 +50,7 @@ public class LocationSearchFragment extends Fragment
 	private AddressSearchAsyncTask geoTask;
 	private GPSTracker gps;
 	private Button clearSearchBarButton;
+	private ProgressBar searchProgress;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -67,9 +69,10 @@ public class LocationSearchFragment extends Fragment
 	    {
 	        //map is already there, just return view as it is
 	    }
-        
+	    
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
+        
         map.getUiSettings().setMyLocationButtonEnabled(true);
         //Hide keyboard on map click
         map.setOnMapClickListener(new OnMapClickListener()
@@ -119,8 +122,7 @@ public class LocationSearchFragment extends Fragment
 		comm = (Communicator) getActivity();
 		
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-				37.3333, -121.9000), 12.0f));
+        
         
 		//center map on user
 		gps = new GPSTracker(getActivity());
@@ -129,8 +131,17 @@ public class LocationSearchFragment extends Fragment
 			LatLng updateLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
 		}
+		else
+		{
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+					37.3333, -121.9000), 12.0f));
+		}
 		
-    	geoTask = new AddressSearchAsyncTask(getActivity(), map);
+	    searchProgress = (ProgressBar) getActivity().findViewById(R.id.locationSearchProgressBar);
+		addressSearchButton = (Button) getActivity().findViewById(R.id.routeMenuButton);
+
+		
+    	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
 		searchBar.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line));
@@ -147,7 +158,6 @@ public class LocationSearchFragment extends Fragment
 			
 		});
 		
-		addressSearchButton = (Button) getActivity().findViewById(R.id.routeMenuButton);
 		addressSearchButton.setOnClickListener(new OnClickListener() 
         {
             @Override
@@ -164,7 +174,7 @@ public class LocationSearchFragment extends Fragment
                 //Status.PENDING, execute.
                 if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
                 {
-                	geoTask = new AddressSearchAsyncTask(getActivity(), map);
+                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
                 }
                 if(geoTask.getStatus() == AsyncTask.Status.PENDING)
                 {

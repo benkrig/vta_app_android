@@ -38,7 +38,8 @@ public class PlaceFragment extends Fragment
 {
 	Communicator comm;
 	private View rootView;
-	private ProgressBar loadProgress = null;
+	private ProgressBar loadProgressBar = null;
+	private Button loadProgressButton = null;
 	private RelativeLayout placeLayout = null;
 	
 	private String name;
@@ -78,7 +79,8 @@ public class PlaceFragment extends Fragment
 	    {
 	        /* map is already there, just return view as it is */
 	    }
-	    loadProgress = (ProgressBar) rootView.findViewById(R.id.placeLoadBar);
+	    loadProgressBar = (ProgressBar) rootView.findViewById(R.id.placeLoadBar);
+	    loadProgressButton = (Button) rootView.findViewById(R.id.placeLoadButton);
 	    placeLayout = (RelativeLayout) rootView.findViewById(R.id.placeRelativeLayout);
 	    
         return rootView;
@@ -157,6 +159,7 @@ public class PlaceFragment extends Fragment
     		clearPlace();
     		
         	placeLoc = new LatLng(location.latitude, location.longitude);
+        	
     	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword.substring(11));
     	    getPlace.execute();
     	}
@@ -405,7 +408,8 @@ public class PlaceFragment extends Fragment
 	    protected void onPreExecute() 
 	    {
 	        super.onPreExecute();
-	        loadProgress.setVisibility(View.VISIBLE);
+	        loadProgressButton.setVisibility(View.GONE);
+	        loadProgressBar.setVisibility(View.VISIBLE);
 	        
 	    }
 		
@@ -419,7 +423,8 @@ public class PlaceFragment extends Fragment
 	    protected void onPostExecute(JSONObject result) 
 	    {
 	    	placeLayout.setVisibility(View.VISIBLE);
-	        loadProgress.setVisibility(View.GONE);
+	        loadProgressButton.setVisibility(View.VISIBLE);
+	        loadProgressBar.setVisibility(View.GONE);
 		    updatePlace(result);
 	    }
 	}

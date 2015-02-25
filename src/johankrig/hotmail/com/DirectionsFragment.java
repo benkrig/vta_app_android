@@ -38,7 +38,8 @@ public class DirectionsFragment extends Fragment
 	{
         rootView = inflater.inflate(R.layout.fragment_directions, container, false);
         footerView = inflater.inflate(R.layout.directions_footer_row, null, false);
-        headerView = inflater.inflate(R.layout.directions_footer_row, null, false);
+        headerView = inflater.inflate(R.layout.directions_header_row, null, false);
+        
         directionsBackButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
         directionsBackButton.setOnClickListener(new OnClickListener() 
         {
@@ -115,11 +116,10 @@ public class DirectionsFragment extends Fragment
 	        	   directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations);
 	           }
 	           //create header view
-	           TextView header1 = (TextView) headerView.findViewById(R.id.directionsLocation);
+	           TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
 	           header1.setText("Depart at: " + departTime);
-	           TextView header2 = (TextView) headerView.findViewById(R.id.directionsDistance);
+	           TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
 	           header2.setText("Arrive at: " + arrivalTime);
-	           TextView header3 = (TextView) headerView.findViewById(R.id.directionsDistance);
 	           //end header view
 	           
 	           //set footer view
@@ -169,7 +169,7 @@ public class DirectionsFragment extends Fragment
 		           mainListView.addHeaderView(headerView);
 		           mainListView.addFooterView(footerView);
 		           
-	        	   directionsAdapter.notifyDataSetChanged();
+		           mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations));
 	           }
 
  	   	}
