@@ -98,7 +98,9 @@ import android.widget.Filterable;
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&components=country:us");
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
-            endpointURL.append("&radius=5000");
+            endpointURL.append("&radius=500");
+            endpointURL.append("&types=establishment");
+
             endpointURL.append("&input=" + URLEncoder.encode(input, "utf8"));
 
             URL url = new URL(endpointURL.toString());

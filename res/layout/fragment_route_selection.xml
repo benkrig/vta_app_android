@@ -88,7 +88,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rtbtn"
                 android:text="@string/route1"
-                android:textColor="@color/white"
+                android:textColor="@color/exitblue"
                  />
 
             <Button
@@ -99,7 +99,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rtbtn"
                 android:text="@string/route2"
-				android:textColor="@color/white"
+				android:textColor="@color/exitblue"
                  />
 
             <Button
@@ -110,7 +110,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rtbtn"
                 android:text="@string/route3"
-                android:textColor="@color/white" />
+                android:textColor="@color/exitblue" />
         </LinearLayout>
 
     </LinearLayout>

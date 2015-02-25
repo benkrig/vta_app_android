@@ -42,6 +42,8 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     private final String LOG_TAG = "VTA";
     private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private final String TYPE_NEARBY = "/nearbysearch";
+    private final String TYPE_TEXT = "/textsearch";
+
     private final String OUT_JSON = "/json";
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	private final int MAX_RESULTS = 40;
@@ -81,7 +83,10 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     protected List<Address> doInBackground(String... params)
     {
         List<Address> addresses = null;
-        addresses = this.getAddresses(searchKeyword, gps);
+        if(!searchKeyword.isEmpty())
+        {
+            addresses = this.getAddresses(searchKeyword, gps);
+        }
         
         return addresses;
     }
@@ -92,37 +97,44 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     	searchProgress.setVisibility(View.GONE);
     	addressSearchButton.setVisibility(View.VISIBLE);
     	
-        if(addresses == null || addresses.size() == 0)
-        {
-            Toast.makeText(context, "Nothing nearby found!", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
-        	//Clears all the existing markers on the map
-        	map.clear();
-        	//Adding Markers on Google Map for each matching address
-        	for(int index = 0; index < MAX_RESULTS && index < addresses.size(); index++)
-        	{
-        		final Address address = (Address) addresses.get(index);
-        		//Creating an instance of GeoPoint, to display in Google Map
-        		final LatLng markerLatLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-        		markerOptions = new MarkerOptions();
-        		markerOptions.position(markerLatLng);
-        		markerOptions.title("Let's go to " + address.getFeatureName());
-        		markerOptions.snippet("at " + address.getAddressLine(0));
-        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
-        		map.addMarker(markerOptions);
-        		
-        		
-        		//center map on first location
-        		if(index == 0)
-        		{
-        			map.animateCamera(CameraUpdateFactory.newLatLng(markerLatLng));
-        			map.animateCamera(CameraUpdateFactory.zoomTo(12));
-        		}	
-        	}
-        }
+    	if(searchKeyword.isEmpty())
+    	{
+            Toast.makeText(context, "Enter text to search", Toast.LENGTH_SHORT).show();
+    	}
+    	else
+    	{
+	        if(addresses == null || addresses.size() == 0)
+	        {
+	            Toast.makeText(context, "Try a different search!", Toast.LENGTH_SHORT).show();
+	        }
+	        else
+	        {
+	        	//Clears all the existing markers on the map
+	        	map.clear();
+	        	//Adding Markers on Google Map for each matching address
+	        	for(int index = 0; index < MAX_RESULTS && index < addresses.size(); index++)
+	        	{
+	        		final Address address = (Address) addresses.get(index);
+	        		//Creating an instance of GeoPoint, to display in Google Map
+	        		final LatLng markerLatLng = new LatLng(address.getLatitude(), address.getLongitude());
+	
+	        		markerOptions = new MarkerOptions();
+	        		markerOptions.position(markerLatLng);
+	        		markerOptions.title("Let's go to " + address.getFeatureName());
+	        		markerOptions.snippet(address.getAddressLine(0));
+	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+	        		map.addMarker(markerOptions);
+	        		
+	        		
+	        		//center map on first location
+	        		if(index == 0)
+	        		{
+	        			map.moveCamera(CameraUpdateFactory.newLatLng(markerLatLng));
+	        			map.moveCamera(CameraUpdateFactory.zoomTo(13));
+	        		}	
+	        	}
+	        }
+    	}
     }
 
     public List<Address> getAddresses(String keyword, GPSTracker gpsTracker) 
@@ -136,12 +148,12 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         try 
         {
 
-            StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + TYPE_NEARBY + OUT_JSON);
+            StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + TYPE_TEXT + OUT_JSON);
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
            // endpointURL.append("&radius="+RADIUS);
-            endpointURL.append("&rankby=distance");
-            endpointURL.append("&keyword=" + URLEncoder.encode(keyword, "utf8"));
+            endpointURL.append("&radius=5000");
+            endpointURL.append("&query=" + URLEncoder.encode(keyword, "utf8"));
             
             Log.e(LOG_TAG, "endpointURL: " + endpointURL);
 
@@ -188,7 +200,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
             	JSONObject result = results.getJSONObject(index);
             	Address addr = new Address(null);
             	addr.setFeatureName(result.getString("name"));
-            	addr.setAddressLine(0, result.getString("vicinity"));
+            	addr.setAddressLine(0, result.getString("formatted_address"));
             	
             	JSONObject geo = result.getJSONObject("geometry");
             	JSONObject location = geo.getJSONObject("location");

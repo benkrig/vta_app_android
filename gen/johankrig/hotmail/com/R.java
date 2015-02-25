@@ -432,7 +432,9 @@ containing a value of this type.
     public static final class id {
         public static final int RouteMap=0x7f070027;
         public static final int TextView01=0x7f070042;
-        public static final int action_settings=0x7f070047;
+        public static final int TextView02=0x7f070046;
+        public static final int TextView03=0x7f070045;
+        public static final int action_settings=0x7f070048;
         public static final int address=0x7f070039;
         public static final int arriveTextView=0x7f070019;
         public static final int book_now=0x7f070010;
@@ -453,13 +455,13 @@ containing a value of this type.
         public static final int holo_dark=0x7f070005;
         public static final int holo_light=0x7f070006;
         public static final int hybrid=0x7f070004;
-        public static final int letsgoButton=0x7f070046;
+        public static final int letsgoButton=0x7f070047;
         public static final int linearLayout1=0x7f070021;
         public static final int locationSearchProgressBar=0x7f070025;
         public static final int mainmap=0x7f070026;
         public static final int match_parent=0x7f07000c;
-        public static final int menu_about=0x7f070048;
-        public static final int menu_website=0x7f070049;
+        public static final int menu_about=0x7f070049;
+        public static final int menu_website=0x7f07004a;
         public static final int metaforaGenericNoClickButton=0x7f07001e;
         public static final int monochrome=0x7f070013;
         public static final int name=0x7f070038;
@@ -491,8 +493,7 @@ containing a value of this type.
         public static final int selectRouteDepartTime=0x7f07002a;
         public static final int selectionDetails=0x7f07000b;
         public static final int spacebutton=0x7f07001f;
-        public static final int startScreenLoadingText=0x7f070045;
-        public static final int startScreenProgressBar=0x7f070044;
+        public static final int startScreenLoadingText=0x7f070044;
         public static final int strict_sandbox=0x7f070009;
         public static final int terrain=0x7f070003;
         public static final int textDirectionsButton=0x7f070028;
