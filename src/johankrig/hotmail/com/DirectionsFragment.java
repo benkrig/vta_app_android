@@ -243,22 +243,25 @@ public class DirectionsFragment extends Fragment
 		
 		View rowView = inflater.inflate(R.layout.directionsrow, parent, false);
 		
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.reviewerName);
+		ImageView imageView = (ImageView) rowView.findViewById(R.id.vehicleTypeImage);
 
 		TextView directionsText = (TextView) rowView.findViewById(R.id.directionsText);
 		TextView directionsDetails = (TextView) rowView.findViewById(R.id.directionsDetails);
+		TextView directionsRowTimeText = (TextView) rowView.findViewById(R.id.directionsRowTimeTextView);
+
 		
-		if(transitArrivals[position] != null)
+		if(position+1 < transitArrivals.length)
 		{
-			LinearLayout detailsLayout = (LinearLayout) rowView.findViewById(R.id.transitDetailsLinearLayout);
-			detailsLayout.setVisibility(View.VISIBLE);
-			TextView transitDetails = (TextView) rowView.findViewById(R.id.transitTextView);
-			transitDetails.setText(vehicleTypes[position] + " arrives here at " + transitArrivals[position]);
+			if(transitArrivals[position+1] != null)
+			{
+				TextView transitDetails = (TextView) rowView.findViewById(R.id.transitTextView);
+				transitDetails.setVisibility(View.VISIBLE);
+				transitDetails.setText(vehicleTypes[position+1] + " arrives here at " + transitArrivals[position+1]);
+			}
 		}
 		
-		directionsDetails.setText("Dist: " + distances[position]
-				+ "\n"
-				+ durations[position]);
+		directionsDetails.setText("Dist: " + distances[position]);
+		directionsRowTimeText.setText(durations[position]);
 		
 		directionsText.setText(values[position]);
  
