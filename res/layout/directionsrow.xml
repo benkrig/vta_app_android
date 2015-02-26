@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="@color/rowpurple" >
+    android:background="@color/closedgrey"
+    android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,27 +14,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:padding="5dip"
-             />
+            android:layout_centerInParent="true"
+            android:padding="5dip" />
 
         <TextView
             android:id="@+id/directionsText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/reviewerName"
+            android:layout_centerInParent="true"
             android:layout_toLeftOf="@+id/directionsDetails"
-            android:textColor="@color/white"
-            
-             />
+            android:layout_toRightOf="@id/reviewerName"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/directionsDetails"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
             android:textColor="@color/white"
             android:padding="5dip"
 			 />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/transitDetailsLinearLayout"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/transitTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+			 />
+
+    </LinearLayout>
 
 </LinearLayout>

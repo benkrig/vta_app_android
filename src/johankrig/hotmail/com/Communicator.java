@@ -17,5 +17,7 @@ public interface Communicator
 	public void startupSlide();
 
 	public void gotoRouteSelection();
+
+	public void goToPlaceDetails();
 	
 }

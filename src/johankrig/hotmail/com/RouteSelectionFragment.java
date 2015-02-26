@@ -66,7 +66,6 @@ public class RouteSelectionFragment extends Fragment
     private Button routebtn3;
     private ImageButton textDirectionsButton;
     ImageButton mainMapButton;
-    GeoAsyncTask findDestination = new GeoAsyncTask();
     DirectionsAsyncTask drawRoute;
     GetBusLocationTask bus;
     GPSTracker gps;
@@ -109,13 +108,9 @@ public class RouteSelectionFragment extends Fragment
         {
             @Override
             public void onClick(View v)
-            {
-            	
-            	//Erase variables
-            	map.clear();
-            	
-            	//Return to home search screen
-                comm.goToLocationSearch();
+            {            	
+            	//Return to Place Details Screen
+                comm.goToPlaceDetails();
                 
             }
         });
@@ -364,6 +359,8 @@ public class RouteSelectionFragment extends Fragment
 	           final JSONObject json = new JSONObject(result);
 	           //Get the Routes Array from the JsonObject
 	           JSONArray routeArray = json.getJSONArray("routes");
+	           Log.d("Routes: ", ""+routeArray.length());
+
 	           
 	           //Select which route to draw
 	           //Throws a JSONException if no route is found at index routeNumber
@@ -477,7 +474,7 @@ public class RouteSelectionFragment extends Fragment
 	    private LatLng uloc;
 
 	    //HARDCODED FOR NOW CHANGE THIS
-	    private int route = 1;
+	    private int route;
 		private String directionsurl;
 
 		public void setRouteNumber(int num)
@@ -500,6 +497,7 @@ public class RouteSelectionFragment extends Fragment
 	        super.onPreExecute();
 	        loadProgress.setVisibility(View.VISIBLE);
 			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
+			Log.d("url", directionsurl);
 	    }
 	    @Override
 	    protected String doInBackground(Void... params) 
@@ -524,86 +522,32 @@ public class RouteSelectionFragment extends Fragment
 	        }
 	    }
 	}
-
-	private class GeoAsyncTask extends AsyncTask<Void, Void, String>
-	{
-		private String DAPIKEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
-	    private String dest;
-	    private String geocodingurl;
-
-		//takes a LatLng for the start point and a string for the endpoint
-		//using google geocode api finds the LatLng of the String Adress
-		//then uses google directions api to get directions from the points
-		public void updateDestination(String destination)
-		{
-			dest = destination;
-			geocodingurl = "https://maps.googleapis.com/maps/api/geocode/json?address=" + dest + "&components=administrative_area:CA|country:US&key=" + DAPIKEY + "&sensor=true";
-		}
-		
-	    @Override
-	    protected void onPreExecute() 
-	    {
-	        super.onPreExecute();
-	        loadProgress.setVisibility(View.VISIBLE);
-	    }
-	    
-	    @Override
-	    protected String doInBackground(Void... params) 
-	    {
-	        JSONParser jParser = new JSONParser();
-	        String json = jParser.getJSONFromUrl(geocodingurl, 0);
-	        return json;
-	    }
-	    
-	    @Override
-	    protected void onPostExecute(String result) 
-	    {
-	        super.onPostExecute(result);   
-	        loadProgress.setVisibility(View.GONE);
-	        
-	        if(result!=null)
-	        {
-	           //Transform the string into a json object
-	           try 
-	           {
-	        	   JSONObject json = new JSONObject(result);
-	        	   JSONArray addresses = json.getJSONArray("results");
-	        	   JSONObject address = addresses.getJSONObject(0);
-	        	   JSONObject geometry = address.getJSONObject("geometry");
-	        	   JSONObject location = geometry.getJSONObject("location");
-	        	   //Public LatLng in RouteFragment.java
-	         	   //Something to do with JSON formatting, have to parse double from string
-	        	   destinationLatLng = new LatLng ((Double.parseDouble(location.getString("lat"))),(Double.parseDouble(location.getString("lng"))));
-	           } 
-	           catch (JSONException e) 
-	           {
-		            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
-	           }
-	        }
-	        else
-	        {
-	            Toast.makeText(getActivity(), "No Location found", Toast.LENGTH_SHORT).show();
-	        }
-	    }
-	}
 	
 //updates userLatLng, destinationLatLng
 	public void updateFragment(LatLng dest)
 	{
-		GPSTracker gps = new GPSTracker(getActivity());
-		userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-		destinationLatLng = dest;
-		
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-		
-		if(drawRoute !=null)
+		if(!dest.equals(destinationLatLng))
 		{
-			drawRoute.cancel(true);
+			map.clear();
+			
+			GPSTracker gps = new GPSTracker(getActivity());
+			userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+			destinationLatLng = dest;
+			
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+			
+			if(drawRoute !=null)
+			{
+				drawRoute.cancel(true);
+			}
+			drawRoute = new DirectionsAsyncTask();
+			drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+	    	drawRoute.setRouteNumber(0);
+			drawRoute.execute();
 		}
-		drawRoute = new DirectionsAsyncTask();
-		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
-    	drawRoute.setRouteNumber(0);
-		drawRoute.execute();
+		else
+		{
+		}
 	}
 	
 }

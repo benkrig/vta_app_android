@@ -17,6 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -74,8 +75,11 @@ public class DirectionsFragment extends Fragment
 	           
 	           JSONArray routes = json.getJSONArray("routes");
 	           JSONObject route = routes.getJSONObject(routeNumber);
+	           
+	           
 	           JSONArray legs = route.getJSONArray("legs");
 	           JSONObject leg = legs.getJSONObject(0);
+	           
 	           JSONArray steps = leg.getJSONArray("steps");
 	           
 	           JSONObject departure_time = leg.getJSONObject("departure_time");
@@ -90,6 +94,9 @@ public class DirectionsFragment extends Fragment
 	           String[] travel_modes = new String[steps.length()];
 	           String[] distances = new String[steps.length()];
 	           String[] durations = new String[steps.length()];
+	           String[] transitArrivals = new String[steps.length()];
+	           String[] vehicleTypes = new String[steps.length()];
+	           
 
 	           
 	           for(int index = 0; index < steps.length(); index++)
@@ -106,6 +113,16 @@ public class DirectionsFragment extends Fragment
 	        	   JSONObject duration = step.getJSONObject("duration");
 	        	   String durationString = duration.getString("text");
 
+	        	   if(travel_mode.equals("TRANSIT"))
+	        	   {
+	        		   JSONObject transitDetails = step.getJSONObject("transit_details");
+	        		   JSONObject departureTime = transitDetails.getJSONObject("departure_time");
+	        		   transitArrivals[index] = departureTime.getString("text");
+	        		   
+	        		   JSONObject line = transitDetails.getJSONObject("line");
+	        		   JSONObject vehicle = line.getJSONObject("vehicle");
+	        		   vehicleTypes[index] = vehicle.getString("name");
+	        	   }
 	        	   distances[index] = distanceString;
 	        	   durations[index] = durationString;
 	        	   instructions[index] = html_instructions;
@@ -113,7 +130,7 @@ public class DirectionsFragment extends Fragment
 	           }
 	           if(directionsAdapter == null)
 	           {
-	        	   directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations);
+	        	   directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes);
 	           }
 	           //create header view
 	           TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
@@ -142,7 +159,7 @@ public class DirectionsFragment extends Fragment
 	        	   JSONObject distance = curleg.getJSONObject("distance");
 	        	   distanceMeters += distance.getInt("value");
 	           }
-	           footer2.setText("Total distance: " + (int)(distanceMeters * 0.00062137) + " mi");
+	           footer2.setText((int)(distanceMeters * 0.00062137) + " mi");
 
 	           TextView footer3 = (TextView) footerView.findViewById(R.id.directionsTime);
 	           int seconds = 0;
@@ -152,7 +169,20 @@ public class DirectionsFragment extends Fragment
 	        	   JSONObject duration = curleg.getJSONObject("duration");
 	        	   seconds += duration.getInt("value");
 	           }
-	           footer3.setText("Total time: " + ((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins (includes bus wait times)");
+	           if(((int)((seconds/60)/60)) == 0)
+	           {
+		           footer3.setText(((int)((seconds/60)%60)) + " mins");
+	           }
+	           else
+	           {
+		           footer3.setText(((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins");
+	           }
+	           
+	           TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
+	           String fareCost = "$"+route.getJSONObject("fare").getInt("value");
+	           
+	           footerFare.setText(fareCost);
+	           
 	           //end footer
 	           if(mainListView.getAdapter() == null)
 	           {
@@ -169,7 +199,8 @@ public class DirectionsFragment extends Fragment
 		           mainListView.addHeaderView(headerView);
 		           mainListView.addFooterView(footerView);
 		           
-		           mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations));
+		           mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes)
+);
 	           }
 
  	   	}
@@ -189,8 +220,10 @@ public class DirectionsFragment extends Fragment
 	String[] modes;
 	private String[] distances;
 	private String[] durations;
+	private String[] transitArrivals;
+	private String[] vehicleTypes;
  
-	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations) 
+	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations, String[] transitArrivals, String[] vehicleTypes) 
 	{
 		super(context, R.layout.directionsrow, values);
 		this.context = context;
@@ -198,6 +231,8 @@ public class DirectionsFragment extends Fragment
 		this.modes = modes;
 		this.distances = distances;
 		this.durations = durations;
+		this.transitArrivals = transitArrivals;
+		this.vehicleTypes = vehicleTypes;
 	}
  
 	@Override
@@ -212,6 +247,14 @@ public class DirectionsFragment extends Fragment
 
 		TextView directionsText = (TextView) rowView.findViewById(R.id.directionsText);
 		TextView directionsDetails = (TextView) rowView.findViewById(R.id.directionsDetails);
+		
+		if(transitArrivals[position] != null)
+		{
+			LinearLayout detailsLayout = (LinearLayout) rowView.findViewById(R.id.transitDetailsLinearLayout);
+			detailsLayout.setVisibility(View.VISIBLE);
+			TextView transitDetails = (TextView) rowView.findViewById(R.id.transitTextView);
+			transitDetails.setText(vehicleTypes[position] + " arrives here at " + transitArrivals[position]);
+		}
 		
 		directionsDetails.setText("Dist: " + distances[position]
 				+ "\n"

@@ -46,6 +46,8 @@ public class PlaceFragment extends Fragment
 	private String address;
 	private String phone;
 	private String web;
+	private String openNowString;
+	private boolean openNow;
 	
 	private float rating;
 	private PlaceMobileArrayAdapter placeAdapter;
@@ -55,6 +57,7 @@ public class PlaceFragment extends Fragment
 	TextView placeAddress;
 	TextView placePhone;
 	TextView placeWeb;
+	TextView openNowText;
 	RatingBar placeRating;
 	
 	LatLng placeLoc;
@@ -101,6 +104,7 @@ public class PlaceFragment extends Fragment
         placePhone = (TextView) rootView.findViewById(R.id.phone);
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
+        openNowText = (TextView) rootView.findViewById((R.id.placeCurrentStatus));
     	
         placeWeb.setOnClickListener(new OnClickListener() 
         {
@@ -151,6 +155,7 @@ public class PlaceFragment extends Fragment
     		placePhone.setText(phone);
     		placeWeb.setText(web);		
     		placeRating.setRating(rating);
+    		openNowText.setText(openNowString);
     	}
     	else
     	{
@@ -173,6 +178,7 @@ public class PlaceFragment extends Fragment
 		placePhone.setText("");
 		placeWeb.setText("");		
 		placeRating.setRating(0);
+		openNowText.setText("");
 	}
 
 	public void updatePlace(JSONObject result) 
@@ -215,6 +221,24 @@ public class PlaceFragment extends Fragment
 					String link = "<a href="+ web +">"+detailsJSON.getString("website")+"</a>";
 					placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
 					placeWeb.setText(Html.fromHtml(link));
+				}
+				
+				JSONObject openingHours = detailsJSON.getJSONObject("opening_hours");
+				if(openingHours.has("open_now"))
+				{
+					openNow = openingHours.getBoolean("open_now");
+					if(openNow)
+					{
+						openNowString = "Open";
+						openNowText.setTextColor(getResources().getColor(R.color.openred));
+						openNowText.setText(openNowString);
+					}
+					else
+					{
+						openNowString = "Closed";
+						openNowText.setTextColor(getResources().getColor(R.color.closedgrey));
+						openNowText.setText(openNowString);
+					}
 				}
 				
 				if(detailsJSON.has("rating"))
@@ -276,6 +300,7 @@ public class PlaceFragment extends Fragment
 	            endpointURL.append("?key=" + API_KEY);
 	            endpointURL.append("&placeid="+place_id);
 	            
+	            Log.d("placedets", endpointURL.toString());
 	            URL url = new URL(endpointURL.toString());
 	            conn = (HttpURLConnection) url.openConnection();
 	            InputStreamReader in = new InputStreamReader(conn.getInputStream());

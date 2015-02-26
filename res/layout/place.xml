@@ -127,6 +127,33 @@
 		     
 		    <!-- Location Value -->
 
+		    <LinearLayout
+		        android:layout_width="match_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="2dp"
+		        android:paddingBottom="5dp"
+		         >
+
+		        <TextView
+		            android:layout_width="wrap_content"
+		            android:layout_height="wrap_content"
+		            android:linksClickable="true"
+		            android:singleLine="true"
+		            android:text="Currently:" />
+		        
+		        <TextView
+		            android:id="@+id/placeCurrentStatus"
+		            android:singleLine="true"
+		            android:text="ayyy"
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:layout_weight="1"
+		            android:linksClickable="true"
+		            android:paddingLeft="5dp"
+		            android:textStyle="bold"
+		            android:textColor="@color/openred" />
+		    </LinearLayout>
+
 		    <TextView
 		        android:id="@+id/reviewUserName"
 		        android:layout_width="wrap_content"
@@ -149,7 +176,7 @@
 		        <ListView
 		            android:id="@+id/placeReviewList"
 		            android:paddingTop="5dp"		            
-		            android:divider="@color/purple"
+		            android:divider="@color/exitblue"
 		            android:dividerHeight="1.0dp"
 		            android:layout_width="match_parent"
 		            android:layout_height="wrap_content" >
@@ -172,7 +199,7 @@
    	          android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@color/exitblue"
+                android:background="@color/purple"
                 android:text="Get routes"
                 android:textColor="@color/white"
                  />

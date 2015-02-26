@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundblue"
+    android:background="@color/closedgrey"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -42,25 +42,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:orientation="vertical" >
-    </LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
  		 >
 
         <ListView
             android:id="@+id/textDirectionsListView"
-            android:paddingTop="2dp"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:divider="@color/white"
-            android:dividerHeight="2dp"
+            android:dividerHeight="1dp"
             >
         </ListView>
     </LinearLayout>
+    
 
 </LinearLayout>

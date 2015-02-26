@@ -102,6 +102,12 @@ public class MainActivity extends FragmentActivity implements Communicator
 		DirectionsFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).getDirectionsFragment();
 		directionsFragment.updateDirectionsList(JSON, routeNumber);
 	}
+
+	@Override
+	public void goToPlaceDetails() 
+	{
+		viewPager.setCurrentItem(4, false);
+	}
 	
 	
 
