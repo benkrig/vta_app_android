@@ -12,7 +12,7 @@ public interface Communicator
 
 	public void gotoTextDirections();
 	
-	public void getPlaceDetails(LatLng location, String place);
+	public void getPlaceDetails(LatLng location, String place, String address);
 
 	public void startupSlide();
 

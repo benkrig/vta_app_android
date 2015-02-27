@@ -1,14 +1,12 @@
 package johankrig.hotmail.com;
 
 import java.util.Date;
-
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -36,7 +34,8 @@ import android.widget.TextView;
 	{
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
- 
+		
+		
 		View rowView = inflater.inflate(R.layout.placereviewrow, parent, false);
 		
 		TextView userName = (TextView) rowView.findViewById(R.id.reviewUserName);

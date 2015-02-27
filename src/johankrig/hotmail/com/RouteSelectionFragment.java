@@ -11,6 +11,7 @@ import johankrig.hotmail.com.R;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 
 import org.json.JSONArray;
@@ -27,8 +28,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -70,7 +71,7 @@ public class RouteSelectionFragment extends Fragment
     GetBusLocationTask bus;
     GPSTracker gps;
 	private View rootView;
-    
+    String googleDirectionsResultJSON;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -116,9 +117,11 @@ public class RouteSelectionFragment extends Fragment
         });
         
         class mytimepicker extends DialogFragment implements
-        TimePickerDialog.OnTimeSetListener 
+        TimePickerDialog.OnTimeSetListener, android.content.DialogInterface.OnClickListener 
         {
         	Button time = null;
+        	int callCount = 0;
+        	
         	public mytimepicker(Button time)
         	{
         		this.time = time;
@@ -131,43 +134,62 @@ public class RouteSelectionFragment extends Fragment
 		        int hour = c.get(Calendar.HOUR_OF_DAY);
 		        int minute = c.get(Calendar.MINUTE);
 		        
-		        return new TimePickerDialog(getActivity(), this, hour, minute,
+		        TimePickerDialog dialog = new TimePickerDialog(getActivity(), this, hour, minute,
 		                DateFormat.is24HourFormat(getActivity()));
+		        
+		        dialog.setTitle("Departure Time");
+		        dialog.setCancelable(true);
+		        dialog.setCanceledOnTouchOutside(true);
+		        dialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", this);
+		        return dialog;
 		    }
 		
 		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		    {
-		    	String am_pm = "";
-
-		        Calendar datetime = Calendar.getInstance();
-		        datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		        datetime.set(Calendar.MINUTE, minute);
-
-		        if (datetime.get(Calendar.AM_PM) == Calendar.AM)
-		            am_pm = "AM";
-		        else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
-		            am_pm = "PM";
-		        
-		    	String strTimeToShow = String.format("%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
-		        time.setText(strTimeToShow + " "+ am_pm);
-		        
-
-		        map.clear();
-				GPSTracker gps = new GPSTracker(getActivity());
-				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-				
-				map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-				
-				if(drawRoute != null)
-				{
-					drawRoute.cancel(true);
-				}
-				drawRoute = new DirectionsAsyncTask();
-				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
-		    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
-				drawRoute.setRouteNumber(0);
-				drawRoute.execute();
+		    	if(callCount==1)
+		    	{
+			    	String am_pm = "";
+	
+			        Calendar datetime = Calendar.getInstance();
+			        datetime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			        datetime.set(Calendar.MINUTE, minute);
+	
+			        if (datetime.get(Calendar.AM_PM) == Calendar.AM)
+			            am_pm = "AM";
+			        else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
+			            am_pm = "PM";
+			        
+			    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+			        time.setText(strTimeToShow + " "+ am_pm);
+			        
+	
+			        map.clear();
+					GPSTracker gps = new GPSTracker(getActivity());
+					userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+					
+					map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+					
+					if(drawRoute != null)
+					{
+						drawRoute.cancel(true);
+					}
+					drawRoute = new DirectionsAsyncTask();
+					drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+			    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
+					drawRoute.setRouteNumber(0);
+					drawRoute.execute();
+		    	}
+		    	callCount++;
 		    }
+			@Override
+			public void onClick(DialogInterface dialog, int which) 
+			{
+				if(which == DialogInterface.BUTTON_NEGATIVE)
+				{
+					dialog.cancel();
+					dialog.dismiss();
+				}
+			}
 		}
         
         final Button time = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
@@ -178,8 +200,7 @@ public class RouteSelectionFragment extends Fragment
 			public void onClick(View v) 
 			{
 				DialogFragment newFragment = new mytimepicker(time);
-                newFragment.show(getFragmentManager(), "timePicker");	
-                
+                newFragment.show(getFragmentManager(), "timePicker");
 			}
         	
         });
@@ -194,7 +215,7 @@ public class RouteSelectionFragment extends Fragment
             public void onClick(View v)
             {
             	//Route number is hard coded based on button number
-
+            	/*
             	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
             	{
             		drawRoute.cancel(true);
@@ -211,7 +232,12 @@ public class RouteSelectionFragment extends Fragment
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
     		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute(); 
-                }
+                }*/
+            	map.clear();
+	            drawPath(googleDirectionsResultJSON, 0);
+	            
+	            Log.d("json", googleDirectionsResultJSON+"");
+	            comm.updateDirectionsList(googleDirectionsResultJSON, 0);
                 
                 Timer myTimer = new Timer();
                 if(myTask !=null){
@@ -229,7 +255,7 @@ public class RouteSelectionFragment extends Fragment
             @Override
             public void onClick(View v) 
             {
-            	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
+            	/*if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
             	{
             		drawRoute.cancel(true);
                 	drawRoute = new DirectionsAsyncTask();
@@ -245,7 +271,13 @@ public class RouteSelectionFragment extends Fragment
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
     		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute();
-                }
+                }*/
+
+            	map.clear();
+	            drawPath(googleDirectionsResultJSON, 1);
+	            
+	            Log.d("json", googleDirectionsResultJSON+"");
+	            comm.updateDirectionsList(googleDirectionsResultJSON, 1);
 
                 Timer myTimer = new Timer();
                 if(myTask !=null){
@@ -265,7 +297,7 @@ public class RouteSelectionFragment extends Fragment
             public void onClick(View v) 
             {
             	//Route number is hard coded based on button number
-            	if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
+            	/*if(drawRoute.getStatus() == AsyncTask.Status.RUNNING)
             	{
                 	drawRoute = new DirectionsAsyncTask();
             	}
@@ -281,7 +313,14 @@ public class RouteSelectionFragment extends Fragment
             		drawRoute.updateUserLocation(userLatLng, destinationLatLng);
     		    	drawRoute.setTime(System.currentTimeMillis()/1000);
                 	drawRoute.execute();
-                }
+                }*/
+            	
+
+            	map.clear();
+	            drawPath(googleDirectionsResultJSON, 2);
+	            
+	            Log.d("json", googleDirectionsResultJSON+"");
+	            comm.updateDirectionsList(googleDirectionsResultJSON, 2);
 
                 Timer myTimer = new Timer();
                 if(myTask !=null)
@@ -292,6 +331,8 @@ public class RouteSelectionFragment extends Fragment
                 myTimer.schedule(myTask, 3000, 1000); 
             }
         });
+        
+        
         textDirectionsButton = (ImageButton) rootView.findViewById(R.id.textDirectionsButton);
         textDirectionsButton.setOnClickListener(new OnClickListener() 
         {
@@ -434,9 +475,10 @@ public class RouteSelectionFragment extends Fragment
 
 		           		MarkerOptions markerOptions = new MarkerOptions();
 		           		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
-		           		markerOptions.title("At " + arrival_stop.getString("name"));
-		           		markerOptions.snippet("to " + transit_details.getString("headsign"));
+		           		markerOptions.title("Stop name: " + arrival_stop.getString("name"));
+		           		markerOptions.snippet("Line: " + transit_details.getString("headsign"));
 		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		           		markerOptions.flat(true);
 		           		map.addMarker(markerOptions);
 		           		
 		         
@@ -445,9 +487,10 @@ public class RouteSelectionFragment extends Fragment
 		           		
 		           		markerOptions = new MarkerOptions();
 		           		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
-		           		markerOptions.title("At " + departure_stop.getString("name"));
-		           		markerOptions.snippet("to " + transit_details.getString("headsign"));
+		           		markerOptions.title("Stop name: " + departure_stop.getString("name"));
+		           		markerOptions.snippet("Line:  " + transit_details.getString("headsign"));
 		           		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		           		markerOptions.flat(true);
 		           		map.addMarker(markerOptions);
 		    		}
 		    		//add markers to map
@@ -513,6 +556,7 @@ public class RouteSelectionFragment extends Fragment
 	        super.onPostExecute(result);  
 	        loadProgress.setVisibility(View.GONE);
 	        
+	        googleDirectionsResultJSON = result;
 	        //BAD TEST, RESULT WILL NEVER RETURN A NULL, FIX THIS
 	        if(result!=null)
 	        {

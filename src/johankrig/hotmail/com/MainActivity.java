@@ -3,7 +3,6 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.model.LatLng;
 import johankrig.hotmail.com.R;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -12,10 +11,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
@@ -82,10 +79,10 @@ public class MainActivity extends FragmentActivity implements Communicator
 		viewPager.setCurrentItem(3, false);
 	}
 	@Override
-	public void getPlaceDetails(LatLng location, String place)
+	public void getPlaceDetails(LatLng location, String place, String address)
 	{	
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
-		placeFragment.initialize(location, place);
+		placeFragment.initialize(location, place, address);
 		viewPager.setCurrentItem(4, false);
 
 	}

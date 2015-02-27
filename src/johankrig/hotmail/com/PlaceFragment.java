@@ -41,6 +41,7 @@ public class PlaceFragment extends Fragment
 	private ProgressBar loadProgressBar = null;
 	private Button loadProgressButton = null;
 	private RelativeLayout placeLayout = null;
+	private RelativeLayout placeNoInformationLayout = null;
 	
 	private String name;
 	private String address;
@@ -59,6 +60,7 @@ public class PlaceFragment extends Fragment
 	TextView placeWeb;
 	TextView openNowText;
 	RatingBar placeRating;
+	TextView placeNoInformationAddress;
 	
 	LatLng placeLoc;
 
@@ -85,8 +87,9 @@ public class PlaceFragment extends Fragment
 	    loadProgressBar = (ProgressBar) rootView.findViewById(R.id.placeLoadBar);
 	    loadProgressButton = (Button) rootView.findViewById(R.id.placeLoadButton);
 	    placeLayout = (RelativeLayout) rootView.findViewById(R.id.placeRelativeLayout);
-	    
-        return rootView;
+	    placeNoInformationLayout = (RelativeLayout) rootView.findViewById(R.id.placeNoInformationLayout);
+        
+	    return rootView;
 	}
     
     @Override
@@ -105,7 +108,8 @@ public class PlaceFragment extends Fragment
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
         openNowText = (TextView) rootView.findViewById((R.id.placeCurrentStatus));
-    	
+    	placeNoInformationAddress = (TextView) rootView.findViewById(R.id.placeNoInformationAddress);
+        
         placeWeb.setOnClickListener(new OnClickListener() 
         {
             @Override
@@ -144,7 +148,7 @@ public class PlaceFragment extends Fragment
 	}
 
     
-    public void initialize(LatLng location, String keyword)
+    public void initialize(LatLng location, String keyword, String address)
     {
     	//initialize new place if it is not already initialized
     	if(location.equals(placeLoc))
@@ -156,14 +160,20 @@ public class PlaceFragment extends Fragment
     		placeWeb.setText(web);		
     		placeRating.setRating(rating);
     		openNowText.setText(openNowString);
+    		placeNoInformationAddress.setText(address);
     	}
     	else
     	{
+    		placeNoInformationLayout.setVisibility(View.GONE);
         	placeLayout.setVisibility(View.INVISIBLE);
     		//clear and get new place
     		clearPlace();
     		
-        	placeLoc = new LatLng(location.latitude, location.longitude);
+    		
+    		placeNoInformationAddress.setText(address);
+    		this.address = address;
+        	
+    		placeLoc = new LatLng(location.latitude, location.longitude);
         	
     	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword.substring(11));
     	    getPlace.execute();
@@ -223,22 +233,31 @@ public class PlaceFragment extends Fragment
 					placeWeb.setText(Html.fromHtml(link));
 				}
 				
-				JSONObject openingHours = detailsJSON.getJSONObject("opening_hours");
-				if(openingHours.has("open_now"))
+				if(detailsJSON.has("opening_hours"))
 				{
-					openNow = openingHours.getBoolean("open_now");
-					if(openNow)
+					JSONObject openingHours = detailsJSON.getJSONObject("opening_hours");
+					if(openingHours.has("open_now"))
 					{
-						openNowString = "Open";
-						openNowText.setTextColor(getResources().getColor(R.color.openred));
-						openNowText.setText(openNowString);
+						openNow = openingHours.getBoolean("open_now");
+						if(openNow)
+						{
+							openNowString = "Open";
+							openNowText.setTextColor(getResources().getColor(R.color.openred));
+							openNowText.setText(openNowString);
+						}
+						else
+						{
+							openNowString = "Closed";
+							openNowText.setTextColor(getResources().getColor(R.color.closedgrey));
+							openNowText.setText(openNowString);
+						}
 					}
-					else
-					{
-						openNowString = "Closed";
-						openNowText.setTextColor(getResources().getColor(R.color.closedgrey));
-						openNowText.setText(openNowString);
-					}
+				}
+				else
+				{
+					openNowString = "unknown";
+					openNowText.setTextColor(getResources().getColor(R.color.closedgrey));
+					openNowText.setText(openNowString);
 				}
 				
 				if(detailsJSON.has("rating"))
@@ -248,24 +267,27 @@ public class PlaceFragment extends Fragment
 					placeRating.setRating((float) detailsJSON.getDouble("rating"));
 				}
 				
-				JSONArray reviews = detailsJSON.getJSONArray("reviews");
-				if(!reviews.isNull(0))
+				if(detailsJSON.has("reviews"))
 				{
-					placeReviewsDetails = new String[reviews.length()];
-					reviewerNames = new String[reviews.length()];
-					reviewDates = new int[reviews.length()];
-					reviewRatings = new float[reviews.length()];
-					
-					for(int i = 0; i < reviews.length(); i++)
+					JSONArray reviews = detailsJSON.getJSONArray("reviews");
+					if(!reviews.isNull(0))
 					{
-						JSONObject tmp = reviews.getJSONObject(i);
-						placeReviewsDetails[i] = tmp.getString("text");
-						reviewerNames[i] = tmp.getString("author_name");
-						reviewDates[i] = tmp.getInt("time");
-						Log.d("infos", tmp.getJSONArray("aspects").toString());
-						JSONArray rating = tmp.getJSONArray("aspects");
-			        	JSONObject rating1 = rating.getJSONObject(0);
-						reviewRatings[i] = (float) rating1.getDouble("rating");
+						placeReviewsDetails = new String[reviews.length()];
+						reviewerNames = new String[reviews.length()];
+						reviewDates = new int[reviews.length()];
+						reviewRatings = new float[reviews.length()];
+						
+						for(int i = 0; i < reviews.length(); i++)
+						{
+							JSONObject tmp = reviews.getJSONObject(i);
+							placeReviewsDetails[i] = tmp.getString("text");
+							reviewerNames[i] = tmp.getString("author_name");
+							reviewDates[i] = tmp.getInt("time");
+							Log.d("infos", tmp.getJSONArray("aspects").toString());
+							JSONArray rating = tmp.getJSONArray("aspects");
+				        	JSONObject rating1 = rating.getJSONObject(0);
+							reviewRatings[i] = (float) (rating1.getDouble("rating") + (3*0.66));
+						}
 					}
 				}
 			} 
@@ -447,10 +469,19 @@ public class PlaceFragment extends Fragment
 	    }
 	    protected void onPostExecute(JSONObject result) 
 	    {
-	    	placeLayout.setVisibility(View.VISIBLE);
-	        loadProgressButton.setVisibility(View.VISIBLE);
-	        loadProgressBar.setVisibility(View.GONE);
-		    updatePlace(result);
+	    	if(result == null)
+	    	{
+		    	placeNoInformationLayout.setVisibility(View.VISIBLE);
+		        loadProgressButton.setVisibility(View.VISIBLE);
+		        loadProgressBar.setVisibility(View.GONE);
+	    	}
+	    	else
+	    	{
+		    	placeLayout.setVisibility(View.VISIBLE);
+		        loadProgressButton.setVisibility(View.VISIBLE);
+		        loadProgressBar.setVisibility(View.GONE);
+			    updatePlace(result);
+	    	}
 	    }
 	}
 }

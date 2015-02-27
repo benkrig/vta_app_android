@@ -15,11 +15,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
@@ -28,10 +26,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -41,14 +37,12 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	
     private final String LOG_TAG = "VTA";
     private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
-    private final String TYPE_NEARBY = "/nearbysearch";
     private final String TYPE_TEXT = "/textsearch";
-
     private final String OUT_JSON = "/json";
     private final String API_KEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	private final int MAX_RESULTS = 40;
 	//In meters
-	private final int RADIUS = 20000;
+	private final int RADIUS = 5000;
 
 	Context context;
 	MarkerOptions markerOptions;
@@ -72,6 +66,14 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	{
 		searchKeyword = newKeyword;
 	}
+
+    @Override
+    protected void onCancelled() 
+    {
+    	searchProgress.setVisibility(View.GONE);
+    	addressSearchButton.setVisibility(View.VISIBLE);
+    }
+	
 	@Override 
 	protected void onPreExecute()
 	{
@@ -99,7 +101,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     	
     	if(searchKeyword.isEmpty())
     	{
-            Toast.makeText(context, "Enter text to search", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Enter text to search or touch a location", Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -123,14 +125,15 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	        		markerOptions.title("Let's go to " + address.getFeatureName());
 	        		markerOptions.snippet(address.getAddressLine(0));
 	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+	           		markerOptions.flat(true);
 	        		map.addMarker(markerOptions);
 	        		
 	        		
 	        		//center map on first location
 	        		if(index == 0)
 	        		{
-	        			map.moveCamera(CameraUpdateFactory.newLatLng(markerLatLng));
-	        			map.moveCamera(CameraUpdateFactory.zoomTo(13));
+	        			map.animateCamera(CameraUpdateFactory.newLatLng(markerLatLng));
+	        			map.animateCamera(CameraUpdateFactory.zoomTo(13));
 	        		}	
 	        	}
 	        }
@@ -152,7 +155,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
            // endpointURL.append("&radius="+RADIUS);
-            endpointURL.append("&radius=5000");
+            endpointURL.append("&radius="+RADIUS);
             endpointURL.append("&query=" + URLEncoder.encode(keyword, "utf8"));
             
             Log.e(LOG_TAG, "endpointURL: " + endpointURL);

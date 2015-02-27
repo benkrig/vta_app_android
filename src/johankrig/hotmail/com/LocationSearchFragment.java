@@ -192,7 +192,9 @@ public class LocationSearchFragment extends Fragment
 			public void onClick(View v) 
 			{
 				map.clear();
-				searchBar.setText("");
+				geoTask.cancel(true);
+				searchBar.clearComposingText();
+				//searchBar.setText("");
 			}
 			
 		});
@@ -203,8 +205,9 @@ public class LocationSearchFragment extends Fragment
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
 		markerOptions.title("Let's go here!");
-		markerOptions.snippet("to " + address.getAddressLine(0));
+		markerOptions.snippet(address.getAddressLine(0));
 		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+   		markerOptions.flat(true);
 		map.addMarker(markerOptions);
 	}
 	
@@ -328,7 +331,7 @@ class InfoWindowClickAdapter implements OnInfoWindowClickListener
 	@Override
 	public void onInfoWindowClick(Marker marker) 
 	{
-		comm.getPlaceDetails(marker.getPosition(), marker.getTitle());
+		comm.getPlaceDetails(marker.getPosition(), marker.getTitle(), marker.getSnippet());
 	}
 	
 }

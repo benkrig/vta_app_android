@@ -3,9 +3,7 @@ package johankrig.hotmail.com;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import johankrig.hotmail.com.R;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +15,6 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -179,9 +176,15 @@ public class DirectionsFragment extends Fragment
 	           }
 	           
 	           TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
-	           String fareCost = "$"+route.getJSONObject("fare").getInt("value");
-	           
-	           footerFare.setText(fareCost);
+	           if(route.has("fare"))
+	           {
+	        	   String fareCost = "$"+route.getJSONObject("fare").getInt("value");
+		           footerFare.setText(fareCost);
+	           }
+	           else
+	           {
+	        	   footerFare.setText("unknown");
+	           }
 	           
 	           //end footer
 	           if(mainListView.getAdapter() == null)

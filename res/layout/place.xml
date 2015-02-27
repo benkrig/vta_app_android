@@ -53,10 +53,54 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/placeNoInformationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:textSize="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:text="We can't find details for the place at" />
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:paddingRight="25dp"
+                android:paddingLeft="25dp"
+                android:paddingBottom="10dp"
+                android:text="We can still go there!" />
+
+            <TextView
+                android:id="@+id/placeNoInformationAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView1"
+                android:layout_alignRight="@+id/textView1"
+                android:layout_below="@+id/textView2"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:text="111 This is the Address Ave 95914" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
             android:id="@+id/placeRelativeLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
+			android:visibility="gone"
+
             android:background="@color/white" >
             
             <LinearLayout
@@ -71,7 +115,6 @@
         		android:text="Name:"
         		android:layout_width="fill_parent"
         		android:layout_height="wrap_content"
-
         		android:textStyle="bold"/>
      
     	<!--  Name Value -->
@@ -144,7 +187,7 @@
 		        <TextView
 		            android:id="@+id/placeCurrentStatus"
 		            android:singleLine="true"
-		            android:text="ayyy"
+		            android:text="OPEN/CLOSE"
 		            android:layout_width="fill_parent"
 		            android:layout_height="wrap_content"
 		            android:layout_weight="1"
@@ -201,7 +244,7 @@
                 android:layout_weight="1"
                 android:background="@color/purple"
                 android:text="Get routes"
-                android:textColor="@color/white"
+                android:textColor="@color/exitblue"
                  />
         </LinearLayout>
 

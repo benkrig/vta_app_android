@@ -1,24 +1,16 @@
 package johankrig.hotmail.com;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.TimerTask;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-import android.content.Context;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -189,7 +181,8 @@ public class GetBusLocationTask extends TimerTask
                     if (hideMarker) 
                     {
                         //marker.setVisible(false);
-                    } else 
+                    } 
+                    else 
                     {
                         marker.setVisible(true);
                     }
