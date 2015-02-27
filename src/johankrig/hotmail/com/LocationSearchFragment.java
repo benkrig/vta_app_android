@@ -193,8 +193,7 @@ public class LocationSearchFragment extends Fragment
 			{
 				map.clear();
 				geoTask.cancel(true);
-				searchBar.clearComposingText();
-				//searchBar.setText("");
+				searchBar.setText("");
 			}
 			
 		});
