@@ -161,7 +161,7 @@ int id name 0x7f070040
 int id none 0x7f070000
 int id normal 0x7f070001
 int id pager 0x7f070014
-int id phone 0x7f070042
+int id phone 0x7f070043
 int id placeBaseLinearLayout 0x7f070038
 int id placeCurrentStatus 0x7f070044
 int id placeGetRoutesButton 0x7f07003c
@@ -204,7 +204,7 @@ int id useRouteButton 0x7f070050
 int id userReviewDetails 0x7f07004a
 int id userReviewRating 0x7f070048
 int id vehicleTypeImage 0x7f07001f
-int id website 0x7f070043
+int id website 0x7f070042
 int id wrap_content 0x7f07000d
 int integer google_play_services_version 0x7f080000
 int layout activity_main 0x7f030000

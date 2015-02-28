@@ -132,8 +132,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	        		//center map on first location
 	        		if(index == 0)
 	        		{
-	        			map.animateCamera(CameraUpdateFactory.newLatLng(markerLatLng));
-	        			map.animateCamera(CameraUpdateFactory.zoomTo(13));
+	        			map.animateCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 13));
 	        		}	
 	        	}
 	        }

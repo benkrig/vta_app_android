@@ -174,7 +174,7 @@ public class RouteSelectionFragment extends Fragment
 					GPSTracker gps = new GPSTracker(getActivity());
 					userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 					
-					map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+					map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 					
 					if(userLatLng != null && destinationLatLng != null)
 					{
@@ -204,6 +204,18 @@ public class RouteSelectionFragment extends Fragment
 		}
         
         final Button time = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
+        Calendar datetime = Calendar.getInstance();
+        datetime.setTimeInMillis(System.currentTimeMillis());
+
+        String am_pm = null;
+        if (datetime.get(Calendar.AM_PM) == Calendar.AM)
+            am_pm = "AM";
+        else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
+            am_pm = "PM";
+        
+    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+        time.setText(strTimeToShow + " "+ am_pm);
+        
         time.setOnClickListener(new OnClickListener()
         {
 			@Override
@@ -502,7 +514,16 @@ public class RouteSelectionFragment extends Fragment
 	        super.onPreExecute();
 	        loadProgressButton.setVisibility(View.GONE);
 	        loadProgress.setVisibility(View.VISIBLE);
-			directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
+			
+	        MarkerOptions markerOptions = new MarkerOptions();
+    		markerOptions.position(eloc);
+    		markerOptions.flat(true);
+    		markerOptions.title("Destination");
+    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+    		markerOptions.flat(true);
+    		map.addMarker(markerOptions);	     
+    		
+	        directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
 			Log.d("url", directionsurl);
 	    }
 	    @Override
@@ -542,7 +563,7 @@ public class RouteSelectionFragment extends Fragment
 			userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 			destinationLatLng = dest;
 			
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+			map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 			
 			if(drawRoute !=null)
 			{

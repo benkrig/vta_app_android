@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/closedgrey"
     android:orientation="vertical"
     
      >
@@ -16,7 +17,9 @@
             android:id="@+id/reviewUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:text="Name First"
+        	android:textColor="@color/purple"
+             />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -37,13 +40,18 @@
         android:id="@+id/dateOfReview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Mon 12 Feb 2014 asdsd"
+        android:textSize="12sp"
+        android:textColor="@color/whitetransparent"
+         />
 
     <TextView
         android:id="@+id/userReviewDetails"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
-        android:text="TextView" />
+        android:text="THIs is aknd aeih aikdf akhgie "
+        android:textColor="@color/white"
+         />
 
 </LinearLayout>

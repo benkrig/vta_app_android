@@ -482,7 +482,7 @@ containing a value of this type.
         public static final int none=0x7f070000;
         public static final int normal=0x7f070001;
         public static final int pager=0x7f070014;
-        public static final int phone=0x7f070042;
+        public static final int phone=0x7f070043;
         public static final int placeBaseLinearLayout=0x7f070038;
         public static final int placeCurrentStatus=0x7f070044;
         public static final int placeGetRoutesButton=0x7f07003c;
@@ -525,7 +525,7 @@ containing a value of this type.
         public static final int userReviewDetails=0x7f07004a;
         public static final int userReviewRating=0x7f070048;
         public static final int vehicleTypeImage=0x7f07001f;
-        public static final int website=0x7f070043;
+        public static final int website=0x7f070042;
         public static final int wrap_content=0x7f07000d;
     }
     public static final class integer {

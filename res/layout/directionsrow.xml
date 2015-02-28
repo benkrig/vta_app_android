@@ -93,7 +93,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:visibility="gone"
-
                 android:gravity="center_vertical"
                 android:text="this bus will be here at 2:11pm"
                 android:textColor="@color/buttondarkgrey" />

@@ -78,13 +78,25 @@ public class DirectionsFragment extends Fragment
 			JSONObject leg = legs.getJSONObject(0);
 	           
 			JSONArray steps = leg.getJSONArray("steps");
-	           
-			JSONObject departure_time = leg.getJSONObject("departure_time");
-			JSONObject arrival_time = leg.getJSONObject("arrival_time");
-	           
-			String departTime = departure_time.getString("text");
-			String arrivalTime = arrival_time.getString("text");
+	        
+			//create header view
+			if(leg.has("departure_time"))
+			{
+				JSONObject departure_time = leg.getJSONObject("departure_time");
+				String departTime = departure_time.getString("text");
 
+				TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
+				header1.setText("Depart at: " + departTime);				
+			}
+			if(leg.has("arrival_time"))
+			{				
+				JSONObject arrival_time = leg.getJSONObject("arrival_time");
+				String arrivalTime = arrival_time.getString("text");
+
+				TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
+		    	header2.setText("Arrive at: " + arrivalTime);
+			}
+			//end header veiw
 
 	           
 			String[] instructions = new String[steps.length()];
@@ -131,12 +143,7 @@ public class DirectionsFragment extends Fragment
 			{
 				directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes);
 			}
-			//create header view
-			TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
-			header1.setText("Depart at: " + departTime);
-			TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
-	    	header2.setText("Arrive at: " + arrivalTime);
-	    	//end header view
+			
 	           
 	    	//set footer view
 	    	TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
