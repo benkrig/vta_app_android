@@ -5,8 +5,8 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#790ebd"
-        	android:endColor="#790ebd"
+        	android:startColor="#212121"
+        	android:endColor="#212121"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"
@@ -29,8 +29,8 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#790ebd"
-        	android:endColor="#790ebd"
+        	android:startColor="#212121"
+        	android:endColor="#212121"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"
@@ -53,8 +53,8 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#790ebd"
-        	android:endColor="#790ebd"
+        	android:startColor="#212121"
+        	android:endColor="#212121"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"

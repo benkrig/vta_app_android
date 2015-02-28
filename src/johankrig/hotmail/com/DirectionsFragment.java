@@ -68,144 +68,144 @@ public class DirectionsFragment extends Fragment
 		try 
 		{
 		
-	           final JSONObject json = new JSONObject(DirectionsJSON);
+			final JSONObject json = new JSONObject(DirectionsJSON);
 	           
-	           JSONArray routes = json.getJSONArray("routes");
-	           JSONObject route = routes.getJSONObject(routeNumber);
+			JSONArray routes = json.getJSONArray("routes");
+			JSONObject route = routes.getJSONObject(routeNumber);
 	           
 	           
-	           JSONArray legs = route.getJSONArray("legs");
-	           JSONObject leg = legs.getJSONObject(0);
+			JSONArray legs = route.getJSONArray("legs");
+			JSONObject leg = legs.getJSONObject(0);
 	           
-	           JSONArray steps = leg.getJSONArray("steps");
+			JSONArray steps = leg.getJSONArray("steps");
 	           
-	           JSONObject departure_time = leg.getJSONObject("departure_time");
-	           JSONObject arrival_time = leg.getJSONObject("arrival_time");
+			JSONObject departure_time = leg.getJSONObject("departure_time");
+			JSONObject arrival_time = leg.getJSONObject("arrival_time");
 	           
-	           String departTime = departure_time.getString("text");
-	           String arrivalTime = arrival_time.getString("text");
+			String departTime = departure_time.getString("text");
+			String arrivalTime = arrival_time.getString("text");
 
 
 	           
-	           String[] instructions = new String[steps.length()];
-	           String[] travel_modes = new String[steps.length()];
-	           String[] distances = new String[steps.length()];
-	           String[] durations = new String[steps.length()];
-	           String[] transitArrivals = new String[steps.length()];
-	           String[] vehicleTypes = new String[steps.length()];
+			String[] instructions = new String[steps.length()];
+			String[] travel_modes = new String[steps.length()];
+			String[] distances = new String[steps.length()];
+			String[] durations = new String[steps.length()];
+			String[] transitArrivals = new String[steps.length()];
+			String[] vehicleTypes = new String[steps.length()];
 	           
 
 	           
-	           for(int index = 0; index < steps.length(); index++)
-	           {
-	        	   //consider adding transit details in here as well.
+			for(int index = 0; index < steps.length(); index++)
+			{
+				//consider adding transit details in here as well.
 	        	   
-	        	   JSONObject step = steps.getJSONObject(index);
-	        	   String html_instructions = step.getString("html_instructions");
-	        	   String travel_mode = step.getString("travel_mode");
+				JSONObject step = steps.getJSONObject(index);
+				String html_instructions = step.getString("html_instructions");
+				String travel_mode = step.getString("travel_mode");
 	        	   
-	        	   JSONObject distance = step.getJSONObject("distance");
-	        	   String distanceString = distance.getString("text");
+				JSONObject distance = step.getJSONObject("distance");
+				String distanceString = distance.getString("text");
 	        	   
-	        	   JSONObject duration = step.getJSONObject("duration");
-	        	   String durationString = duration.getString("text");
+				JSONObject duration = step.getJSONObject("duration");
+				int durationSec = duration.getInt("value");
+				String durationString = duration.getString("text");
+				durationString = (int)(durationSec * 0.0166667) + " min";
 
-	        	   if(travel_mode.equals("TRANSIT"))
-	        	   {
-	        		   JSONObject transitDetails = step.getJSONObject("transit_details");
-	        		   JSONObject departureTime = transitDetails.getJSONObject("departure_time");
-	        		   transitArrivals[index] = departureTime.getString("text");
+				if(travel_mode.equals("TRANSIT"))
+				{
+					JSONObject transitDetails = step.getJSONObject("transit_details");
+					JSONObject departureTime = transitDetails.getJSONObject("departure_time");
+					transitArrivals[index] = departureTime.getString("text");
 	        		   
-	        		   JSONObject line = transitDetails.getJSONObject("line");
-	        		   JSONObject vehicle = line.getJSONObject("vehicle");
-	        		   vehicleTypes[index] = vehicle.getString("name");
-	        	   }
-	        	   distances[index] = distanceString;
-	        	   durations[index] = durationString;
-	        	   instructions[index] = html_instructions;
-	        	   travel_modes[index] = travel_mode;
-	           }
-	           if(directionsAdapter == null)
-	           {
-	        	   directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes);
-	           }
-	           //create header view
-	           TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
-	           header1.setText("Depart at: " + departTime);
-	           TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
-	           header2.setText("Arrive at: " + arrivalTime);
-	           //end header view
+					JSONObject line = transitDetails.getJSONObject("line");
+					JSONObject vehicle = line.getJSONObject("vehicle");
+					vehicleTypes[index] = vehicle.getString("name");
+				}
+				distances[index] = distanceString;
+				durations[index] = durationString;
+				instructions[index] = html_instructions;
+				travel_modes[index] = travel_mode;
+			}
+			if(directionsAdapter == null)
+			{
+				directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes);
+			}
+			//create header view
+			TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
+			header1.setText("Depart at: " + departTime);
+			TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
+	    	header2.setText("Arrive at: " + arrivalTime);
+	    	//end header view
 	           
-	           //set footer view
-	           TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
-	           JSONObject firstleg = legs.getJSONObject(0);
-	           JSONObject lastleg = legs.getJSONObject(legs.length()-1);
-	           Log.d("firstlegs", firstleg.getString("start_address"));
-	           Log.d("lastleg", lastleg.getString("end_address"));
-	           Log.d("footerview", footerView.toString());
-	           Log.d("footerviewtext", footer1.toString());
+	    	//set footer view
+	    	TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
+	    	JSONObject firstleg = legs.getJSONObject(0);
+	    	JSONObject lastleg = legs.getJSONObject(legs.length()-1);
+	    	Log.d("firstlegs", firstleg.getString("start_address"));
+	    	Log.d("lastleg", lastleg.getString("end_address"));
+	    	Log.d("footerview", footerView.toString());
+	    	Log.d("footerviewtext", footer1.toString());
 
 
-	           footer1.setText(firstleg.getString("start_address") + " to " + lastleg.getString("end_address"));
+	    	footer1.setText(firstleg.getString("start_address") + " to " + lastleg.getString("end_address"));
 	           
-	           TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
-	           int distanceMeters = 0;
-	           for(int c = 0; c < legs.length(); c++)
-	           {
-	        	   JSONObject curleg = legs.getJSONObject(c);
-	        	   JSONObject distance = curleg.getJSONObject("distance");
-	        	   distanceMeters += distance.getInt("value");
-	           }
-	           footer2.setText((int)(distanceMeters * 0.00062137) + " mi");
+	    	TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
+	    	int distanceMeters = 0;
+	    	for(int c = 0; c < legs.length(); c++)
+	    	{
+	    		JSONObject curleg = legs.getJSONObject(c);
+	    		JSONObject distance = curleg.getJSONObject("distance");
+	    		distanceMeters += distance.getInt("value");
+	    	}
+	    	footer2.setText((int)(distanceMeters * 0.00062137) + " mi");
 
-	           TextView footer3 = (TextView) footerView.findViewById(R.id.directionsTime);
-	           int seconds = 0;
-	           for(int c = 0; c < legs.length(); c++)
-	           {
-	        	   JSONObject curleg = legs.getJSONObject(c);
-	        	   JSONObject duration = curleg.getJSONObject("duration");
-	        	   seconds += duration.getInt("value");
-	           }
-	           if(((int)((seconds/60)/60)) == 0)
-	           {
-		           footer3.setText(((int)((seconds/60)%60)) + " mins");
-	           }
-	           else
-	           {
-		           footer3.setText(((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins");
-	           }
+	    	TextView footer3 = (TextView) footerView.findViewById(R.id.directionsTime);
+	    	int seconds = 0;
+	    	for(int c = 0; c < legs.length(); c++)
+	    	{
+	    		JSONObject curleg = legs.getJSONObject(c);
+	    		JSONObject duration = curleg.getJSONObject("duration");
+	    		seconds += duration.getInt("value");
+	    	}
+	    	if(((int)((seconds/60)/60)) == 0)
+	    	{
+	    		footer3.setText(((int)((seconds/60)%60)) + " mins");
+	    	}
+	    	else
+	    	{
+	    		footer3.setText(((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins");
+	    	}
 	           
-	           TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
-	           if(route.has("fare"))
-	           {
-	        	   String fareCost = "$"+route.getJSONObject("fare").getInt("value");
-		           footerFare.setText(fareCost);
-	           }
-	           else
-	           {
-	        	   footerFare.setText("unknown");
-	           }
+	    	TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
+	    	if(route.has("fare"))
+	    	{
+	    		String fareCost = "$"+route.getJSONObject("fare").getInt("value");
+	    		footerFare.setText(fareCost);
+	    	}
+	     	else
+	     	{
+	     		footerFare.setText("unknown");
+	     	}
 	           
-	           //end footer
-	           if(mainListView.getAdapter() == null)
-	           {
-		           mainListView.setAdapter(directionsAdapter);	 
+	    	//end footer
+	    	if(mainListView.getAdapter() == null)
+	    	{
+	    		mainListView.setAdapter(directionsAdapter);	 
 
-		           mainListView.addHeaderView(headerView);
-		           mainListView.addFooterView(footerView);
-	           }
-	           else
-	           {	           
-	        	   mainListView.removeHeaderView(headerView);
-	        	   mainListView.removeFooterView(footerView);
+	    		mainListView.addHeaderView(headerView);
+	    		mainListView.addFooterView(footerView);
+	    	}
+	    	else
+	    	{
+	    		mainListView.removeHeaderView(headerView);
+	    		mainListView.removeFooterView(footerView);
 
-		           mainListView.addHeaderView(headerView);
-		           mainListView.addFooterView(footerView);
+	    		mainListView.addHeaderView(headerView);
+	    		mainListView.addFooterView(footerView);
 		           
-		           mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes)
-);
-	           }
-
+	    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes));
+	    	}
  	   	}
 		catch (JSONException e) 
 		{
@@ -263,7 +263,7 @@ public class DirectionsFragment extends Fragment
 			}
 		}
 		
-		directionsDetails.setText("Dist: " + distances[position]);
+		directionsDetails.setText(distances[position]);
 		directionsRowTimeText.setText(durations[position]);
 		
 		directionsText.setText(values[position]);

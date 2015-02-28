@@ -327,8 +327,10 @@ containing a value of this type.
         public static final int zOrderOnTop=0x7f010010;
     }
     public static final class color {
-        public static final int backgroundblue=0x7f05001d;
-        public static final int closedgrey=0x7f050020;
+        public static final int backgroundblue=0x7f05001e;
+        public static final int buttondarkgrey=0x7f050023;
+        public static final int buttondarkgreytransparent=0x7f050024;
+        public static final int closedgrey=0x7f050021;
         public static final int common_action_bar_splitter=0x7f050009;
         /**  Sign-in Button Colors 
          */
@@ -341,16 +343,18 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f050006;
         public static final int common_signin_btn_light_text_focused=0x7f050007;
         public static final int common_signin_btn_light_text_pressed=0x7f050005;
-        public static final int common_signin_btn_text_dark=0x7f050022;
-        public static final int common_signin_btn_text_light=0x7f050023;
-        public static final int exitblue=0x7f05001c;
-        public static final int headerpurple=0x7f05001b;
-        public static final int openred=0x7f05001f;
+        public static final int common_signin_btn_text_dark=0x7f050027;
+        public static final int common_signin_btn_text_light=0x7f050028;
+        public static final int exitblue=0x7f05001d;
+        public static final int greytransparent=0x7f050026;
+        public static final int headerpurple=0x7f05001c;
+        public static final int openred=0x7f050020;
         public static final int purple=0x7f050018;
-        public static final int rowblue=0x7f05001e;
-        public static final int rowpurple=0x7f050019;
-        public static final int searchpurple=0x7f05001a;
-        public static final int textdirectionsgrey=0x7f050021;
+        public static final int purpletransparent=0x7f050019;
+        public static final int rowblue=0x7f05001f;
+        public static final int rowpurple=0x7f05001a;
+        public static final int searchpurple=0x7f05001b;
+        public static final int textdirectionsgrey=0x7f050022;
         public static final int wallet_bright_foreground_disabled_holo_light=0x7f05000f;
         /** 
          Wallet colors to support consistent Wallet fragment holo dark UI in client application
@@ -369,9 +373,10 @@ containing a value of this type.
         public static final int wallet_hint_foreground_holo_light=0x7f050011;
         public static final int wallet_holo_blue_light=0x7f050015;
         public static final int wallet_link_text_light=0x7f050016;
-        public static final int wallet_primary_text_holo_light=0x7f050024;
-        public static final int wallet_secondary_text_holo_dark=0x7f050025;
+        public static final int wallet_primary_text_holo_light=0x7f050029;
+        public static final int wallet_secondary_text_holo_dark=0x7f05002a;
         public static final int white=0x7f050017;
+        public static final int whitetransparent=0x7f050025;
     }
     public static final class dimen {
         /**  Default screen margins, per the Android Design guidelines. 
@@ -419,26 +424,29 @@ containing a value of this type.
         public static final int common_signin_btn_text_normal_light=0x7f02001b;
         public static final int common_signin_btn_text_pressed_dark=0x7f02001c;
         public static final int common_signin_btn_text_pressed_light=0x7f02001d;
-        public static final int directionsicon=0x7f02001e;
-        public static final int gradbg=0x7f02001f;
-        public static final int ic_launcher=0x7f020020;
-        public static final int ic_plusone_medium_off_client=0x7f020021;
-        public static final int ic_plusone_small_off_client=0x7f020022;
-        public static final int ic_plusone_standard_off_client=0x7f020023;
-        public static final int ic_plusone_tall_off_client=0x7f020024;
-        public static final int letsgo_button=0x7f020025;
-        public static final int locationicon=0x7f020026;
-        public static final int powered_by_google_dark=0x7f020027;
-        public static final int powered_by_google_light=0x7f020028;
-        public static final int rtbtn=0x7f020029;
-        public static final int vta=0x7f02002a;
-        public static final int walking_man=0x7f02002b;
+        public static final int directionsbar=0x7f02001e;
+        public static final int directionsicon=0x7f02001f;
+        public static final int directionspurplecircle=0x7f020020;
+        public static final int gradbg=0x7f020021;
+        public static final int ic_launcher=0x7f020022;
+        public static final int ic_plusone_medium_off_client=0x7f020023;
+        public static final int ic_plusone_small_off_client=0x7f020024;
+        public static final int ic_plusone_standard_off_client=0x7f020025;
+        public static final int ic_plusone_tall_off_client=0x7f020026;
+        public static final int letsgo_button=0x7f020027;
+        public static final int locationicon=0x7f020028;
+        public static final int powered_by_google_dark=0x7f020029;
+        public static final int powered_by_google_light=0x7f02002a;
+        public static final int rtbtn=0x7f02002b;
+        public static final int vta=0x7f02002c;
+        public static final int walking_man=0x7f02002d;
+        public static final int whitebackbtn=0x7f02002e;
     }
     public static final class id {
         public static final int RouteMap=0x7f07002e;
         public static final int TextView01=0x7f07004d;
         public static final int TextView03=0x7f07004c;
-        public static final int action_settings=0x7f070050;
+        public static final int action_settings=0x7f070051;
         public static final int address=0x7f070041;
         public static final int arriveTextView=0x7f07001d;
         public static final int book_now=0x7f070010;
@@ -450,12 +458,12 @@ containing a value of this type.
         public static final int dateOfReview=0x7f070049;
         public static final int departTextView=0x7f07001c;
         public static final int directionsBackButton=0x7f070024;
-        public static final int directionsDetails=0x7f070022;
+        public static final int directionsDetails=0x7f070020;
         public static final int directionsDistance=0x7f07001a;
         public static final int directionsFare=0x7f070016;
         public static final int directionsLocation=0x7f07001b;
-        public static final int directionsRowTimeTextView=0x7f070023;
-        public static final int directionsText=0x7f070020;
+        public static final int directionsRowTimeTextView=0x7f070021;
+        public static final int directionsText=0x7f070022;
         public static final int directionsTime=0x7f070018;
         public static final int grayscale=0x7f070012;
         public static final int holo_dark=0x7f070005;
@@ -466,8 +474,8 @@ containing a value of this type.
         public static final int locationSearchProgressBar=0x7f07002c;
         public static final int mainmap=0x7f07002d;
         public static final int match_parent=0x7f07000c;
-        public static final int menu_about=0x7f070051;
-        public static final int menu_website=0x7f070052;
+        public static final int menu_about=0x7f070052;
+        public static final int menu_website=0x7f070053;
         public static final int metaforaGenericNoClickButton=0x7f070025;
         public static final int monochrome=0x7f070013;
         public static final int name=0x7f070040;
@@ -491,6 +499,7 @@ containing a value of this type.
         public static final int routeDirectionTextView=0x7f070030;
         public static final int routeMenuButton=0x7f07002b;
         public static final int routeProgressBar=0x7f070032;
+        public static final int routeProgressButton=0x7f070033;
         public static final int routebutton1=0x7f070035;
         public static final int routebutton2=0x7f070036;
         public static final int routebutton3=0x7f070037;
@@ -511,8 +520,8 @@ containing a value of this type.
         public static final int textView2=0x7f070017;
         public static final int textView3=0x7f070019;
         public static final int transitTextDirectionsLayout=0x7f07001e;
-        public static final int transitTextView=0x7f070021;
-        public static final int useRouteButton=0x7f070033;
+        public static final int transitTextView=0x7f070023;
+        public static final int useRouteButton=0x7f070050;
         public static final int userReviewDetails=0x7f07004a;
         public static final int userReviewRating=0x7f070048;
         public static final int vehicleTypeImage=0x7f07001f;
@@ -543,7 +552,7 @@ containing a value of this type.
     public static final class string {
         public static final int action_settings=0x7f06001b;
         public static final int app_name=0x7f06001a;
-        public static final int choose_time=0x7f060026;
+        public static final int choose_time=0x7f060027;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
         will direct user to application settings of Google Play services where they
         can enable it [CHAR LIMIT=40] 
@@ -633,16 +642,17 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060018;
-        public static final int desc=0x7f060025;
-        public static final int directions=0x7f060023;
+        public static final int desc=0x7f060026;
+        public static final int directions=0x7f060024;
+        public static final int directions_page_string=0x7f060020;
         public static final int menu_about_string=0x7f06001c;
         public static final int menu_website_string=0x7f06001d;
-        public static final int metaforaString=0x7f060024;
-        public static final int route1=0x7f060020;
-        public static final int route2=0x7f060021;
-        public static final int route3=0x7f060022;
+        public static final int metaforaString=0x7f060025;
+        public static final int route1=0x7f060021;
+        public static final int route2=0x7f060022;
+        public static final int route3=0x7f060023;
         public static final int routes_button_string=0x7f06001f;
-        public static final int searchBarText=0x7f060027;
+        public static final int searchBarText=0x7f060028;
         public static final int search_field=0x7f06001e;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

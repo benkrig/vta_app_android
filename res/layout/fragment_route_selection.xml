@@ -17,100 +17,105 @@
             <ImageButton
                 android:id="@+id/directionsBackButton"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight=".5"
-                android:background="@drawable/rtbtn"
-				android:contentDescription="@string/desc"
-                android:src="@drawable/backbutton" />
-
+                android:layout_weight="2"
+                android:background="@color/buttondarkgrey"
+                android:contentDescription="@string/desc"
+                android:src="@drawable/whitebackbtn" />
 
             <Button
                 android:id="@+id/selectRouteDepartTime"
                 style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:layout_weight="3"
+                android:layout_gravity="center"
+                android:layout_weight="6"
+                android:background="@color/purple"
                 android:text="@string/choose_time"
-                android:textColor="@color/exitblue"
-                android:background="@drawable/rtbtn" />
+                android:textColor="@color/white" />
 
             <ProgressBar
                 android:id="@+id/routeProgressBar"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:visibility="gone"                
+                android:layout_weight="2"
                 android:background="@color/purple"
-                android:indeterminate="true"
-                android:layout_weight=".5" />
+                android:indeterminate="true" />
+            
+            <Button
+                android:id="@+id/routeProgressButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:background="@color/purple"
+			 	/>
 
-            <ImageButton
-                android:id="@+id/useRouteButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight=".5"
-                android:background="@drawable/rtbtn"
-                android:contentDescription="@string/desc"
-                android:src="@drawable/chooseroute"
-                 />
+				 />
         </LinearLayout>
 
-        <fragment
-            android:id="@+id/routeselectionmap"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dip"
-            android:layout_gravity="center"
-            android:layout_weight="1" 
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#00ffffff"
             android:gravity="bottom" >
 
-            <ImageButton
-                android:id="@+id/textDirectionsButton"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/backbtn"
-                android:src="@drawable/directionsicon"
-                android:contentDescription="@string/directions" />
+            <fragment
+                android:id="@+id/routeselectionmap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
-            <Button
-                android:id="@+id/routebutton1"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rtbtn"
-                android:text="@string/route1"
-                android:textColor="@color/exitblue"
-                 />
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true" >
 
-            <Button
-                android:id="@+id/routebutton2"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rtbtn"
-                android:text="@string/route2"
-				android:textColor="@color/exitblue"
-                 />
+                <ImageButton
+                    android:id="@+id/textDirectionsButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/purple"
+                    android:contentDescription="@string/directions"
+                    android:src="@drawable/directionsicon" />
 
-            <Button
-                android:id="@+id/routebutton3"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rtbtn"
-                android:text="@string/route3"
-                android:textColor="@color/exitblue" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/routebutton1"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    
+                    android:layout_weight="1"
+                    android:background="@color/whitetransparent"
+                    android:text="@string/route1"
+                    android:textColor="@color/buttondarkgrey" />
+
+                <Button
+                    android:id="@+id/routebutton2"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/whitetransparent"
+                    android:text="@string/route2"
+                    android:textColor="@color/buttondarkgrey" />
+
+                <Button
+                    android:id="@+id/routebutton3"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/whitetransparent"
+                    android:text="@string/route3"
+                    android:textColor="@color/buttondarkgrey" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
 
     </LinearLayout>
