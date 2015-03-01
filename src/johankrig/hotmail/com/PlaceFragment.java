@@ -49,6 +49,7 @@ public class PlaceFragment extends Fragment
 	private String web;
 	private String openNowString;
 	private boolean openNow;
+	private int numberOfRating;
 	
 	private float rating;
 	private PlaceMobileArrayAdapter placeAdapter;
@@ -59,6 +60,7 @@ public class PlaceFragment extends Fragment
 	TextView placePhone;
 	TextView placeWeb;
 	TextView openNowText;
+	TextView placeNumberOfRatings;
 	RatingBar placeRating;
 	TextView placeNoInformationAddress;
 	
@@ -108,7 +110,8 @@ public class PlaceFragment extends Fragment
     	placeWeb = (TextView) rootView.findViewById(R.id.website);
         placeRating = (RatingBar) rootView.findViewById(R.id.placeRating);
         openNowText = (TextView) rootView.findViewById((R.id.placeCurrentStatus));
-    	placeNoInformationAddress = (TextView) rootView.findViewById(R.id.placeNoInformationAddress);
+    	placeNumberOfRatings = (TextView) rootView.findViewById(R.id.placeNumberOfRatings);
+        placeNoInformationAddress = (TextView) rootView.findViewById(R.id.placeNoInformationAddress);
         
         placeWeb.setOnClickListener(new OnClickListener() 
         {
@@ -160,6 +163,7 @@ public class PlaceFragment extends Fragment
     		placeWeb.setText(web);		
     		placeRating.setRating(rating);
     		openNowText.setText(openNowString);
+    		placeNumberOfRatings.setText(numberOfRating);
     		placeNoInformationAddress.setText(address);
     	}
     	else
@@ -189,6 +193,7 @@ public class PlaceFragment extends Fragment
 		placeWeb.setText("");		
 		placeRating.setRating(0);
 		openNowText.setText("");
+		placeNumberOfRatings.setText("");
 	}
 
 	public void updatePlace(JSONObject result) 
@@ -217,6 +222,11 @@ public class PlaceFragment extends Fragment
 					address = detailsJSON.getString("formatted_address");
 					placeAddress.setText(address);
 	
+				}
+				if(detailsJSON.has("user_ratings_total"))
+				{
+					numberOfRating = detailsJSON.getInt("user_ratings_total");
+					placeNumberOfRatings.setText(numberOfRating + " reviews");
 				}
 		    	
 				if(detailsJSON.has("formatted_phone_number"))

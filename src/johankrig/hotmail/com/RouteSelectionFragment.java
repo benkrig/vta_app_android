@@ -13,20 +13,16 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -63,13 +59,13 @@ public class RouteSelectionFragment extends Fragment
     Communicator comm;
 	
 	//Private variables
-	private Button routebtn1;
-	private Button routebtn2;
-    private Button routebtn3;
+	private Button route1Button;
+	private Button route2Button;
+    private Button route3Button;
     private ImageButton textDirectionsButton;
-    ImageButton mainMapButton;
-    DirectionsAsyncTask drawRoute;
-    GetBusLocationTask bus;
+    private ImageButton gotoPlaceDetailsButton;
+    private DirectionsAsyncTask drawRoute;
+    private DecodeRouteJSON draw;
 	private View rootView;
     String googleDirectionsResultJSON;
 
@@ -91,16 +87,15 @@ public class RouteSelectionFragment extends Fragment
     		/* map is already there, just return view as it is */
     	}
 
-    	//Set up map for RouteFragment
         comm = (Communicator) getActivity();
 
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
     	
-    	routebtn1 = (Button) rootView.findViewById(R.id.routebutton1);
-        routebtn2 = (Button) rootView.findViewById(R.id.routebutton2);
-        routebtn3 = (Button) rootView.findViewById(R.id.routebutton3);
+    	route1Button = (Button) rootView.findViewById(R.id.routebutton1);
+        route2Button = (Button) rootView.findViewById(R.id.routebutton2);
+        route3Button = (Button) rootView.findViewById(R.id.routebutton3);
 
         textDirectionsButton = (ImageButton) rootView.findViewById(R.id.textDirectionsButton);
         
@@ -110,18 +105,6 @@ public class RouteSelectionFragment extends Fragment
     	        
         
         
-        //This button returns the user to home search screen
-        mainMapButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
-        mainMapButton.setOnClickListener(new OnClickListener() 
-        {
-            @Override
-            public void onClick(View v)
-            {            	
-            	//Return to Place Details Screen
-                comm.goToPlaceDetails();
-                
-            }
-        });
         
         class mytimepicker extends DialogFragment implements
         TimePickerDialog.OnTimeSetListener, android.content.DialogInterface.OnClickListener 
@@ -203,7 +186,7 @@ public class RouteSelectionFragment extends Fragment
 			}
 		}
         
-        final Button time = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
+        final Button routeTimeButton = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
         Calendar datetime = Calendar.getInstance();
         datetime.setTimeInMillis(System.currentTimeMillis());
 
@@ -214,14 +197,14 @@ public class RouteSelectionFragment extends Fragment
             am_pm = "PM";
         
     	String strTimeToShow = String.format(Locale.US, "%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
-        time.setText(strTimeToShow + " "+ am_pm);
+        routeTimeButton.setText(strTimeToShow + " "+ am_pm);
         
-        time.setOnClickListener(new OnClickListener()
+        routeTimeButton.setOnClickListener(new OnClickListener()
         {
 			@Override
 			public void onClick(View v) 
 			{
-				DialogFragment newFragment = new mytimepicker(time);
+				DialogFragment newFragment = new mytimepicker(routeTimeButton);
                 newFragment.show(getFragmentManager(), "timePicker");
 			}
         });
@@ -229,29 +212,32 @@ public class RouteSelectionFragment extends Fragment
         
     	//OnClick ROUTEBUTTON1
     	//Main route directions will be drawn onto map
-        routebtn1.setOnClickListener(new OnClickListener() 
+        route1Button.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v)
             {
-            	routebtn1.setBackgroundColor(getResources().getColor(R.color.greytransparent));
-            	routebtn2.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-            	routebtn3.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+            	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 
             	if(googleDirectionsResultJSON != null)
             	{
-                	map.clear();
-		            drawPath(googleDirectionsResultJSON, 0);
-		            Log.d("json", googleDirectionsResultJSON+"");
-		            comm.updateDirectionsList(googleDirectionsResultJSON, 0);
 		            
-		            Timer myTimer = new Timer();
+                	if(draw != null)
+                	{
+                		draw.cancel(true);
+                	}
+                	draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
+                	draw.execute();
+                	  	
+		            /*Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); 
+	                myTimer.schedule(myTask, 3000, 1000); */
             	}
                 
                 
@@ -260,72 +246,89 @@ public class RouteSelectionFragment extends Fragment
         
     	//OnClick ROUTEBUTTON2
     	//Alternate route 1 directions will be drawn onto map
-        routebtn2.setOnClickListener(new OnClickListener() 
+        route2Button.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v) 
             {
-            	routebtn2.setBackgroundColor(getResources().getColor(R.color.greytransparent));
-            	routebtn1.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-            	routebtn3.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route2Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+            	route1Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 
             	if(googleDirectionsResultJSON != null)
-            	{
-	            	map.clear();
-		            drawPath(googleDirectionsResultJSON, 1);
-		            
-		            Log.d("json", googleDirectionsResultJSON+"");
-		            comm.updateDirectionsList(googleDirectionsResultJSON, 1);
-	
-		            Timer myTimer = new Timer();
+            	{		            
+
+                	if(draw != null)
+                	{
+                		draw.cancel(true);
+                	}
+                	
+                	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
+                	draw.execute();
+                	  	
+		            /*Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); 
+	                myTimer.schedule(myTask, 3000, 1000); */
             	}
             }
         });
         
     	//OnClick ROUTEBUTTON3
     	//Alternate route 2 directions will be drawn onto map
-        routebtn3.setOnClickListener(new OnClickListener() 
+        route3Button.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v) 
             {
-            	routebtn3.setBackgroundColor(getResources().getColor(R.color.greytransparent));
-            	routebtn2.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-            	routebtn1.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route3Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+            	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+            	route1Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 
             	if(googleDirectionsResultJSON != null)
             	{
-	            	map.clear();
-		            drawPath(googleDirectionsResultJSON, 2);
-		            
-		            Log.d("json", googleDirectionsResultJSON+"");
-		            comm.updateDirectionsList(googleDirectionsResultJSON, 2);
-	
-	                Timer myTimer = new Timer();
+                	if(draw != null)
+                	{
+                		draw.cancel(true);
+                	}
+                	
+                	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
+                	draw.execute();
+                	  	
+		            /*Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
-	                
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); 
+	                myTimer.schedule(myTask, 3000, 1000); */
             	}
             }
         });
         
-        
+        //takes user to place details fragment
         textDirectionsButton.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v) 
             {
             	comm.gotoTextDirections();
+            }
+        });
+
+        //This button returns the user to home search screen
+        gotoPlaceDetailsButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
+        gotoPlaceDetailsButton.setOnClickListener(new OnClickListener() 
+        {
+            @Override
+            public void onClick(View v)
+            {            	
+            	//Return to Place Details Screen
+                comm.goToPlaceDetails();
+                
             }
         });
         
@@ -337,7 +340,6 @@ public class RouteSelectionFragment extends Fragment
 	//decodes google polyline, formula has already been developed online.
 	private List<LatLng> decodePoly(String encoded) 
 	{
-
 	    List<LatLng> poly = new ArrayList<LatLng>();
 	    int index = 0, len = encoded.length();
 	    int lat = 0, lng = 0;
@@ -378,8 +380,33 @@ public class RouteSelectionFragment extends Fragment
 	//Transforms it into a JSONObject and selects the polyline from
 	//the given routeNumber.
 	//Draws polyline onto RouteFragment map
-	public void drawPath(String result, int routeNumber) 
+	
+	private class ResponseObject 
 	{
+		List<PolylineOptions> polyies;
+		List<MarkerOptions> markers;
+		public ResponseObject(List<PolylineOptions> polyies, List<MarkerOptions> markers)
+		{
+			this.polyies = polyies;
+			this.markers = markers;
+		}
+		
+		public List<PolylineOptions> getpolyies()
+		{
+			return polyies;
+		}
+		public List<MarkerOptions> getmarkers()
+		{
+			return markers;
+		}
+	    //accessors
+	}	
+	public ResponseObject drawPath(String result, int routeNumber) 
+	{
+		List<PolylineOptions> polyies = new ArrayList<PolylineOptions>();
+		List<MarkerOptions> markers = new ArrayList<MarkerOptions>();
+		
+		
 	    try 
 	    {
 	    	//Tranform the String response RESULT into a JSON object
@@ -412,12 +439,47 @@ public class RouteSelectionFragment extends Fragment
 	    	        {
 	        			LatLng src = list.get(x);
 		       		   	LatLng dest = list.get(x+1);
-		       		   	@SuppressWarnings("unused")
-		       		   	Polyline line = map.addPolyline(new PolylineOptions()
+		       		   	
+		       		   	polyies.add(new PolylineOptions()
 		       		   		.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
 			                .width(9)
-			                .color(Color.argb(190, 255, 102, 126)).geodesic(true));
+			                .color(Color.argb(190, 121, 14, 189)).geodesic(true));
 	    	        }
+	        		
+
+		        	if(step.has("transit_details"))
+		        	{
+		        		JSONObject transit_details = step.getJSONObject("transit_details");
+			           
+		        		JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
+		        		JSONObject arrival_location = arrival_stop.getJSONObject("location");
+
+		        		
+		        		
+		        		MarkerOptions markerOptions = new MarkerOptions();
+		        		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
+		        		markerOptions.title("Stop name: " + arrival_stop.getString("name"));
+		        		markerOptions.snippet("Line: " + transit_details.getString("headsign"));
+		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		        		markerOptions.flat(true);
+		        		
+		        		markers.add(markerOptions);
+		        		
+			           		
+			         
+		        		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
+		        		JSONObject departure_location = departure_stop.getJSONObject("location");
+			           		
+		        		markerOptions = new MarkerOptions();
+		        		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
+		        		markerOptions.title("Stop: " + departure_stop.getString("name"));
+		        		markerOptions.snippet("Line:  " + transit_details.getString("headsign"));
+		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		        		markerOptions.flat(true);
+		        		
+		        		markers.add(markerOptions);
+
+		        	}
 	        	}
 	        	   
 	        	if(step.getString("travel_mode").equals("WALKING"))
@@ -429,50 +491,15 @@ public class RouteSelectionFragment extends Fragment
 	        		{
 	        			LatLng src = list.get(x);
 	        			LatLng dest = list.get(x+1);
-	        			@SuppressWarnings("unused")
-	        			Polyline line = map.addPolyline(new PolylineOptions()
-	        				.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-	        				.width(9)
-	        				.color(Color.argb(150, 0, 0, 255)).geodesic(true));
+	        			
+	        			polyies.add(new PolylineOptions()
+        				.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
+        				.width(9)
+        				.color(Color.argb(180, 0, 100, 0)).geodesic(true));
+	        			
 	        		}
 	        	}
-	        }
-
-	        //routes -> legs -> steps -> transit_details -> arrival/location_stop -> location latlng
-	        JSONArray legs = routes.getJSONArray("legs");
-	        JSONObject leg = legs.getJSONObject(0);
-	        JSONArray steps = leg.getJSONArray("steps");
-	        //for each step, draw bus stops on map
-	        for (int z = 0; z < steps.length(); z ++)
-	        {
-	        	JSONObject step = steps.getJSONObject(z);
-	        	if(step.has("transit_details"))
-	        	{
-	        		JSONObject transit_details = step.getJSONObject("transit_details");
-		           
-	        		JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
-	        		JSONObject arrival_location = arrival_stop.getJSONObject("location");
-
-	        		MarkerOptions markerOptions = new MarkerOptions();
-	        		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
-	        		markerOptions.title("Stop name: " + arrival_stop.getString("name"));
-	        		markerOptions.snippet("Line: " + transit_details.getString("headsign"));
-	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
-	        		markerOptions.flat(true);
-	        		map.addMarker(markerOptions);
-		           		
-		         
-	        		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
-	        		JSONObject departure_location = departure_stop.getJSONObject("location");
-		           		
-	        		markerOptions = new MarkerOptions();
-	        		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
-	        		markerOptions.title("Stop name: " + departure_stop.getString("name"));
-	        		markerOptions.snippet("Line:  " + transit_details.getString("headsign"));
-	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
-	        		markerOptions.flat(true);
-	        		map.addMarker(markerOptions);
-	        	}		           
+	        			        
 	        }
 	    } 
 	    catch (JSONException e) 
@@ -480,17 +507,19 @@ public class RouteSelectionFragment extends Fragment
 	    	//Called if no route is found at Index routeNumber
             Toast.makeText(getActivity(), "No route found :: E: "+e.toString(), Toast.LENGTH_LONG).show();
 	    }
+	    
+	    ResponseObject resp = new ResponseObject(polyies, markers);
+        return resp;
 	} 
 	
 	//
-	private class DirectionsAsyncTask extends AsyncTask<Void, Void, String>
+	private class DirectionsAsyncTask extends AsyncTask<Void, Void, ResponseObject>
 	{
 		private String DAPIKEY = "AIzaSyBoU0I2dTrmBwKvFAtAHY72ZWPjtwE_r-8";
 	    private long time = System.currentTimeMillis()/1000;
 	    private LatLng eloc;
 	    private LatLng uloc;
-
-	    //HARDCODED FOR NOW CHANGE THIS
+	    private String json;
 	    private int route;
 		private String directionsurl;
 
@@ -527,27 +556,42 @@ public class RouteSelectionFragment extends Fragment
 			Log.d("url", directionsurl);
 	    }
 	    @Override
-	    protected String doInBackground(Void... params) 
+	    protected ResponseObject doInBackground(Void... params) 
 	    {
 	        JSONParser jParser = new JSONParser();
 	        //1 for directions api
-	        String json = jParser.getDirectionApiJsonResponse(directionsurl);
-	        return json;
+	        json = jParser.getDirectionApiJsonResponse(directionsurl);
+	        ResponseObject response = null;
+	        
+	        if(json!=null)
+	        {
+	            response = drawPath(json, route);
+	            Log.d("json", json+"");
+	        }
+	        
+	        return response;
 	    }
 	    @Override
-	    protected void onPostExecute(String result) 
+	    protected void onPostExecute(ResponseObject result) 
 	    {
 	        super.onPostExecute(result);  
 	        loadProgressButton.setVisibility(View.VISIBLE);
 	        loadProgress.setVisibility(View.GONE);
 	        
-	        googleDirectionsResultJSON = result;
-	        //BAD TEST, RESULT WILL NEVER RETURN A NULL, FIX THIS
-	        if(result!=null)
+	        googleDirectionsResultJSON = json;
+	        
+            comm.updateDirectionsList(json, route);
+	        
+	        List<PolylineOptions> polyies = result.getpolyies();
+	        List<MarkerOptions> markers = result.getmarkers();
+	        
+	        for (PolylineOptions temp : polyies) 
 	        {
-	            drawPath(result, route);
-	            Log.d("json", result+"");
-	            comm.updateDirectionsList(result, route);
+	        	map.addPolyline(temp);
+	        }
+	        for (MarkerOptions temp : markers)
+	        {
+	        	map.addMarker(temp);
 	        }
 	    }
 	}
@@ -569,9 +613,10 @@ public class RouteSelectionFragment extends Fragment
 			{
 				drawRoute.cancel(true);
 			}
-			routebtn1.setBackgroundColor(getResources().getColor(R.color.greytransparent));
-        	routebtn2.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-        	routebtn3.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+			
+			route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
         	
 			drawRoute = new DirectionsAsyncTask();
 			drawRoute.updateUserLocation(userLatLng, destinationLatLng);
