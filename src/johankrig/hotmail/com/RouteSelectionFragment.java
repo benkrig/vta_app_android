@@ -607,7 +607,7 @@ public class RouteSelectionFragment extends Fragment
 			userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
 			destinationLatLng = dest;
 			
-			map.animateCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 			
 			if(drawRoute !=null)
 			{

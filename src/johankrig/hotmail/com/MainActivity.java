@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,7 +20,40 @@ public class MainActivity extends FragmentActivity implements Communicator
 {	  
 	public NoSwipeViewPager viewPager;
 	public String destination;
-	public Bundle bundle = new Bundle();
+	
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) 
+	{
+	    if (keyCode == KeyEvent.KEYCODE_BACK) 
+	    {
+	    	if(viewPager.getCurrentItem() == 0)
+	    	{
+	    		return super.onKeyDown(keyCode, event);
+	    	}
+	    	if(viewPager.getCurrentItem() == 1)
+	    	{
+	 	       	return super.onKeyDown(keyCode, event);
+	    	}	
+	    	//route selection fragment, goes to placedetails
+	    	else if(viewPager.getCurrentItem() == 2)
+	    	{
+	    		viewPager.setCurrentItem(4, false);
+	    	}
+	    	else if(viewPager.getCurrentItem() == 3)
+	    	{
+	    		viewPager.setCurrentItem(2, false);
+	    	}
+	    	else if(viewPager.getCurrentItem() == 4)
+	    	{
+	    		viewPager.setCurrentItem(1, false);
+	    	}
+	      return true;
+	    } 
+	    else 
+	    {
+	       return super.onKeyDown(keyCode, event);
+	    }
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 

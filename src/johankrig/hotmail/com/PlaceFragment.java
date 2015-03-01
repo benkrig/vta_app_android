@@ -49,7 +49,7 @@ public class PlaceFragment extends Fragment
 	private String web;
 	private String openNowString;
 	private boolean openNow;
-	private int numberOfRating;
+	private int numberOfRatings;
 	
 	private float rating;
 	private PlaceMobileArrayAdapter placeAdapter;
@@ -163,7 +163,7 @@ public class PlaceFragment extends Fragment
     		placeWeb.setText(web);		
     		placeRating.setRating(rating);
     		openNowText.setText(openNowString);
-    		placeNumberOfRatings.setText(numberOfRating);
+    		placeNumberOfRatings.setText(numberOfRatings + " reviews");
     		placeNoInformationAddress.setText(address);
     	}
     	else
@@ -225,8 +225,8 @@ public class PlaceFragment extends Fragment
 				}
 				if(detailsJSON.has("user_ratings_total"))
 				{
-					numberOfRating = detailsJSON.getInt("user_ratings_total");
-					placeNumberOfRatings.setText(numberOfRating + " reviews");
+					numberOfRatings = detailsJSON.getInt("user_ratings_total");
+					placeNumberOfRatings.setText(numberOfRatings + " reviews");
 				}
 		    	
 				if(detailsJSON.has("formatted_phone_number"))
@@ -293,7 +293,6 @@ public class PlaceFragment extends Fragment
 							placeReviewsDetails[i] = tmp.getString("text");
 							reviewerNames[i] = tmp.getString("author_name");
 							reviewDates[i] = tmp.getInt("time");
-							Log.d("infos", tmp.getJSONArray("aspects").toString());
 							JSONArray rating = tmp.getJSONArray("aspects");
 				        	JSONObject rating1 = rating.getJSONObject(0);
 							reviewRatings[i] = (float) (rating1.getDouble("rating") + (3*0.66));
@@ -369,11 +368,18 @@ public class PlaceFragment extends Fragment
 	            jsonObj = new JSONObject(jsonResults.toString());
 	            
 	            //IF THIS RETURNS NULL PUT UP A NO PLACE INFO PAGE INSTEAD
+	            if(jsonObj.has("result"))
+	            {	
 	            result = jsonObj.getJSONObject("result");
+	            }
+	            else
+	            {
+	            	result = null;
+	            }
 	        } 
 	        catch (JSONException e) 
 	        {
-	            Log.e(LOG_TAG, "Cannot process JSON results", e);
+	            Log.e(LOG_TAG, "No results for this place", e);
 	        }
 	    return result;
 	}

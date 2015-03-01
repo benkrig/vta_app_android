@@ -56,21 +56,8 @@
             android:id="@+id/placeNoInformationLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:visibility="gone"
             android:layout_weight="1"
              >
-
-            <TextView
-                android:id="@+id/textView2"
-                android:gravity="center"
-                android:paddingTop="5dp"
-                android:textSize="15dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:text="We can't find details for the place at" />
 
             <TextView
                 android:id="@+id/textView1"
@@ -87,12 +74,26 @@
                 android:id="@+id/placeNoInformationAddress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textView1"
-                android:layout_alignRight="@+id/textView1"
-                android:layout_below="@+id/textView2"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/buttondarkgrey"
                 android:gravity="center"
-                android:textStyle="bold"
-                android:text="111 This is the Address Ave 95914" />
+                android:text="111 This is the Address Ave 95914"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/placeNoInformationAddress"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:text="We can&apos;t find details for this place"
+                android:textSize="15dp" />
 
         </RelativeLayout>
 
@@ -100,7 +101,8 @@
             android:id="@+id/placeRelativeLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"            
+            android:layout_weight="1"   
+            android:visibility="gone"
             android:background="@color/white" >
             
             <LinearLayout
@@ -123,7 +125,7 @@
                         android:layout_weight="4"
                         android:textSize="15dp"
                         android:gravity="center_horizontal"
-                        android:text="asldalkd ljeka ekalgk helighali "
+                        android:text="(Empty)"
                         android:textColor="@color/white"
                         android:background="@color/buttondarkgrey"
 					 />
@@ -146,7 +148,7 @@
     			    android:gravity="center_horizontal"
     			    android:layout_weight="4"
     			    android:paddingBottom="12dip"
-    			    android:text="ayyyyyyad sda khsdkhashkd asd e feat asd asd efeaf afsf" 
+    			    android:text="(Empty)" 
     			    android:textColor="@color/white"
     			    android:textSize="12sp"
     			    android:background="@color/buttondarkgrey"
@@ -177,7 +179,7 @@
 		            android:paddingLeft="5dp"
 		            android:paddingTop="5dp"
 		            android:singleLine="true"
-		            android:text="ASDALDA LKSL" />
+		            android:text="(empty)" />
 
 		        <TextView
 		            android:id="@+id/phone"
@@ -190,7 +192,7 @@
 		            android:textColorLink="@color/white"
 		            android:linksClickable="true"
 		            android:paddingLeft="5dp"
-		            android:text="(408)-396-1411" />
+		            android:text="(empty)" />
 
 		    </LinearLayout>
 		     
@@ -263,7 +265,7 @@
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:paddingLeft="5dp"
-		            android:text="192 reviews"
+		            android:text="(empty)"
 		            android:textSize="12sp"
 		            android:textColor="@color/white" />
 
