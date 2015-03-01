@@ -6,6 +6,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -143,6 +149,8 @@ public class PlaceFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+            	
+            	
             	//Return to home search screen
             	comm.returnRoutes(placeLoc);
             }

@@ -8,11 +8,18 @@
 package johankrig.hotmail.com;
 
 import johankrig.hotmail.com.R;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
+
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -231,13 +238,13 @@ public class RouteSelectionFragment extends Fragment
                 	draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
                 	draw.execute();
                 	  	
-		            /*Timer myTimer = new Timer();
+		            Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); */
+	                myTimer.schedule(myTask, 3000, 1000);
             	}
                 
                 
@@ -558,6 +565,61 @@ public class RouteSelectionFragment extends Fragment
 	    @Override
 	    protected ResponseObject doInBackground(Void... params) 
 	    {
+
+	    	// 1. create HttpClient
+            HttpClient httpclient = new DefaultHttpClient();
+            
+            // 2. make POST request to the given URL
+            HttpGet httpPost = new HttpGet("http://metafora.herokuapp.com/route");
+            String body = "";
+ 
+            JSONObject jsonObject = new JSONObject();
+            
+            JSONObject userloc = new JSONObject();
+            
+            JSONObject destloc = new JSONObject();
+
+            try
+            {
+	            userloc.put("lat", uloc.latitude);
+	            userloc.put("lng", uloc.longitude);
+	            
+	            destloc.put("lat", eloc.latitude);
+	            destloc.put("lng", eloc.longitude);
+	            
+	            jsonObject.put("userlatlng", userloc);
+	            jsonObject.put("destinationlatlng", destloc);
+	            
+	            jsonObject.put("unixtimestamp", System.currentTimeMillis());
+	            
+            }
+            catch(Exception e)
+            {
+            	
+            }
+
+            
+            body = jsonObject.toString();
+            
+            httpPost.setHeader("Accept", "application/json");
+            httpPost.setHeader("body", body);
+            httpPost.setHeader("Content-type", "application/json");
+ 
+            try 
+            {
+				httpclient.execute(httpPost);
+			} 
+            catch (ClientProtocolException e) 
+			{
+				e.printStackTrace();
+			} 
+            catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+            httpPost.abort();
+            
+            
 	        JSONParser jParser = new JSONParser();
 	        //1 for directions api
 	        json = jParser.getDirectionApiJsonResponse(directionsurl);
