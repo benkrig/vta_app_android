@@ -100,12 +100,17 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         
         try
         {
-        	
             userloc.put("lat", gps.getLatitude());
             userloc.put("lng", gps.getLongitude());
             jsonObject.put("userlatlng", userloc);            
             jsonObject.put("searchstring", searchKeyword);
             jsonObject.put("unixtimestamp", System.currentTimeMillis());
+            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
+            jsonObject.put("brand", android.os.Build.BRAND);
+            jsonObject.put("device", android.os.Build.DEVICE);
+            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
+            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
+            jsonObject.put("product", android.os.Build.PRODUCT);
             
         }
         catch(Exception e)
@@ -115,6 +120,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 
         
         body = jsonObject.toString();
+        Log.d("pro", ""+System.getProperties());
         
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("body", body);

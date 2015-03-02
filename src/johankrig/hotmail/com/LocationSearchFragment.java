@@ -69,7 +69,15 @@ public class LocationSearchFragment extends Fragment
 	    {
 	        //map is already there, just return view as it is
 	    }
-	    
+        Log.d("pro", ""+android.os.Build.MODEL);
+        Log.d("pro", ""+android.os.Build.PRODUCT);
+        Log.d("pro", ""+android.os.Build.VERSION.SDK_INT);
+        Log.d("pro", ""+android.os.Build.MANUFACTURER);
+        Log.d("pro", ""+android.os.Build.BRAND);
+
+
+        Log.d("pro", ""+android.os.Build.DEVICE);
+
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         

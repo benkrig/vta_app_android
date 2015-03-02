@@ -565,32 +565,31 @@ public class RouteSelectionFragment extends Fragment
 	    @Override
 	    protected ResponseObject doInBackground(Void... params) 
 	    {
-
-	    	// 1. create HttpClient
             HttpClient httpclient = new DefaultHttpClient();
-            
-            // 2. make POST request to the given URL
             HttpGet httpPost = new HttpGet("http://metafora.herokuapp.com/route");
             String body = "";
  
             JSONObject jsonObject = new JSONObject();
             
             JSONObject userloc = new JSONObject();
-            
             JSONObject destloc = new JSONObject();
 
             try
             {
 	            userloc.put("lat", uloc.latitude);
 	            userloc.put("lng", uloc.longitude);
-	            
 	            destloc.put("lat", eloc.latitude);
 	            destloc.put("lng", eloc.longitude);
 	            
 	            jsonObject.put("userlatlng", userloc);
 	            jsonObject.put("destinationlatlng", destloc);
-	            
 	            jsonObject.put("unixtimestamp", System.currentTimeMillis());
+	            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
+	            jsonObject.put("brand", android.os.Build.BRAND);
+	            jsonObject.put("device", android.os.Build.DEVICE);
+	            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
+	            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
+	            jsonObject.put("product", android.os.Build.PRODUCT);
 	            
             }
             catch(Exception e)
@@ -598,9 +597,7 @@ public class RouteSelectionFragment extends Fragment
             	
             }
 
-            
             body = jsonObject.toString();
-            
             httpPost.setHeader("Accept", "application/json");
             httpPost.setHeader("body", body);
             httpPost.setHeader("Content-type", "application/json");
