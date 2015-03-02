@@ -584,12 +584,12 @@ public class RouteSelectionFragment extends Fragment
 	            jsonObject.put("userlatlng", userloc);
 	            jsonObject.put("destinationlatlng", destloc);
 	            jsonObject.put("unixtimestamp", System.currentTimeMillis());
-	            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
-	            jsonObject.put("brand", android.os.Build.BRAND);
-	            jsonObject.put("device", android.os.Build.DEVICE);
+	            jsonObject.put("manufacturer", ""+android.os.Build.MANUFACTURER);
+	            jsonObject.put("brand", ""+android.os.Build.BRAND);
+	            jsonObject.put("device", ""+android.os.Build.DEVICE);
 	            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
 	            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
-	            jsonObject.put("product", android.os.Build.PRODUCT);
+	            jsonObject.put("product", ""+android.os.Build.PRODUCT);
 	            
             }
             catch(Exception e)
