@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/closedgrey"
+    android:background="@color/whitetransparent"
     android:orientation="vertical"
     
      >
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:text="Mon 12 Feb 2014 asdsd"
         android:textSize="12sp"
-        android:textColor="@color/whitetransparent"
+        android:textColor="@color/buttondarkgrey"
          />
 
     <TextView
@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:paddingBottom="5dp"
         android:text="THIs is aknd aeih aikdf akhgie "
-        android:textColor="@color/white"
+        android:textColor="@color/buttondarkgrey"
          />
 
 </LinearLayout>

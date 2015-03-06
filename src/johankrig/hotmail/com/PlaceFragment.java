@@ -7,11 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,8 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -132,6 +125,19 @@ public class PlaceFragment extends Fragment
             }
         });
         
+        placePhone.setOnClickListener(new OnClickListener()
+        {
+        	@Override
+        	public void onClick(View arg0)
+        	{
+        		if(phone != null)
+        		{
+        			Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone)); 
+        			startActivity(callIntent);
+        		}
+        	}
+        });
+        
         locationSearchButton = (ImageButton) rootView.findViewById(R.id.placeInfoBackButton);
         locationSearchButton.setOnClickListener(new OnClickListener() 
         {
@@ -167,8 +173,8 @@ public class PlaceFragment extends Fragment
         	//place already loaded
     		placeName.setText(name);
     		placeAddress.setText(address);		
-    		placePhone.setText(phone);
-    		placeWeb.setText(web);		
+    		//placePhone.setText(phone);
+    		//placeWeb.setText(web);		
     		placeRating.setRating(rating);
     		openNowText.setText(openNowString);
     		placeNumberOfRatings.setText(numberOfRatings + " reviews");
@@ -178,7 +184,8 @@ public class PlaceFragment extends Fragment
     	{
     		placeNoInformationLayout.setVisibility(View.GONE);
         	placeLayout.setVisibility(View.INVISIBLE);
-    		//clear and get new place
+    		
+        	//clear and get new place
     		clearPlace();
     		
     		
@@ -197,8 +204,8 @@ public class PlaceFragment extends Fragment
 		
 		placeName.setText("");
 		placeAddress.setText("");		
-		placePhone.setText("");
-		placeWeb.setText("");		
+		//placePhone.setText("");
+		//placeWeb.setText("");		
 		placeRating.setRating(0);
 		openNowText.setText("");
 		placeNumberOfRatings.setText("");
@@ -240,15 +247,25 @@ public class PlaceFragment extends Fragment
 				if(detailsJSON.has("formatted_phone_number"))
 				{
 			    	phone = detailsJSON.getString("formatted_phone_number");
-					placePhone.setText(phone);
+					//placePhone.setText(phone);
+					placePhone.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					placePhone.setVisibility(View.INVISIBLE);
 				}
 				
 				if(detailsJSON.has("website"))
 				{
 			    	web = detailsJSON.getString("website");
-					String link = "<a href="+ web +">"+detailsJSON.getString("website")+"</a>";
-					placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
-					placeWeb.setText(Html.fromHtml(link));
+					//String link = "<a href="+ web +">"+detailsJSON.getString("website")+"</a>";
+					//placeWeb.setMovementMethod(LinkMovementMethod.getInstance());
+					//placeWeb.setText(Html.fromHtml(link));
+					placeWeb.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					placeWeb.setVisibility(View.INVISIBLE);
 				}
 				
 				if(detailsJSON.has("opening_hours"))

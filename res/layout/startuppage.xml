@@ -62,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="Version 0.0.2"
+            android:text="Version 0.0.3"
             android:textSize="12sp"
             android:textColor="@color/white" />
 
@@ -78,8 +78,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-             >
+            android:layout_centerInParent="true" >
 
             <Button
                 android:id="@+id/letsgoButton"
@@ -88,11 +87,11 @@
                 android:background="@color/purple"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
-                android:text="let's go"
+                android:text="let&apos;s go"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
-
         </RelativeLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

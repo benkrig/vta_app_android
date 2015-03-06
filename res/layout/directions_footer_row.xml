@@ -79,7 +79,25 @@
    	    android:layout_width="match_parent"
    	    android:layout_height="wrap_content"
    	    android:text="FROM TO HERE"
+   	    android:gravity="center"
+   	    android:paddingTop="10dp"
    	    android:textColor="@color/buttondarkgrey"
    	     />
+
+   	<TextView
+   	    android:id="@+id/textView4"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:text="to"
+   	    android:gravity="center"
+   	    android:textColor="@color/purple" />
+
+   	<TextView
+   	    android:id="@+id/directionsEndAddress"
+   	    android:layout_width="match_parent"
+   	    android:layout_height="wrap_content"
+   	    android:gravity="center"
+   	    android:text="END ADDRESS 12142 af asf "
+   	    android:textColor="@color/buttondarkgrey" />
 
 </LinearLayout>

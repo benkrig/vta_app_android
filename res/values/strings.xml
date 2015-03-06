@@ -16,5 +16,10 @@
     <string name="desc">Route selection Button</string>
     <string name="choose_time">SELECT TIME</string>
     <string name="searchBarText"> </string>
+    <string name="placeDetailsWebsiteString">WEBSITE</string>
+    <string name="placeDetailsCallString">CALL</string>
+    <string name="emptystring">(empty)</string>
+    
+    
     
 </resources>

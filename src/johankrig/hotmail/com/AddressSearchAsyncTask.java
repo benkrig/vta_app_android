@@ -29,6 +29,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -57,9 +58,9 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	GPSTracker gps;
 	String searchKeyword;
 	ProgressBar searchProgress;
-	private Button addressSearchButton;
+	private ImageButton addressSearchButton;
 	
-	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress, Button addressSearchButton)
+	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress, ImageButton addressSearchButton)
 	{
 		this.map = map;
 		this.context = context;

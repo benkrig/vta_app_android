@@ -98,6 +98,7 @@ public class RouteSelectionFragment extends Fragment
 
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(true);
     	
     	route1Button = (Button) rootView.findViewById(R.id.routebutton1);
@@ -156,7 +157,7 @@ public class RouteSelectionFragment extends Fragment
 			        else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
 			            am_pm = "PM";
 			        
-			    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+			    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
 			        time.setText(strTimeToShow + " "+ am_pm);
 			        
 	
@@ -203,7 +204,7 @@ public class RouteSelectionFragment extends Fragment
         else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
             am_pm = "PM";
         
-    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
         routeTimeButton.setText(strTimeToShow + " "+ am_pm);
         
         routeTimeButton.setOnClickListener(new OnClickListener()

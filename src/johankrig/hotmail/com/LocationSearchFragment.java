@@ -36,6 +36,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 
@@ -44,7 +45,7 @@ public class LocationSearchFragment extends Fragment
 	private AutoCompleteTextView searchBar;
 	private GoogleMap map;
 	private View rootView;
-	private Button addressSearchButton;
+	private ImageButton addressSearchButton;
 	private Communicator comm;
 	private String searchString = "";
 	private AddressSearchAsyncTask geoTask;
@@ -57,7 +58,9 @@ public class LocationSearchFragment extends Fragment
 	{
 		if (rootView != null) 
 		{
+			
 	        ViewGroup parent = (ViewGroup) rootView.getParent();
+	        
 	        if (parent != null)
 	            parent.removeView(rootView);
 	    }
@@ -138,7 +141,7 @@ public class LocationSearchFragment extends Fragment
 		}
 		
 	    searchProgress = (ProgressBar) getActivity().findViewById(R.id.locationSearchProgressBar);
-		addressSearchButton = (Button) getActivity().findViewById(R.id.routeMenuButton);
+		addressSearchButton = (ImageButton) getActivity().findViewById(R.id.routeMenuButton);
 
 		
     	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
@@ -260,8 +263,6 @@ public class LocationSearchFragment extends Fragment
 	            endpointURL.append("latlng="+this.latlng.latitude+","+this.latlng.longitude);
 	            endpointURL.append("&key=" + API_KEY);
 
-	            Log.e(LOG_TAG, "endpointURL: " + endpointURL);
-
 	            URL url = new URL(endpointURL.toString());
 	            conn = (HttpURLConnection) url.openConnection();
 	            InputStreamReader in = new InputStreamReader(conn.getInputStream());
@@ -314,7 +315,6 @@ public class LocationSearchFragment extends Fragment
 	    }
 	}
 }
-
 
 class InfoWindowClickAdapter implements OnInfoWindowClickListener
 {

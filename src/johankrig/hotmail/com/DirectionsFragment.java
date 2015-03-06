@@ -155,8 +155,10 @@ public class DirectionsFragment extends Fragment
 	    	Log.d("footerviewtext", footer1.toString());
 
 
-	    	footer1.setText(firstleg.getString("start_address") + " to " + lastleg.getString("end_address"));
-	           
+	    	footer1.setText(firstleg.getString("start_address"));
+	         
+	    	TextView footerEndAddress = (TextView) footerView.findViewById(R.id.directionsEndAddress);
+	    	footerEndAddress.setText(lastleg.getString("end_address"));
 	    	TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
 	    	int distanceMeters = 0;
 	    	for(int c = 0; c < legs.length(); c++)

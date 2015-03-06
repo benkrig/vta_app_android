@@ -7,6 +7,7 @@
     	tools:context=".PlaceFragment"
         android:id="@+id/placeBaseLinearLayout"
         android:orientation="vertical"
+        android:background="@color/white"
         >
 
         <LinearLayout
@@ -17,11 +18,11 @@
                 android:id="@+id/placeInfoBackButton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
-                android:layout_weight="2"
                 android:layout_height="fill_parent"
+                android:layout_weight="2"
                 android:background="@color/buttondarkgrey"
                 android:contentDescription="@string/desc"
-                android:src="@drawable/whitebackbtn" />
+                android:src="@drawable/ic_action_previous_item" />
 
             <Button
                 android:id="@+id/metaforaGenericNoClickButton"
@@ -55,45 +56,34 @@
         <RelativeLayout
             android:id="@+id/placeNoInformationLayout"
             android:layout_width="match_parent"
+            android:background="@color/white"
             android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1"            
              >
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:paddingRight="25dp"
-                android:paddingLeft="25dp"
-                android:paddingBottom="10dp"
-                android:text="We can still go there!" />
-
-            <TextView
-                android:id="@+id/placeNoInformationAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:background="@color/buttondarkgrey"
-                android:gravity="center"
-                android:text="111 This is the Address Ave 95914"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/placeNoInformationAddress"
+                android:layout_above="@+id/placeNoInformationAddress"
+                android:layout_alignLeft="@+id/placeNoInformationAddress"
+                android:layout_alignRight="@+id/placeNoInformationAddress"
                 android:gravity="center"
                 android:paddingTop="5dp"
-                android:text="We can&apos;t find details for this place"
-                android:textSize="15dp" />
+                android:text="No details for"
+                android:textColor="@color/purple"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/placeNoInformationAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@color/white"
+                android:gravity="center"
+                android:text="123 Address St. #4 "
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 
@@ -103,7 +93,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"   
             android:visibility="gone"
-            android:background="@color/white" >
+            android:background="@color/textdirectionsgrey" >
             
             <LinearLayout
 	    		android:layout_width="match_parent"
@@ -123,11 +113,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="4"
-                        android:textSize="15dp"
+                        android:textSize="20sp"
                         android:gravity="center_horizontal"
-                        android:text="(Empty)"
-                        android:textColor="@color/white"
-                        android:background="@color/buttondarkgrey"
+                        android:text="@string/emptystring"
+                        android:textColor="@color/purple"
+                        android:background="@color/white"
 					 />
 
                 </LinearLayout>
@@ -145,14 +135,13 @@
     			    android:id="@+id/address"
     			    android:layout_width="0dp"
     			    android:layout_height="wrap_content"
-    			    android:gravity="center_horizontal"
     			    android:layout_weight="4"
+    			    android:background="@color/white"
+    			    android:gravity="center_horizontal"
     			    android:paddingBottom="12dip"
-    			    android:text="(Empty)" 
-    			    android:textColor="@color/white"
-    			    android:textSize="12sp"
-    			    android:background="@color/buttondarkgrey"
-    			    />
+    			    android:text="@string/emptystring"
+    			    android:textColor="@color/buttondarkgrey"
+    			    android:textSize="12sp" />
 
     		</LinearLayout>
 		     
@@ -163,36 +152,89 @@
 		    <LinearLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:orientation="vertical"
-		        android:background="@color/buttondarkgrey" >
+		        android:background="@color/textdirectionsgrey"
+		        android:orientation="horizontal" >
 
-		        <TextView
-		            android:id="@+id/website"
-		            android:layout_width="match_parent"
-		            android:layout_height="0dp"
-		            android:layout_weight="6.15"
-		            android:linksClickable="true"
-		            android:textSize="13sp"
-		            android:textColor="@color/white"
-		            android:textColorLink="@color/white"
-		            android:paddingBottom="5dp"
-		            android:paddingLeft="5dp"
-		            android:paddingTop="5dp"
-		            android:singleLine="true"
-		            android:text="(empty)" />
+		        <LinearLayout
+		            android:layout_width="2dp"
+		            android:background="@color/white"
+		            android:layout_height="match_parent"
+				 >
+		        </LinearLayout>
 
-		        <TextView
-		            android:id="@+id/phone"
-		            android:layout_width="match_parent"
-		            android:layout_height="0dp"
-		            android:layout_weight="4.30"
-		            android:autoLink="phone"
-		            android:textSize="13sp"
-		            android:textColor="@color/white"
-		            android:textColorLink="@color/white"
-		            android:linksClickable="true"
-		            android:paddingLeft="5dp"
-		            android:text="(empty)" />
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_weight="1"
+		            android:orientation="horizontal"
+		            android:layout_height="match_parent" >
+
+		            <ImageView
+		                android:id="@+id/imageView1"
+		                android:layout_width="wrap_content"
+		                android:layout_height="fill_parent"
+		                android:gravity="center"
+		                android:src="@drawable/purple_ic_action_web_site" />
+
+		            <TextView
+		                android:id="@+id/website"
+		                android:layout_width="match_parent"
+		                android:layout_height="fill_parent"
+		                android:gravity="center"
+		                android:linksClickable="true"
+		                android:paddingBottom="20dp"
+		                android:paddingRight="20dp"
+		                android:paddingTop="20dp"
+		                android:singleLine="true"
+		                android:text="@string/placeDetailsWebsiteString"
+		                android:textColor="@color/purple"
+		                android:textColorLink="@color/purple"
+		                android:textSize="16sp" />
+
+		        </LinearLayout>
+
+		        <LinearLayout
+		            android:layout_width="2dp"
+		            android:background="@color/white"
+		            android:layout_height="match_parent"
+				 >
+		        </LinearLayout>
+
+		        <LinearLayout
+		            android:layout_width="0dp"
+		            android:layout_height="match_parent"
+		            android:layout_weight="1"
+		            android:orientation="horizontal" >
+
+		            <ImageView
+		                android:id="@+id/imageView2"
+		                android:paddingLeft="10dp"
+		                android:layout_width="wrap_content"
+		                android:layout_height="match_parent"
+		                android:src="@drawable/purple_ic_action_call"
+					 />
+
+		            <TextView
+		                android:id="@+id/phone"
+		                android:layout_width="match_parent"
+		                android:layout_height="fill_parent"
+		                android:autoLink="phone"
+		                android:gravity="center"
+		                android:linksClickable="true"
+		                android:paddingBottom="20dp"
+		                android:paddingRight="20dp"
+		                android:paddingTop="20dp"
+		                android:text="@string/placeDetailsCallString"
+		                android:textColor="@color/purple"
+		                android:textColorLink="@color/purple"
+		                android:textSize="16sp" />
+		        </LinearLayout>
+		        
+		        <LinearLayout
+		            android:layout_width="2dp"
+		            android:background="@color/white"
+		            android:layout_height="match_parent"
+				 >
+		        </LinearLayout>
 
 		    </LinearLayout>
 		     
@@ -202,7 +244,7 @@
 		    <LinearLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
-		        android:background="@color/buttondarkgrey"
+		        android:background="@color/white"
 		        android:padding="5dp"
 		         >
 
@@ -212,7 +254,7 @@
 		            android:linksClickable="true"
 		            android:singleLine="true"
 		            android:text="Currently:"
-        			android:textColor="@color/white"
+        			android:textColor="@color/purple"
 		             />
 		        
 		        <TextView
@@ -233,16 +275,17 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:paddingLeft="5dp"
-		        android:text="Reviews:"
-		        android:textColor="@color/white"
+		        android:paddingTop="20dp"
+		        android:text="Review Summary:"
+		        android:textColor="@color/purple"
 		        android:textStyle="bold"
-		        android:background="@color/buttondarkgrey" />
+		        android:background="@color/white" />
 
 		    <LinearLayout
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		       	android:orientation="horizontal"
-		       	android:background="@color/buttondarkgrey" >
+		       	android:background="@color/white" >
 
 		        <LinearLayout
 		            android:layout_width="4dp"
@@ -265,9 +308,9 @@
 		            android:layout_width="wrap_content"
 		            android:layout_height="wrap_content"
 		            android:paddingLeft="5dp"
-		            android:text="(empty)"
+		            android:text="@string/emptystring"
 		            android:textSize="12sp"
-		            android:textColor="@color/white" />
+		            android:textColor="@color/buttondarkgrey" />
 
 		    </LinearLayout>
 
@@ -275,7 +318,7 @@
 		        android:layout_width="match_parent"
 		        android:layout_height="match_parent"
 		        android:orientation="vertical"
-		        android:background="@color/closedgrey"
+		        android:background="@color/textdirectionsgrey"
 		        android:padding="5dp"
 		         >
 
@@ -298,16 +341,16 @@
             android:background="#00ffffff"
             android:gravity="bottom" >
 
-    	<Button
-  	         android:id="@+id/placeGetRoutesButton"
-  	           style="?android:attr/buttonBarButtonStyle"
-   	          android:layout_width="0dp"
+            <Button
+                android:id="@+id/placeGetRoutesButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/purple"
                 android:text="ROUTES"
-                android:textColor="@color/white"
-                 />
+                android:textColor="@color/white" />
+
         </LinearLayout>
 
     </LinearLayout>
