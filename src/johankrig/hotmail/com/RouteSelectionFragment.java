@@ -23,6 +23,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -47,7 +49,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -75,6 +79,8 @@ public class RouteSelectionFragment extends Fragment
     private DecodeRouteJSON draw;
 	private View rootView;
     String googleDirectionsResultJSON;
+	private ImageView routeZoomInButton;
+	private TextView routeZoomOutButton;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -340,6 +346,27 @@ public class RouteSelectionFragment extends Fragment
             }
         });
         
+        routeZoomInButton = (ImageView) rootView.findViewById(R.id.routeZoomInButton);
+        routeZoomInButton.setOnClickListener(new OnClickListener()
+        {
+        	@Override
+        	public void onClick(View v)
+        	{
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 1000, null);
+        	}
+        	
+        });
+        routeZoomOutButton = (TextView) rootView.findViewById(R.id.routeZoomOutButton);
+        routeZoomOutButton.setOnClickListener(new OnClickListener()
+        {
+        	@Override
+        	public void onClick(View v)
+        	{
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 1000, null);
+        	}
+        	
+        });
+        
         return rootView;
     }
     
@@ -556,7 +583,7 @@ public class RouteSelectionFragment extends Fragment
     		markerOptions.position(eloc);
     		markerOptions.flat(true);
     		markerOptions.title("Destination");
-    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
     		markerOptions.flat(true);
     		map.addMarker(markerOptions);	     
     		

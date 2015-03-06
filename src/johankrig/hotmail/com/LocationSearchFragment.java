@@ -208,7 +208,7 @@ public class LocationSearchFragment extends Fragment
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
 		markerOptions.title("Let's go here!");
 		markerOptions.snippet(address.getAddressLine(0));
-		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
    		markerOptions.flat(true);
 		map.addMarker(markerOptions);
 	}

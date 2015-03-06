@@ -3,8 +3,10 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.model.LatLng;
 import johankrig.hotmail.com.R;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -77,6 +80,24 @@ public class MainActivity extends FragmentActivity implements Communicator
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
+	
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{  
+		Intent browserIntent;
+        switch (item.getItemId()) 
+        {    
+            case R.id.menu_about:  
+            	browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://metafora.co/about"));
+        		startActivity(browserIntent);
+            	return true;     
+            case R.id.menu_website:
+            	 browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://metafora.co/"));
+        		startActivity(browserIntent);
+            	return true;     
+            default:  
+                return super.onOptionsItemSelected(item);  
+        }  
+    }  
 	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) 
@@ -182,6 +203,7 @@ class MyAdapter extends FragmentPagerAdapter
 	{
 		return placeFrag;
 	}
+
     
 	@Override
 	public Fragment getItem(int arg0) 

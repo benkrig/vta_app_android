@@ -91,63 +91,65 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
     @Override
     protected List<Address> doInBackground(String... params)
     {
-    	// 1. create HttpClient
-        HttpClient httpclient = new DefaultHttpClient();
-        
-        HttpGet httpPost = new HttpGet("http://metafora.herokuapp.com/search");
-        String body = "";
-        JSONObject jsonObject = new JSONObject();
-        JSONObject userloc = new JSONObject();
-        
-        try
-        {
-            userloc.put("lat", gps.getLatitude());
-            userloc.put("lng", gps.getLongitude());
-            jsonObject.put("userlatlng", userloc);            
-            jsonObject.put("searchstring", searchKeyword);
-            jsonObject.put("unixtimestamp", System.currentTimeMillis());
-            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
-            jsonObject.put("brand", android.os.Build.BRAND);
-            jsonObject.put("device", android.os.Build.DEVICE);
-            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
-            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
-            jsonObject.put("product", android.os.Build.PRODUCT);
-            
-        }
-        catch(Exception e)
-        {
-        	
-        }
-
-        
-        body = jsonObject.toString();
-        Log.d("pro", ""+System.getProperties());
-        
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("body", body);
-        httpPost.setHeader("Content-type", "application/json");
-
-        try 
-        {
-			httpclient.execute(httpPost);
-		} 
-        catch (ClientProtocolException e) 
-		{
-			e.printStackTrace();
-		} 
-        catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-        httpPost.abort();
-        
-        
-        List<Address> addresses = null;
-        if(!searchKeyword.isEmpty())
-        {
-            addresses = this.getAddresses(searchKeyword, gps);
-        }
-        
+    	List<Address> addresses = null;
+    	if(gps.getLatitude() != 0 && gps.getLongitude() != 0)
+    	{
+	    	// 1. create HttpClient
+	        HttpClient httpclient = new DefaultHttpClient();
+	        
+	        HttpGet httpPost = new HttpGet("http://metafora.herokuapp.com/search");
+	        String body = "";
+	        JSONObject jsonObject = new JSONObject();
+	        JSONObject userloc = new JSONObject();
+	        
+	        try
+	        {
+	            userloc.put("lat", gps.getLatitude());
+	            userloc.put("lng", gps.getLongitude());
+	            jsonObject.put("userlatlng", userloc);            
+	            jsonObject.put("searchstring", searchKeyword);
+	            jsonObject.put("unixtimestamp", System.currentTimeMillis());
+	            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
+	            jsonObject.put("brand", android.os.Build.BRAND);
+	            jsonObject.put("device", android.os.Build.DEVICE);
+	            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
+	            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
+	            jsonObject.put("product", android.os.Build.PRODUCT);
+	            
+	        }
+	        catch(Exception e)
+	        {
+	        	
+	        }
+	
+	        
+	        body = jsonObject.toString();
+	        Log.d("pro", ""+System.getProperties());
+	        
+	        httpPost.setHeader("Accept", "application/json");
+	        httpPost.setHeader("body", body);
+	        httpPost.setHeader("Content-type", "application/json");
+	
+	        try 
+	        {
+				httpclient.execute(httpPost);
+			} 
+	        catch (ClientProtocolException e) 
+			{
+				e.printStackTrace();
+			} 
+	        catch (IOException e) 
+			{
+				e.printStackTrace();
+			}
+	        httpPost.abort();
+	        
+	        
+	        if(!searchKeyword.isEmpty())
+	        {
+	            addresses = this.getAddresses(searchKeyword, gps);
+	        }
+    	}
         return addresses;
     }
 
@@ -182,7 +184,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	        		markerOptions.position(markerLatLng);
 	        		markerOptions.title("Let's go to " + address.getFeatureName());
 	        		markerOptions.snippet(address.getAddressLine(0));
-	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.locationicon));
+	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
 	           		markerOptions.flat(true);
 	        		map.addMarker(markerOptions);
 	        		

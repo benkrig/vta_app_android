@@ -68,6 +68,7 @@
                 android:layout_height="match_parent" />
 
             <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -88,7 +89,6 @@
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
                     android:text="@string/route1"
@@ -113,8 +113,30 @@
                     android:background="@color/whitetransparent"
                     android:text="@string/route3"
                     android:textColor="@color/buttondarkgrey" />
-
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/routeZoomOutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/linearLayout2"
+                android:layout_alignLeft="@+id/routeZoomInButton"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:text="-"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:textSize="40sp" />
+
+            <ImageView
+                android:id="@+id/routeZoomInButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/routeZoomOutButton"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_action_new" />
 
         </RelativeLayout>
 
