@@ -118,11 +118,19 @@ import android.widget.Filterable;
         catch (MalformedURLException e) 
         {
             Log.e(LOG_TAG, "Error processing Places API URL", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
             return resultList;
         } 
         catch (IOException e) 
         {
             Log.e(LOG_TAG, "Error connecting to Places API", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
             return resultList;
         } 
         finally 
@@ -149,6 +157,10 @@ import android.widget.Filterable;
         catch (JSONException e) 
         {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
         }
 
         return resultList;

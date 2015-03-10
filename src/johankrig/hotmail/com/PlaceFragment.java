@@ -84,6 +84,8 @@ public class PlaceFragment extends Fragment
 	    catch (InflateException e) 
 	    {
 	        /* map is already there, just return view as it is */
+	    	SendErrorAsync log = new SendErrorAsync(e+"");
+        	log.execute();
 	    }
 	    loadProgressBar = (ProgressBar) rootView.findViewById(R.id.placeLoadBar);
 	    loadProgressButton = (Button) rootView.findViewById(R.id.placeLoadButton);
@@ -330,6 +332,9 @@ public class PlaceFragment extends Fragment
 	    catch (JSONException e) 
 	    {
         	Log.e("details ", "101", e);
+        	
+        	SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 		}
 	    
         placeAdapter = new PlaceMobileArrayAdapter(getActivity(), placeReviewsDetails, reviewerNames, reviewDates, reviewRatings);
@@ -373,10 +378,16 @@ public class PlaceFragment extends Fragment
 	        catch (MalformedURLException e) 
 	        {
 	            Log.e(LOG_TAG, "Error processing Places API URL", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        } 
 	        catch (IOException e) 
 	        {
 	            Log.e(LOG_TAG, "Error connecting to Places API", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        } 
 	        finally 
 	        {
@@ -405,6 +416,9 @@ public class PlaceFragment extends Fragment
 	        catch (JSONException e) 
 	        {
 	            Log.e(LOG_TAG, "No results for this place", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        }
 	    return result;
 	}
@@ -447,10 +461,16 @@ public class PlaceFragment extends Fragment
 	        catch (MalformedURLException e) 
 	        {
 	            Log.e(LOG_TAG, "Error processing Places API URL", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        } 
 	        catch (IOException e) 
 	        {
 	            Log.e(LOG_TAG, "Error connecting to Places API", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        } 
 	        finally 
 	        {
@@ -475,6 +495,9 @@ public class PlaceFragment extends Fragment
 	        } catch (JSONException e) 
 	        {
 	            Log.d(LOG_TAG, "Cannot process JSON results", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        }
 		return place_id;
 	}
@@ -503,7 +526,6 @@ public class PlaceFragment extends Fragment
 		
 	    protected JSONObject doInBackground(Void... params) 
 	    {
-	    	
 		    String place_id = getPlaceID(location, keyword);
 		    place_details = getDetails(place_id);
 	        return place_details;

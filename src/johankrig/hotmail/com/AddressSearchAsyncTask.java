@@ -117,9 +117,10 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	            jsonObject.put("product", android.os.Build.PRODUCT);
 	            
 	        }
-	        catch(Exception e)
+	        catch(JSONException e)
 	        {
-	        	
+	        	SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 	        }
 	
 	        
@@ -137,10 +138,16 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	        catch (ClientProtocolException e) 
 			{
 				e.printStackTrace();
+				
+				SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 			} 
 	        catch (IOException e) 
 			{
 				e.printStackTrace();
+				
+				SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 			}
 	        httpPost.abort();
 	        
@@ -233,11 +240,19 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         catch (MalformedURLException e) 
         {
             Log.e(LOG_TAG, "Error processing Places API URL", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
             return resultList;
         } 
         catch (IOException e) 
         {
             Log.e(LOG_TAG, "Error connecting to Places API", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
             return resultList;
         } 
         finally 
@@ -274,6 +289,10 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         } catch (JSONException e) 
         {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
         }
         return resultList;
     }

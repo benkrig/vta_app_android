@@ -3,26 +3,43 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.model.LatLng;
 import johankrig.hotmail.com.R;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View.OnClickListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.Toast;
 
 
 public class MainActivity extends FragmentActivity implements Communicator
 {	  
 	public NoSwipeViewPager viewPager;
 	public String destination;
+	private PopupWindow changeStatusPopUp;
+	private ImageButton button1;
+	
+	
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) 
@@ -66,6 +83,9 @@ public class MainActivity extends FragmentActivity implements Communicator
 		
 		//Ensure keyboard is not showing on startup
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+		
+		
+
 		
 		//Create no swipe view pager (see NoSwipeViewPager.java)
 		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
@@ -159,6 +179,34 @@ public class MainActivity extends FragmentActivity implements Communicator
 	public void goToPlaceDetails() 
 	{
 		viewPager.setCurrentItem(4, false);
+	}
+	
+	
+	
+	   // The method that displays the popup.
+	private void showStatusPopup(final Activity context, Point p) {
+
+	   // Inflate the popup_layout.xml
+	   LinearLayout viewGroup = (LinearLayout) context.findViewById(R.id.llSortChangePopup);
+	   LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	   View layout = layoutInflater.inflate(R.layout.status_popup_layout, null);
+
+	   // Creating the PopupWindow
+	   changeStatusPopUp = new PopupWindow(context);
+	   changeStatusPopUp.setContentView(layout);
+	   changeStatusPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+	   changeStatusPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+	   changeStatusPopUp.setFocusable(true);
+
+	   // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+	   int OFFSET_X = -20;
+	   int OFFSET_Y = 50;
+
+	   //Clear the default translucent background
+	   changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
+
+	   // Displaying the popup at the specified location, + offsets.
+	   changeStatusPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
 	}
 	
 	

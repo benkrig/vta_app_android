@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -257,6 +258,8 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		    catch (JSONException e) 
 		    {
 		    	//Called if no route is found at Index routeNumber
+		    	SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 		    }
 		    
 		    ResponseObject resp = new ResponseObject(polyies, markers);

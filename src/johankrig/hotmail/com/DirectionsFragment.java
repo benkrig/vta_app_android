@@ -3,6 +3,7 @@ package johankrig.hotmail.com;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import johankrig.hotmail.com.R;
 import android.content.Context;
 import android.os.Bundle;
@@ -23,11 +24,11 @@ import android.widget.TextView;
 public class DirectionsFragment extends Fragment 
 {
 	ImageButton directionsBackButton;
-	private View rootView;
+	public View rootView;
     Communicator comm;
-	private ListView mainListView;  
+	public ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
-	private String DirectionsJSON;
+	public String DirectionsJSON;
 	View headerView;
 	View footerView;
 
@@ -64,7 +65,7 @@ public class DirectionsFragment extends Fragment
     //TODO change routes jsonobject to have variable named Routenumber
     public void updateDirectionsList(String JSON, int routeNumber)
     {
-        DirectionsJSON = JSON;        
+        DirectionsJSON = JSON;   
 		try 
 		{
 		
@@ -217,12 +218,15 @@ public class DirectionsFragment extends Fragment
 	    	}
  	   	}
 		catch (JSONException e) 
-		{
-			// TODO Auto-generated catch block
+		{			
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
+        	
 			e.printStackTrace();
 		}
     }
 
+    
 }
 
  class MobileArrayAdapter extends ArrayAdapter<String> 
@@ -292,4 +296,5 @@ public class DirectionsFragment extends Fragment
 		return rowView;
 	}
 }
+
 

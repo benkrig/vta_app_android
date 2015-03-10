@@ -101,8 +101,10 @@ public class GetBusLocationTask extends TimerTask
 
 			}
 			catch(Exception e)
-	    		{       
-	    		}
+			{      
+				SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	    	}
 			
 			return buslist;
 	    }

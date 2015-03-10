@@ -33,6 +33,9 @@ public class StartupFragment extends Fragment
 	    catch (InflateException e) 
 	    {
 	        /* map is already there, just return view as it is */
+	    	
+	    	SendErrorAsync log = new SendErrorAsync(e+"");
+        	log.execute();
 	    }
 
 	    gps = new GPSTracker(getActivity());
@@ -41,8 +44,6 @@ public class StartupFragment extends Fragment
 	    {
 	    	gps.showSettingsAlert();
 	    }
-
-	    
 	    
 	    comm = (Communicator) getActivity();
 	    

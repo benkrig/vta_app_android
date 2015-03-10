@@ -49,7 +49,8 @@ public class JSONParser
     		}
     		catch(Exception e)
     		{
-        	
+    			SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
     		}
     		return json;
     	}
@@ -70,14 +71,23 @@ public class JSONParser
     		} 
     		catch (UnsupportedEncodingException e) 
     		{
+    			SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
     			e.printStackTrace();
     		} 
     		catch (ClientProtocolException e) 
     		{
+    			SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
     			e.printStackTrace();
     		} 
     		catch (IOException e) 
     		{
+    			SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
     			e.printStackTrace();
     		}
     		try 
@@ -98,6 +108,9 @@ public class JSONParser
     		} 
     		catch (Exception e) 
     		{
+    			SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
     			Log.e("Buffer Error", "Error converting result " + e.toString());
     		}
     		return json;
@@ -131,7 +144,8 @@ public class JSONParser
     	}
     	catch(Exception e)
     	{
-	
+    		SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
     	}
     	return json;
     }
@@ -151,14 +165,20 @@ public class JSONParser
 		} 
 		catch (UnsupportedEncodingException e) 
 		{
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 			e.printStackTrace();
 		} 
 		catch (ClientProtocolException e) 
 		{
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 			e.printStackTrace();
 		} 
 		catch (IOException e) 
 		{
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 			e.printStackTrace();
 		}
 		try 
@@ -179,6 +199,8 @@ public class JSONParser
 		} 
 		catch (Exception e) 
 		{
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 			Log.e("Buffer Error", "Error converting result " + e.toString());
 		}
 		return json;	
@@ -186,8 +208,6 @@ public class JSONParser
     
     public String getSearchBarAddress(String locationName)
     {
-    	
-    	
     	return json;
     }
     
@@ -209,7 +229,8 @@ public class JSONParser
 		}
 		catch(Exception e)
 		{
-    	
+			SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 		}
 		return json;
 

@@ -15,7 +15,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -23,8 +22,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -98,6 +95,9 @@ public class RouteSelectionFragment extends Fragment
     	catch (InflateException e) 
     	{
     		/* map is already there, just return view as it is */
+    		
+    		SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
     	}
 
         comm = (Communicator) getActivity();
@@ -185,6 +185,14 @@ public class RouteSelectionFragment extends Fragment
 				    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
 						drawRoute.setRouteNumber(0);
 						drawRoute.execute();
+						
+						Timer myTimer = new Timer();
+		                if(myTask != null)
+		                {
+		                	myTask.cancel();
+		                }
+		            	myTask = new GetBusLocationTask(map);
+		                myTimer.schedule(myTask, 3000, 1000);
 					}
 		    	}
 		    	callCount++;
@@ -280,13 +288,13 @@ public class RouteSelectionFragment extends Fragment
                 	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
                 	draw.execute();
                 	  	
-		            /*Timer myTimer = new Timer();
+		            Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); */
+	                myTimer.schedule(myTask, 3000, 1000);
             	}
             }
         });
@@ -312,13 +320,13 @@ public class RouteSelectionFragment extends Fragment
                 	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
                 	draw.execute();
                 	  	
-		            /*Timer myTimer = new Timer();
+                	Timer myTimer = new Timer();
 	                if(myTask != null)
 	                {
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000); */
+	                myTimer.schedule(myTask, 3000, 1000);
             	}
             }
         });
@@ -541,6 +549,9 @@ public class RouteSelectionFragment extends Fragment
 	    {
 	    	//Called if no route is found at Index routeNumber
             Toast.makeText(getActivity(), "No route found :: E: "+e.toString(), Toast.LENGTH_LONG).show();
+            
+            SendErrorAsync log = new SendErrorAsync(e.toString());
+        	log.execute();
 	    }
 	    
 	    ResponseObject resp = new ResponseObject(polyies, markers);
@@ -622,7 +633,8 @@ public class RouteSelectionFragment extends Fragment
             }
             catch(Exception e)
             {
-            	
+            	SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
             }
 
             body = jsonObject.toString();
@@ -637,10 +649,16 @@ public class RouteSelectionFragment extends Fragment
             catch (ClientProtocolException e) 
 			{
 				e.printStackTrace();
+				
+				SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 			} 
             catch (IOException e) 
 			{
 				e.printStackTrace();
+				
+				SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
 			}
             httpPost.abort();
             
@@ -686,29 +704,45 @@ public class RouteSelectionFragment extends Fragment
 	//updates userLatLng, destinationLatLng
 	public void updateFragment(LatLng dest)
 	{
-		if(!dest.equals(destinationLatLng))
+		try
 		{
-			map.clear();
-			
-			GPSTracker gps = new GPSTracker(getActivity());
-			userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-			destinationLatLng = dest;
-			
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
-			
-			if(drawRoute !=null)
+			if(!dest.equals(destinationLatLng))
 			{
-				drawRoute.cancel(true);
+				map.clear();
+				
+				GPSTracker gps = new GPSTracker(getActivity());
+				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+				destinationLatLng = dest;
+				
+				map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
+				
+				if(drawRoute !=null)
+				{
+					drawRoute.cancel(true);
+				}
+				
+				route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+	        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+	        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+	        	
+				drawRoute = new DirectionsAsyncTask();
+				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
+		    	drawRoute.setRouteNumber(0);
+				drawRoute.execute();
+				
+				Timer myTimer = new Timer();
+	            if(myTask != null)
+	            {
+	            	myTask.cancel();
+	            }
+	        	myTask = new GetBusLocationTask(map);
+	            myTimer.schedule(myTask, 3000, 1000);
 			}
-			
-			route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
-        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-        	
-			drawRoute = new DirectionsAsyncTask();
-			drawRoute.updateUserLocation(userLatLng, destinationLatLng);
-	    	drawRoute.setRouteNumber(0);
-			drawRoute.execute();
+		}
+		catch(Exception e)
+		{
+	    	SendErrorAsync log = new SendErrorAsync(e+"");
+        	log.execute();
 		}
 
 	}

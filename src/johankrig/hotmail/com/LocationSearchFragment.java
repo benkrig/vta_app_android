@@ -20,15 +20,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import johankrig.hotmail.com.R;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -37,7 +46,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class LocationSearchFragment extends Fragment
@@ -52,6 +66,8 @@ public class LocationSearchFragment extends Fragment
 	private GPSTracker gps;
 	private Button clearSearchBarButton;
 	private ProgressBar searchProgress;
+	private ImageButton button1;
+	private PopupWindow changeStatusPopUp;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -72,7 +88,8 @@ public class LocationSearchFragment extends Fragment
 	    {
 	        //map is already there, just return view as it is
 	    }
-
+	    
+	    
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         
@@ -85,7 +102,6 @@ public class LocationSearchFragment extends Fragment
 			{
 				hideKeyBoard();
 			}
-        	
         });
         
         map.setOnMapLongClickListener(new OnMapLongClickListener()
@@ -97,7 +113,6 @@ public class LocationSearchFragment extends Fragment
 				GetMarkerFromTouch getad = new GetMarkerFromTouch(getActivity(), point);
 				getad.execute();
 			}
-        	
         });
                 
 		return rootView;
@@ -139,6 +154,30 @@ public class LocationSearchFragment extends Fragment
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
 					37.3333, -121.9000), 12.0f));
 		}
+		
+		
+		button1 = (ImageButton) getActivity().findViewById(R.id.nearbyMenuButton);
+		button1.setOnClickListener(new OnClickListener() 
+        {
+            public void onClick(View v) 
+            {
+                 int[] location = new int[2];
+   
+                 // Get the x, y location and store it in the location[] array
+                 // location[0] = x, location[1] = y.
+                 v.getLocationOnScreen(location);
+
+                 //Initialize the Point with x, and y positions
+                 Point point = new Point();
+                 point.x = location[0];
+                 point.y = location[1];
+                 showStatusPopup(getActivity(), point);
+            }
+        });
+		
+		
+        
+
 		
 	    searchProgress = (ProgressBar) getActivity().findViewById(R.id.locationSearchProgressBar);
 		addressSearchButton = (ImageButton) getActivity().findViewById(R.id.routeMenuButton);
@@ -200,6 +239,267 @@ public class LocationSearchFragment extends Fragment
 			}
 			
 		});
+	}
+	
+	
+    // The method that displays the popup.
+	private void showStatusPopup(final Activity context, Point p) 
+	{
+
+	    // Inflate the popup_layout.xml
+	    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    final View layout = layoutInflater.inflate(R.layout.status_popup_layout, null);
+	    
+	    TextView food = (TextView) layout.findViewById(R.id.foodTextView);
+	    
+	    food.setOnTouchListener(new OnTouchListener()
+	    {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{
+				
+				TextView subTextView = (TextView) layout.findViewById(R.id.foodTextView);
+				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
+			    LinearLayout foodSub = (LinearLayout) layout.findViewById(R.id.foodSubLayout);
+			    
+			    foodSub.setVisibility(View.VISIBLE);
+			    
+			    if(event.getAction() == MotionEvent.ACTION_MOVE)
+			    {
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeAsian)))
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeAsian);
+						fooda.setTextColor(context.getResources().getColor(R.color.backgroundblue));
+					}
+					else
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeAsian);
+						fooda.setTextColor(context.getResources().getColor(R.color.purple));
+					}
+					
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeFastFood)))
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeFastFood);
+						fooda.setTextColor(context.getResources().getColor(R.color.backgroundblue));
+					}
+					else
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeFastFood);
+						fooda.setTextColor(context.getResources().getColor(R.color.purple));
+					}
+					
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeThai)))
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeThai);
+						fooda.setTextColor(context.getResources().getColor(R.color.backgroundblue));
+					}
+					else
+					{
+						TextView fooda = (TextView) layout.findViewById(R.id.foodTypeThai);
+						fooda.setTextColor(context.getResources().getColor(R.color.purple));
+					}
+					
+					return false;
+			    }
+			    
+			    if(event.getAction() == MotionEvent.ACTION_UP)
+			    {
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeAsian)))
+					{
+						Log.i("", "IN ASIAN");
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("asian food nearby");
+		                	geoTask.execute();
+		                }
+						changeStatusPopUp.dismiss();
+					}
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeFastFood)))
+					{
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("fast food nearby");
+		                	geoTask.execute();
+		                }
+						changeStatusPopUp.dismiss();
+					}
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeThai)))
+					{
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("thai food nearby");
+		                	geoTask.execute();
+		                }
+						changeStatusPopUp.dismiss();
+					}
+					
+					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
+					foodSub.setVisibility(View.GONE);
+					return true;
+					
+		        }
+			    
+
+				return false;			    
+			}
+	    	
+	    });
+
+	    
+	    TextView shopping = (TextView) layout.findViewById(R.id.shoppingTextView);
+	    shopping.setOnTouchListener(new OnTouchListener()
+	    {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{			
+				TextView subTextView = (TextView) layout.findViewById(R.id.shoppingTextView);
+				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.shoppingTextView)))
+					{
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("shopping nearby");
+		                	geoTask.execute();
+		                }
+		                changeStatusPopUp.dismiss();
+					}
+					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
+					return true;
+				}
+				return false;
+			}
+	    });
+	    
+	    TextView entertainment = (TextView) layout.findViewById(R.id.entertainmentTextView);
+	    entertainment.setOnTouchListener(new OnTouchListener()
+	    {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{			
+				TextView subTextView = (TextView) layout.findViewById(R.id.entertainmentTextView);
+				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
+				
+				LinearLayout entertainmentSub = (LinearLayout) layout.findViewById(R.id.entertainmentSubLayout);
+				entertainmentSub.setVisibility(View.VISIBLE);
+				
+				if(event.getAction() == MotionEvent.ACTION_MOVE)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.entertainmentTypeMovies)))
+					{
+						TextView cinema = (TextView) layout.findViewById(R.id.entertainmentTypeMovies);
+						cinema.setTextColor(context.getResources().getColor(R.color.backgroundblue));
+					}
+					else
+					{
+						TextView cinema = (TextView) layout.findViewById(R.id.entertainmentTypeMovies);
+						cinema.setTextColor(context.getResources().getColor(R.color.purple));
+					}
+					return false;
+				}
+				
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.entertainmentTypeMovies)))
+					{
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("cinema nearby");
+		                	geoTask.execute();
+		                }
+						changeStatusPopUp.dismiss();
+					}
+					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
+					entertainmentSub.setVisibility(View.GONE);
+					return true;
+				}
+				return false;
+			}
+	    });
+	    
+	    TextView recreation = (TextView) layout.findViewById(R.id.recreationTextView);
+	    recreation.setOnTouchListener(new OnTouchListener()
+	    {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{				
+				
+				TextView subTextView = (TextView) layout.findViewById(R.id.recreationTextView);
+				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.recreationTextView)))
+					{
+						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+		                {
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                }
+		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+		                {
+		                	geoTask.setLocation("family fun nearby");
+		                	geoTask.execute();
+		                }
+		                changeStatusPopUp.dismiss();
+					}
+					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
+					return true;
+				}
+				return false;
+			}
+	    });
+	    
+	    
+	    // Creating the PopupWindow
+	    changeStatusPopUp = new PopupWindow(context);
+	    changeStatusPopUp.setContentView(layout);
+	    changeStatusPopUp.setWidth(LinearLayout.LayoutParams.FILL_PARENT);
+	    changeStatusPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+	    changeStatusPopUp.setFocusable(true);
+	
+	    // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+	    int OFFSET_X = -20;
+	    int OFFSET_Y = button1.getHeight();
+	
+	    //Clear the default translucent background
+	    changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
+	
+	    // Displaying the popup at the specified location, + offsets.
+	    changeStatusPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, p.x + OFFSET_X, p.y + OFFSET_Y);
+	}
+	public static boolean isPointInsideView(float x, float y, View view){
+	    int location[] = new int[2];
+	    view.getLocationOnScreen(location);
+	    int viewX = location[0];
+	    int viewY = location[1];
+
+	    //point is inside view bounds
+	    if(( x > viewX && x < (viewX + view.getWidth())) &&
+	            ( y > viewY && y < (viewY + view.getHeight()))){
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
 	
 	public void createMarkerFromTouch(Address address)
@@ -278,11 +578,19 @@ public class LocationSearchFragment extends Fragment
 	        catch (MalformedURLException e) 
 	        {
 	            Log.e(LOG_TAG, "Error processing Places API URL", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
 	            return addressresult;
 	        } 
 	        catch (IOException e) 
 	        {
 	            Log.e(LOG_TAG, "Error connecting to Places API", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	        	
 	            return addressresult;
 	        } 
 	        finally 
@@ -310,6 +618,10 @@ public class LocationSearchFragment extends Fragment
 	        catch (JSONException e) 
 	        {
 	            Log.e(LOG_TAG, "Cannot process JSON results", e);
+	            
+	            SendErrorAsync log = new SendErrorAsync(e.toString());
+	        	log.execute();
+	            
 	        }
 	        return addressresult;
 	    }
