@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">VTAdemo</string>
+    <string name="app_name">Metafora Beta</string>
     <string name="action_settings">Settings</string>
     <string name="menu_about_string">About</string>
     <string name="menu_website_string">Website</string>

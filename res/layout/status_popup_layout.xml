@@ -1,162 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:id="@+id/llSortChangePopup"
-android:layout_width="fill_parent"
-android:layout_height="wrap_content"
-android:background="@color/whitetransparent"
-android:orientation="vertical" >
-
-    <LinearLayout
-        android:id="@+id/foodLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-        <TextView
-            android:id="@+id/foodTextView"
-            android:layout_width="322dp"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="5dp"
-            android:text="Food"
-            android:textSize="20sp"
-            android:textColor="@color/purple" />
-
-        <LinearLayout
-            android:id="@+id/foodSubLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="40dp"
-            android:layout_weight="1.0"
-            android:orientation="vertical"
-            android:visibility="gone"
-             >
-
-            <TextView
-                android:id="@+id/foodTypeThai"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:gravity="center_vertical"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="Thai"
-                android:textSize="15sp"
-                android:textColor="@color/purple" />
-
-            <TextView
-                android:id="@+id/foodTypeFastFood"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="Fast Food"
-            	android:textSize="15sp"
-                android:textColor="@color/purple" />
-
-            <TextView
-                android:id="@+id/foodTypeAsian"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:gravity="center_vertical"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:text="Asian"
-            	android:textSize="15sp"
-                android:textColor="@color/purple" />
-        </LinearLayout>
-    </LinearLayout>
-
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:layout_weight="1.0"
-    android:background="@color/buttondarkgrey" 
-    android:contentDescription=""/>
-
-<TextView
-    android:id="@+id/shoppingTextView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="20dp"
-    android:paddingBottom="5dp"
-   	android:paddingTop="5dp"
-    android:text="Shopping"
-    android:layout_weight="1.0"
-    android:gravity="center"
-    android:clickable="true"
-    android:textColor="@color/purple"
-    android:textSize="20sp"
-     />
-
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:layout_weight="1.0"
-    android:background="@color/buttondarkgrey" 
-    android:contentDescription=""/>
-
-<TextView
-    android:id="@+id/entertainmentTextView"
-    android:paddingTop="5dp"
+    android:id="@+id/llSortChangePopup"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="Entertainment"
-    android:layout_weight="1.0"
-    android:paddingLeft="20dp"
-    android:paddingBottom="5dp"
-    android:gravity="center"
-    android:clickable="true"
-    android:textColor="@color/purple"
-    android:textSize="20sp"
-     />
-
-<LinearLayout
-    android:id="@+id/entertainmentSubLayout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="40dp"
-    android:layout_weight="1.0"
-    android:visibility="gone"
+    android:background="@color/whitetransparent"
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/entertainmentTypeMovies"
+        android:id="@+id/foodTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Food"
+        android:textColor="@color/purple"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/foodSubLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/foodTypeThai"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Thai"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/foodTypeFastFood"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Fast Food"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/foodTypeAsian"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Asian"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/buttondarkgrey"
+        android:contentDescription="" />
+
+    <TextView
+        android:id="@+id/shoppingTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Shopping"
+        android:textColor="@color/purple"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/shoppingSubLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.0"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/shoppingTypeClothes"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Clothes"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/shoppingTypeShoes"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Shoes"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/buttondarkgrey"
+        android:contentDescription="" />
+
+    <TextView
+        android:id="@+id/entertainmentTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:text="Entertainment"
+        android:textColor="@color/purple"
+        android:textSize="20sp" />
+
+    <LinearLayout
+        android:id="@+id/entertainmentSubLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:gravity="center_vertical"
-        android:paddingBottom="5dp"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/entertainmentTypeMovies"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1.0"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:text="Cinema"
+            android:textColor="@color/purple"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:background="@color/buttondarkgrey"
+        android:contentDescription="" />
+
+    <TextView
+        android:id="@+id/recreationTextView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:clickable="true"
+        android:gravity="center"
+        android:paddingBottom="10dp"
         android:paddingTop="5dp"
-        android:text="Cinema"
-        android:textSize="15sp"
-        android:textColor="@color/purple" />
+        android:text="Recreation"
+        android:textColor="@color/purple"
+        android:textSize="20sp" />
+
 </LinearLayout>
-
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="1dp"
-    android:layout_weight="1.0"
-    android:background="@color/buttondarkgrey" 
-    android:contentDescription=""/>
-
-<TextView
-    android:id="@+id/recreationTextView"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="5dp"
-    android:text="Recreation"
-    android:layout_weight="1.0"
-    android:paddingLeft="20dp"
-    android:gravity="center"
-    android:textColor="@color/purple" 
-    android:textSize="20sp"
-    android:clickable="true"
-    android:paddingBottom="10dp"/>
-
- </LinearLayout>

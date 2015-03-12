@@ -16,6 +16,11 @@
 	   	<color name = "buttondarkgreytransparent">#CC212121</color>
 	   	<color name = "whitetransparent">#CCFFFFFF</color>
 	   	<color name = "greytransparent">#CC9e9e9e</color>
+	   	<color name = "extrawhitetransparent">#FCFFFFFF</color>
+	   	
+	   	<color name = "transparent">#FFFFFFFF</color>
+	   	
+	   	
 	   	
 	   		    
 </resources>

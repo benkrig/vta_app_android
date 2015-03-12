@@ -9,17 +9,33 @@
         android:id="@+id/linearLayout1"
         android:orientation="vertical" >
 
-        <RelativeLayout
+        <johankrig.hotmail.com.CustomRelativeLayout
+            android:id="@+id/relid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+             >
+             
+            
 
             <fragment
                 android:id="@+id/mainmap"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                 />
+            
+            <RelativeLayout
+            android:id="@+id/touchlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="false"
+
+             />
+
 
             <LinearLayout
+                android:id="@+id/barid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
@@ -44,7 +60,10 @@
                     android:inputType="textPostalAddress"
                     android:paddingLeft="5dp"
                     android:text="@string/searchBarText"
-                    android:textSize="15sp" />
+                    android:textSize="15sp" >
+
+                    <requestFocus />
+                </AutoCompleteTextView>
 
                 <Button
                     android:id="@+id/clearSearchBarButton"
@@ -74,14 +93,6 @@
                     android:visibility="gone" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/touchLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#00000000" >
-
-            </RelativeLayout>
-
-        </RelativeLayout>
+        </johankrig.hotmail.com.CustomRelativeLayout>
 
     </LinearLayout>
