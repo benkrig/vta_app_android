@@ -38,6 +38,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.View.OnTouchListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
@@ -50,6 +52,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -139,6 +142,83 @@ public class LocationSearchFragment extends Fragment
 		super.onActivityCreated(savedInstanceState);
 		comm = (Communicator) getActivity();
 		
+		
+		RelativeLayout touch = (RelativeLayout) getActivity().findViewById(R.id.touchLayout);
+		
+		touch.setOnTouchListener(new OnTouchListener()
+		{
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{
+				LinearLayout purplelayout = new LinearLayout(getActivity());
+				LinearLayout greylayout = new LinearLayout(getActivity());
+				LinearLayout bluelayout = new LinearLayout(getActivity());
+				
+				purplelayout.setBackgroundColor(getActivity().getResources().getColor(R.color.purple));
+				greylayout.setBackgroundColor(getActivity().getResources().getColor(R.color.buttondarkgrey));
+				bluelayout.setBackgroundColor(getActivity().getResources().getColor(R.color.exitblue));
+
+				if(event.getAction() == MotionEvent.ACTION_DOWN)
+				{
+		            float x = event.getX()*event.getXPrecision() - 44;
+		            float y = event.getY()*event.getYPrecision() - 130;
+
+
+		            float x1 = event.getX()*event.getXPrecision() + 90;
+		            float y1 = event.getY()*event.getYPrecision() - 130;
+
+
+		            float x2 = event.getX()*event.getXPrecision() + 90;
+		            float y2 = event.getY()*event.getYPrecision() - 30;
+		            
+		            
+		            RelativeLayout.LayoutParams bp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            bp2.leftMargin = (int) x2;
+		            bp2.topMargin = (int) y2;
+		            bp2.height = 88;
+		            bp2.width = 88;
+		            greylayout.setLayoutParams(bp2);
+		            
+		            RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            bp.leftMargin = (int) x;
+		            bp.topMargin = (int) y;
+		            bp.height = 88;
+		            bp.width = 88;
+		            purplelayout.setLayoutParams(bp);
+
+		            
+		            RelativeLayout.LayoutParams bp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            bp1.leftMargin = (int) x1;
+		            bp1.topMargin = (int) y1;
+		            bp1.height = 88;
+		            bp1.width = 88;
+		            bluelayout.setLayoutParams(bp1);
+		            ((RelativeLayout)v.getParent()).addView(purplelayout);
+		            ((RelativeLayout)v.getParent()).addView(bluelayout);
+		            ((RelativeLayout)v.getParent()).addView(greylayout);
+		            
+		            return true;
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					Toast.makeText(getActivity(), ""+((RelativeLayout)v.getParent()).getChildCount(), Toast.LENGTH_SHORT).show();
+					((RelativeLayout)v.getParent()).removeAllViews();
+		            rootView.invalidate();
+					Toast.makeText(getActivity(), ""+((RelativeLayout)v.getParent()).getChildCount(), Toast.LENGTH_SHORT).show();
+
+
+					return true;
+				}
+	            
+	            
+				return false;
+			}
+			
+			
+		});
+		
+		
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
         
         
@@ -174,6 +254,7 @@ public class LocationSearchFragment extends Fragment
                  showStatusPopup(getActivity(), point);
             }
         });
+
 		
 		
         
