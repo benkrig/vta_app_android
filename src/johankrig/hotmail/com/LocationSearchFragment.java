@@ -50,7 +50,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LocationSearchFragment extends Fragment
 {
@@ -101,18 +100,8 @@ public class LocationSearchFragment extends Fragment
 	//hide keyboard
 	public void hideKeyBoard()
 	{
-		InputMethodManager inputManager = (InputMethodManager)
-                getActivity().getSystemService(Context.INPUT_METHOD_SERVICE); 
-		View focusedView = getActivity().getCurrentFocus();
-	    
-		//Checks for NullPointerException
-	    if (focusedView != null) 
-	    {
-	        inputManager.hideSoftInputFromWindow(focusedView.getWindowToken(),
-	                InputMethodManager.HIDE_NOT_ALWAYS);
-	    }
-		barid.setVisibility(View.GONE);
-
+	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+	    imm.hideSoftInputFromWindow(barid.getWindowToken(), 0);
 	}
 	
 	@Override
@@ -336,7 +325,6 @@ public class LocationSearchFragment extends Fragment
 
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout))
 					{
-						Toast.makeText(getActivity(), "purple", Toast.LENGTH_SHORT).show();
 						Projection projection = map.getProjection();
 
 						//Convert Points to on screen location
@@ -345,7 +333,6 @@ public class LocationSearchFragment extends Fragment
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
-						Toast.makeText(getActivity(), "blue", Toast.LENGTH_SHORT).show();
 						int[] location = new int[2];
 						v.getLocationOnScreen(location);
 						Point p = new Point();
@@ -356,7 +343,6 @@ public class LocationSearchFragment extends Fragment
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
-						Toast.makeText(getActivity(), "grey", Toast.LENGTH_SHORT).show();	
 						barid.setVisibility(View.VISIBLE);
 					}
 					
@@ -395,13 +381,21 @@ public class LocationSearchFragment extends Fragment
 			@Override
 			public void onMapClick(LatLng point) 
 			{
-				hideKeyBoard();
+				Projection projection = map.getProjection();
+				
+				//Convert Points to on screen location
+				Point p1 = new Point();
+				p1 = projection.toScreenLocation(point);
+				
+				if(isPointInsideView(p1.x, (p1.y + topBar.getHeight() + (topBar.getHeight()/2)), barid))
+				{
+				}
+				else
+				{
+					hideKeyBoard();
+				}
 			}	
 		});
-
-		
-		
-        
 
 		
 	    searchProgress = (ProgressBar) getActivity().findViewById(R.id.locationSearchProgressBar);

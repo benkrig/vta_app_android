@@ -455,9 +455,10 @@ containing a value of this type.
         public static final int purplebg_ic_action_place=0x7f020038;
         public static final int rtbtn=0x7f020039;
         public static final int touchcircle=0x7f02003a;
-        public static final int vta=0x7f02003b;
-        public static final int walking_man=0x7f02003c;
-        public static final int whitebackbtn=0x7f02003d;
+        public static final int transit_icon=0x7f02003b;
+        public static final int vta=0x7f02003c;
+        public static final int walking_man=0x7f02003d;
+        public static final int whitebackbtn=0x7f02003e;
     }
     public static final class id {
         public static final int RouteMap=0x7f070034;

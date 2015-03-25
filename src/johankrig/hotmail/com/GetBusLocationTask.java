@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.GoogleMap;
@@ -71,7 +72,6 @@ public class GetBusLocationTask extends TimerTask
 			String result;
 			JSONParser j = new JSONParser();
 			result = j.getVehicleJson();
-			
 			try
 			{
 			json = new JSONObject(result);
@@ -91,8 +91,8 @@ public class GetBusLocationTask extends TimerTask
 				markerOptions = new MarkerOptions();
 	    		markerOptions.position(position);
 	    		markerOptions.title("Bus: " + buses.getJSONObject(c).getString("vehicle_id"));
-	    		markerOptions.snippet(buses.getJSONObject(c).getString("last_updated_on"));
-	    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus));
+	    		markerOptions.snippet(""+buses.getJSONObject(c).getDouble("speed"));
+	    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.transit_icon));
 	    		buslist.add(markerOptions);
 	    		
 	    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Bus(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on") ));

@@ -190,7 +190,7 @@ public class DirectionsFragment extends Fragment
 	    	TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
 	    	if(route.has("fare"))
 	    	{
-	    		String fareCost = "$"+route.getJSONObject("fare").getInt("value");
+	    		String fareCost = "$"+route.getJSONObject("fare").getDouble("value");
 	    		footerFare.setText(fareCost);
 	    	}
 	     	else

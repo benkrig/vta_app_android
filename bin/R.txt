@@ -136,9 +136,10 @@ int drawable purple_ic_action_web_site 0x7f020037
 int drawable purplebg_ic_action_place 0x7f020038
 int drawable rtbtn 0x7f020039
 int drawable touchcircle 0x7f02003a
-int drawable vta 0x7f02003b
-int drawable walking_man 0x7f02003c
-int drawable whitebackbtn 0x7f02003d
+int drawable transit_icon 0x7f02003b
+int drawable vta 0x7f02003c
+int drawable walking_man 0x7f02003d
+int drawable whitebackbtn 0x7f02003e
 int id RouteMap 0x7f070034
 int id TextView01 0x7f070059
 int id TextView03 0x7f070058

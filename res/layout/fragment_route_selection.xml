@@ -126,7 +126,7 @@
                 android:text="-"
                 android:paddingBottom="10dp"
                 android:paddingRight="10dp"
-                android:textColor="@color/white"
+                android:textColor="@color/buttondarkgreytransparent"
                 android:textSize="40sp" />
 
             <ImageView

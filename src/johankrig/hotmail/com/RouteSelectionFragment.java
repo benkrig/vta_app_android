@@ -496,13 +496,29 @@ public class RouteSelectionFragment extends Fragment
 			           
 		        		JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
 		        		JSONObject arrival_location = arrival_stop.getJSONObject("location");
-
-		        		
 		        		
 		        		MarkerOptions markerOptions = new MarkerOptions();
 		        		markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
 		        		markerOptions.title("Stop name: " + arrival_stop.getString("name"));
-		        		markerOptions.snippet("Line: " + transit_details.getString("headsign"));
+		        		String headsign = transit_details.getString("headsign");
+		        		if(Character.isDigit(headsign.charAt(0)))
+		        		{
+			        		markerOptions.snippet("Line: " + headsign);
+		        		}
+		        		else
+		        		{
+		        			try
+		        			{
+			        			JSONObject line = transit_details.getJSONObject("line");
+			        			int shortline = line.getInt("short_name");
+				        		markerOptions.snippet("Line: " + shortline + " " + headsign);
+		        			}
+		        			catch(Exception e)
+		        			{
+				        		markerOptions.snippet("Line: " + headsign);
+		        			}
+		        		}
+		        		
 		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
 		        		markerOptions.flat(true);
 		        		
