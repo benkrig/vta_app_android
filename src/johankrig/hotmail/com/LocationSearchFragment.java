@@ -22,7 +22,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import johankrig.hotmail.com.R;
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
@@ -31,7 +30,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.InflateException;
@@ -68,8 +66,8 @@ public class LocationSearchFragment extends Fragment
 	private ProgressBar searchProgress;
 	private PopupWindow changeStatusPopUp;
 	private RelativeLayout touch;
-	LinearLayout barid;
-	LinearLayout topBar;
+	private LinearLayout barid;
+	private LinearLayout topBar;
 
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -604,8 +602,8 @@ public class LocationSearchFragment extends Fragment
 	    shopping.setOnTouchListener(new OnTouchListener()
 	    {
 			@Override
-			public boolean onTouch(View v, MotionEvent event) 
-			{			
+			public boolean onTouch(View v, MotionEvent event)
+			{
 				TextView subTextView = (TextView) layout.findViewById(R.id.shoppingTextView);
 				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
 				
@@ -786,7 +784,7 @@ public class LocationSearchFragment extends Fragment
 	    int h = getStatusBarHeight() + topBar.getHeight();
 	    
 	    //popup is being created at too high of a coord
-	    // Creating the PopupWindow
+	    //Creating the PopupWindow
 	    changeStatusPopUp = new PopupWindow(context);
 	    changeStatusPopUp.setContentView(layout);
 	    changeStatusPopUp.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
@@ -795,14 +793,15 @@ public class LocationSearchFragment extends Fragment
 	
 	    //Clear the default translucent background
 	    changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
-	    // Displaying the popup at the specified location, + offsets.
+	    //Displaying the popup at the specified location, + offsets.
 	    int[] p1 = new int[2];
 	    touch.getLocationOnScreen(p1);
 	    changeStatusPopUp.showAtLocation(touch, Gravity.NO_GRAVITY, 0, h);
 	}
 	
 	
-	public static boolean isPointInsideView(float x, float y, View view){
+	public static boolean isPointInsideView(float x, float y, View view)
+	{
 	    int location[] = new int[2];
 	    view.getLocationOnScreen(location);
 	    int viewX = location[0];
@@ -810,9 +809,12 @@ public class LocationSearchFragment extends Fragment
 
 	    //point is inside view bounds
 	    if(( x > viewX && x < (viewX + view.getWidth())) &&
-	            ( y > viewY && y < (viewY + view.getHeight()))){
+	            ( y > viewY && y < (viewY + view.getHeight())))
+	    {
 	        return true;
-	    } else {
+	    }
+	    else 
+	    {
 	        return false;
 	    }
 	}
@@ -830,7 +832,6 @@ public class LocationSearchFragment extends Fragment
 	
 	class GetMarkerFromTouch extends AsyncTask<String, Address, Address>
 	{
-		
 	    private final String LOG_TAG = "VTA";
 	    //https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=API_KEY
 	    private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/geocode";

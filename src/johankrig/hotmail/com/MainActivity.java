@@ -125,6 +125,12 @@ public class MainActivity extends FragmentActivity implements Communicator
 	    super.onConfigurationChanged(newConfig);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) 
+	{
+	    super.onRestoreInstanceState(savedInstanceState);
+		viewPager.setCurrentItem(1, true);
+	}
 
 
 	//Communicator methods
