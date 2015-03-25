@@ -13,7 +13,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -42,21 +41,18 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 public class LocationSearchFragment extends Fragment
 {
@@ -70,10 +66,11 @@ public class LocationSearchFragment extends Fragment
 	private GPSTracker gps;
 	private Button clearSearchBarButton;
 	private ProgressBar searchProgress;
-	private ImageButton button1;
 	private PopupWindow changeStatusPopUp;
-	
-	RelativeLayout touch ;
+	private RelativeLayout touch;
+	LinearLayout barid;
+	LinearLayout topBar;
+
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -99,27 +96,6 @@ public class LocationSearchFragment extends Fragment
         map.setMyLocationEnabled(true);
 
         map.getUiSettings().setMyLocationButtonEnabled(true);
-        
-        //Hide keyboard on map click
-        /*map.setOnMapClickListener(new OnMapClickListener()
-        {
-			@Override
-			public void onMapClick(LatLng point) 
-			{
-				hideKeyBoard();
-			}
-        });*/
-        
-        /*map.setOnMapLongClickListener(new OnMapLongClickListener()
-        {
-			@Override
-			public void onMapLongClick(LatLng point) 
-			{
-				//GeoTask get location at Marker
-				GetMarkerFromTouch getad = new GetMarkerFromTouch(getActivity(), point);
-				getad.execute();
-			}
-        });*/
                 
 		return rootView;
     }
@@ -137,6 +113,8 @@ public class LocationSearchFragment extends Fragment
 	        inputManager.hideSoftInputFromWindow(focusedView.getWindowToken(),
 	                InputMethodManager.HIDE_NOT_ALWAYS);
 	    }
+		barid.setVisibility(View.GONE);
+
 	}
 	
 	@Override
@@ -148,7 +126,12 @@ public class LocationSearchFragment extends Fragment
 		
 		final Handler myHandler = new Handler();	
 		
+		barid = (LinearLayout) getActivity().findViewById(R.id.barid);
+		topBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
+
+		
 		touch = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
+		
 		touch.setOnTouchListener(new OnTouchListener()
 		{
 			Vibrator vb = (Vibrator)   getActivity().getSystemService(Context.VIBRATOR_SERVICE);
@@ -169,10 +152,10 @@ public class LocationSearchFragment extends Fragment
 			    	((RelativeLayout)v).setBackgroundColor(0xAA000000);
 		            vb.vibrate(50);
 			    	map.getUiSettings().setScrollGesturesEnabled(false);
-					purplelayout.setBackgroundResource(R.color.purple);
-					greylayout.setBackgroundColor(getActivity().getResources().getColor(R.color.buttondarkgrey));
-					bluelayout.setBackgroundColor(getActivity().getResources().getColor(R.color.exitblue));
-					
+			    	
+					purplelayout.setBackgroundResource(R.drawable.purplebg_ic_action_place);
+					greylayout.setBackgroundResource(R.drawable.black_ic_action_search);
+					bluelayout.setBackgroundResource(R.drawable.blue_ic_action_locate);
 					
 					int oh = ((RelativeLayout)v).getHeight() / 2;
 					int ow = ((RelativeLayout)v).getWidth() / 2;
@@ -184,7 +167,6 @@ public class LocationSearchFragment extends Fragment
 					float x2 = 0;
 					float y2 = 0;
 
-					
 					if(event.getY()*event.getYPrecision() >= oh)
 					{
 						//lower
@@ -222,7 +204,8 @@ public class LocationSearchFragment extends Fragment
 					}
 					else
 					{
-						//upper						
+						//upper				
+						
 						if(event.getX()*event.getXPrecision() > ow)
 						{
 							//right
@@ -257,36 +240,30 @@ public class LocationSearchFragment extends Fragment
 						}
 					}
 					
-		            
 		            RelativeLayout.LayoutParams bp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		            Resources resources = getActivity().getResources();
-		            DisplayMetrics metrics = resources.getDisplayMetrics();
 		            
 		            bp2.leftMargin = (int) x2;
 		            bp2.topMargin = (int) y2;
-		            bp2.height = 88;
-		            bp2.width = 88;
+		            bp2.height = 64;
+		            bp2.width = 64;
 		            greylayout.setLayoutParams(bp2);
 		            
 		            RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            bp.leftMargin = (int) x;
 		            bp.topMargin = (int) y;
-		            bp.height = 88;
-		            bp.width = 88;
+		            bp.height = 64;
+		            bp.width = 64;
 		            purplelayout.setLayoutParams(bp);
-
 		            
 		            RelativeLayout.LayoutParams bp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            bp1.leftMargin = (int) x1;
 		            bp1.topMargin = (int) y1;
-		            bp1.height = 88;
-		            bp1.width = 88;
+		            bp1.height = 64;
+		            bp1.width = 64;
 		            bluelayout.setLayoutParams(bp1);
 		            
 		            //ontouch listeners
-		            
-		            
-		            
+		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
 		            ((RelativeLayout)v).addView(bluelayout);
 		            ((RelativeLayout)v).addView(greylayout);
@@ -294,11 +271,12 @@ public class LocationSearchFragment extends Fragment
 			    }
 			};
 
+			private int TOUCH_WAIT = 250;
 			private float mDownX;
 			private float mDownY;
-			private final float SCROLL_THRESHOLD = 10;
+			private final float SCROLL_THRESHOLD = 15;
 			private boolean isOnClick;
-					
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) 
 			{
@@ -307,9 +285,12 @@ public class LocationSearchFragment extends Fragment
 					this.v = v;
 					this.event = event;	
 					
+					if(!isPointInsideView(event.getRawX(), event.getRawY(), barid))
+						barid.setVisibility(View.GONE);
+					
 					myHandler.removeCallbacks(r);
-					myHandler.postDelayed(r, 1000);
-					hideKeyBoard();
+					myHandler.postDelayed(r, TOUCH_WAIT);
+					//hideKeyBoard();
 					mDownX = event.getX();
 		            mDownY = event.getY();
 		            isOnClick = true;
@@ -322,11 +303,10 @@ public class LocationSearchFragment extends Fragment
 
 					if (isOnClick && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD)) 
 					{
-		                Log.i("ay", "movement detected");
 		                myHandler.removeCallbacks(r);
 		                isOnClick = false;
 		            }
-					//myHandler.removeCallbacks(r);
+					
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout) && !purple)
 					{
 						purple = true;
@@ -378,11 +358,13 @@ public class LocationSearchFragment extends Fragment
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
-						Toast.makeText(getActivity(), "grey", Toast.LENGTH_SHORT).show();						
+						Toast.makeText(getActivity(), "grey", Toast.LENGTH_SHORT).show();	
+						barid.setVisibility(View.VISIBLE);
 					}
 					
-					
-					((RelativeLayout)v).removeAllViews();
+					((RelativeLayout)v).removeView(purplelayout);
+					((RelativeLayout)v).removeView(greylayout);
+					((RelativeLayout)v).removeView(bluelayout);
 					
 			    	map.getUiSettings().setScrollGesturesEnabled(true);
 					myHandler.removeCallbacks(r);
@@ -392,8 +374,6 @@ public class LocationSearchFragment extends Fragment
 				
 				return false;
 			}
-			
-			
 		});
 		
 		
@@ -412,26 +392,14 @@ public class LocationSearchFragment extends Fragment
 					37.3333, -121.9000), 12.0f));
 		}
 		
-		
-		button1 = (ImageButton) getActivity().findViewById(R.id.nearbyMenuButton);
-		/*button1.setOnClickListener(new OnClickListener() 
-        {
-            public void onClick(View v) 
-            {
-                 int[] location = new int[2];
-   
-                 // Get the x, y location and store it in the location[] array
-                 // location[0] = x, location[1] = y.
-                 v.getLocationOnScreen(location);
-
-                 //Initialize the Point with x, and y positions
-                 Point point = new Point();
-                 point.x = location[0];
-                 point.y = location[1];
-                 
-                 showStatusPopup(getActivity(), point);
-            }
-        });*/
+		map.setOnMapClickListener(new OnMapClickListener()
+		{
+			@Override
+			public void onMapClick(LatLng point) 
+			{
+				hideKeyBoard();
+			}	
+		});
 
 		
 		
@@ -493,13 +461,24 @@ public class LocationSearchFragment extends Fragment
 			public void onClick(View v) 
 			{
 				map.clear();
-				geoTask.cancel(true);
+				
+				if(geoTask != null)
+					geoTask.cancel(true);
+				
 				searchBar.setText("");
 			}
 			
 		});
 	}
 	
+	public int getStatusBarHeight() {
+	    int result = 0;
+	    int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+	    if (resourceId > 0) {
+	        result = getResources().getDimensionPixelSize(resourceId);
+	    }
+	    return result;
+	}
 	
     // The method that displays the popup.
 	private void nearbyPopUp(final Activity context, Point p) 
@@ -576,6 +555,7 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("asian food nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 						changeStatusPopUp.dismiss();
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeFastFood)))
@@ -589,6 +569,7 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("fast food nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 						changeStatusPopUp.dismiss();
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.foodTypeThai)))
@@ -602,11 +583,12 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("thai food nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 						changeStatusPopUp.dismiss();
 					}
 					
 					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
-					foodSub.setVisibility(View.GONE);
+					foodSub.setVisibility(View.INVISIBLE);
 					return true;
 					
 		        }
@@ -670,6 +652,7 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("clothes shopping nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 		                changeStatusPopUp.dismiss();
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.shoppingTypeShoes)))
@@ -683,11 +666,12 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("shoes shopping nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 		                changeStatusPopUp.dismiss();
 					}
 
 					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
-					shopSub.setVisibility(View.GONE);
+					shopSub.setVisibility(View.INVISIBLE);
 
 					return true;
 				}
@@ -735,10 +719,11 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("cinema nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 						changeStatusPopUp.dismiss();
 					}
 					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
-					entertainmentSub.setVisibility(View.GONE);
+					entertainmentSub.setVisibility(View.INVISIBLE);
 					return true;
 				}
 				return false;
@@ -754,9 +739,29 @@ public class LocationSearchFragment extends Fragment
 				
 				TextView subTextView = (TextView) layout.findViewById(R.id.recreationTextView);
 				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
+				
+				LinearLayout recSub = (LinearLayout) layout.findViewById(R.id.recreationSubLayout);
+				recSub.setVisibility(View.VISIBLE);
+				
+				
+				if(event.getAction() == MotionEvent.ACTION_MOVE)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.recreationTypeParks)))
+					{
+						TextView cinema = (TextView) layout.findViewById(R.id.recreationTypeParks);
+						cinema.setTextColor(context.getResources().getColor(R.color.backgroundblue));
+					}
+					else
+					{
+						TextView cinema = (TextView) layout.findViewById(R.id.recreationTypeParks);
+						cinema.setTextColor(context.getResources().getColor(R.color.purple));
+					}
+					return false;
+				}
+				
 				if(event.getAction() == MotionEvent.ACTION_UP)
 				{
-					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.recreationTextView)))
+					if(isPointInsideView(event.getRawX(), event.getRawY(), layout.findViewById(R.id.recreationTypeParks)))
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
@@ -767,28 +772,33 @@ public class LocationSearchFragment extends Fragment
 		                	geoTask.setLocation("family fun nearby");
 		                	geoTask.execute();
 		                }
+		                map.clear();
 		                changeStatusPopUp.dismiss();
 					}
 					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
+					recSub.setVisibility(View.INVISIBLE);
 					return true;
 				}
 				return false;
 			}
 	    });
 	    
+	    int h = getStatusBarHeight() + topBar.getHeight();
 	    
+	    //popup is being created at too high of a coord
 	    // Creating the PopupWindow
 	    changeStatusPopUp = new PopupWindow(context);
 	    changeStatusPopUp.setContentView(layout);
 	    changeStatusPopUp.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-	    changeStatusPopUp.setHeight(LinearLayout.LayoutParams.MATCH_PARENT);
+	    changeStatusPopUp.setHeight(touch.getHeight());
 	    changeStatusPopUp.setFocusable(true);
 	
 	    //Clear the default translucent background
 	    changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
-	
 	    // Displaying the popup at the specified location, + offsets.
-	    changeStatusPopUp.showAtLocation(touch, Gravity.NO_GRAVITY, p.x, p.y);
+	    int[] p1 = new int[2];
+	    touch.getLocationOnScreen(p1);
+	    changeStatusPopUp.showAtLocation(touch, Gravity.NO_GRAVITY, 0, h);
 	}
 	
 	

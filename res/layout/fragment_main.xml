@@ -9,6 +9,38 @@
         android:id="@+id/linearLayout1"
         android:orientation="vertical" >
 
+        <LinearLayout
+            android:id="@+id/locationfragmenttopbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" 
+            android:orientation="horizontal">
+            
+            	<Button
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_weight=".5"
+                android:background="@drawable/rtbtn"
+				/>
+
+            	<Button
+            	    style="?android:attr/buttonBarButtonStyle"
+            	    android:layout_width="wrap_content"
+            	    android:layout_height="fill_parent"
+            	    android:layout_weight="3"
+            	    android:background="@drawable/rtbtn"
+            	    android:text="@string/metaforaString"
+            	    android:textColor="@color/white" />
+            	
+				<Button
+	            style="?android:attr/buttonBarButtonStyle"
+	            android:layout_width="wrap_content"
+	            android:layout_height="fill_parent"
+	            android:layout_weight=".5"
+	            android:background="@drawable/rtbtn"
+	            android:contentDescription="@string/desc" />
+        </LinearLayout>
+
         <johankrig.hotmail.com.CustomRelativeLayout
             android:id="@+id/relid"
             android:layout_width="match_parent"
@@ -27,26 +59,24 @@
             <RelativeLayout
             android:id="@+id/touchlayout"
             android:layout_width="match_parent"
+            android:padding="10dp"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:clickable="false"
 
-             />
+             >
+
+                
+
+            </RelativeLayout>
 
 
             <LinearLayout
                 android:id="@+id/barid"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageButton
-                    android:id="@+id/nearbyMenuButton"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:background="@color/purple"
-                    android:src="@drawable/ic_action_overflow"
-                    android:text="Button" />
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                 >
 
                 <AutoCompleteTextView
                     android:id="@+id/searchBar"
@@ -69,7 +99,7 @@
                     android:id="@+id/clearSearchBarButton"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
-                    android:layout_weight="0.5"
+                    android:layout_weight="1"
                     android:background="@color/textdirectionsgrey"
                     android:gravity="center"
                     android:text="x"
@@ -82,16 +112,17 @@
                     android:layout_weight="1"
                     android:background="@color/purple"
                     android:src="@drawable/ic_action_search" />
-
-                <ProgressBar
-                    android:id="@+id/locationSearchProgressBar"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/purple"
-                    android:indeterminate="true"
-                    android:visibility="gone" />
             </LinearLayout>
+		<ProgressBar
+                    android:id="@+id/locationSearchProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:background="@android:color/transparent"
+                    android:visibility="gone"
+                    android:indeterminate="true" 
+                    />
 
         </johankrig.hotmail.com.CustomRelativeLayout>
 

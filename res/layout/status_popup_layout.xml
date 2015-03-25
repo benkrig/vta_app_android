@@ -1,178 +1,213 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/llSortChangePopup"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/whitetransparent"
+    android:weightSum="4"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/foodTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:text="Food"
-        android:textColor="@color/purple"
-        android:textSize="20sp" />
-
     <LinearLayout
-        android:id="@+id/foodSubLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+         >
 
         <TextView
-            android:id="@+id/foodTypeThai"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"
+            android:id="@+id/foodTextView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:clickable="true"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Thai"
+            android:text="Food"
             android:textColor="@color/purple"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/foodTypeFastFood"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Fast Food"
-            android:textColor="@color/purple"
-            android:textSize="15sp" />
+        <LinearLayout
+            android:id="@+id/foodSubLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:visibility="invisible"
+            >
+            <TextView
+                android:id="@+id/foodTypeThai"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="Thai"
+                android:gravity="center"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
 
-        <TextView
-            android:id="@+id/foodTypeAsian"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Asian"
-            android:textColor="@color/purple"
-            android:textSize="15sp" />
+            <TextView
+                android:id="@+id/foodTypeFastFood"
+                android:layout_width="match_parent"
+				android:layout_height="0dp"
+                android:layout_weight="1" 
+                android:gravity="center"
+                android:text="Fast Food"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/foodTypeAsian"
+                android:layout_width="match_parent"
+				android:layout_height="0dp"
+                android:layout_weight="1"                
+                android:gravity="center"
+                android:text="Asian"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/buttondarkgrey"
         android:contentDescription="" />
 
-    <TextView
-        android:id="@+id/shoppingTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:text="Shopping"
-        android:textColor="@color/purple"
-        android:textSize="20sp" />
-
-    <LinearLayout
-        android:id="@+id/shoppingSubLayout"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:layout_weight="1"
+        android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/shoppingTypeClothes"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:id="@+id/shoppingTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
+            android:clickable="true"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Clothes"
+            android:text="Shopping"
             android:textColor="@color/purple"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/shoppingTypeShoes"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"
-            android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Shoes"
-            android:textColor="@color/purple"
-            android:textSize="15sp" />
+        <LinearLayout
+            android:id="@+id/shoppingSubLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:visibility="invisible"
+             >
+
+            <TextView
+                android:id="@+id/shoppingTypeClothes"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Clothes"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/shoppingTypeShoes"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Shoes"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/buttondarkgrey"
         android:contentDescription="" />
 
-    <TextView
-        android:id="@+id/entertainmentTextView"
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:text="Entertainment"
-        android:textColor="@color/purple"
-        android:textSize="20sp" />
-
     <LinearLayout
-        android:id="@+id/entertainmentSubLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:visibility="gone" >
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
 
         <TextView
-            android:id="@+id/entertainmentTypeMovies"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:id="@+id/entertainmentTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1.0"
+            android:clickable="true"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
-            android:text="Cinema"
+            android:text="Entertainment"
             android:textColor="@color/purple"
             android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/entertainmentSubLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            
+             >
+
+            <TextView
+                android:id="@+id/entertainmentTypeMovies"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="Cinema"
+                android:textColor="@color/purple"
+                android:textSize="15sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/buttondarkgrey"
         android:contentDescription="" />
 
-    <TextView
-        android:id="@+id/recreationTextView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.0"
-        android:clickable="true"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="5dp"
-        android:text="Recreation"
-        android:textColor="@color/purple"
-        android:textSize="20sp" />
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/recreationTextView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="Recreation"
+            android:textColor="@color/purple"
+            android:textSize="20sp" />
+
+        <LinearLayout
+            android:id="@+id/recreationSubLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:visibility="invisible"
+             >
+
+            <TextView
+                android:id="@+id/recreationTypeParks"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.0"
+                android:gravity="center"
+                android:text="Parks"
+                android:textColor="@color/purple"
+                android:textSize="15sp"
+                 />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

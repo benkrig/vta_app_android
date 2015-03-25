@@ -5,15 +5,15 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#212121"
-        	android:endColor="#212121"
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"
          />
 		<stroke
         	android:width="0dp"
-        	android:color="#171717" />
+        	android:color="#790ebd" />
         <corners
         	android:radius="0dp" />
         <padding
@@ -29,15 +29,15 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#212121"
-        	android:endColor="#212121"
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"
          />
 		<stroke
         	android:width="0dp"
-        	android:color="#171717" />
+        	android:color="#790ebd" />
         <corners
         	android:radius="0dp" />
         <padding
@@ -53,15 +53,15 @@
     		android:shape="rectangle"
     		android:useLevel="false" >
     	<gradient
-        	android:startColor="#212121"
-        	android:endColor="#212121"
+        	android:startColor="#790ebd"
+        	android:endColor="#790ebd"
         	android:useLevel="false"
         	android:type="linear"
         	android:angle="90"
          />
 		<stroke
         	android:width="0dp"
-        	android:color="#171717" />
+        	android:color="#790ebd" />
         <corners
         	android:radius="0dp" />
         <padding
