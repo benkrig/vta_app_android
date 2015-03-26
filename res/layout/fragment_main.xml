@@ -1,45 +1,45 @@
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+   	android:layout_width="match_parent"
+   	android:layout_height="match_parent"
+   	tools:context=".LocationSearchFragment"
+    android:id="@+id/linearLayout1"
+    android:orientation="vertical" >
 
-    
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-    	xmlns:tools="http://schemas.android.com/tools"
-    	android:layout_width="match_parent"
-    	android:layout_height="match_parent"
-    	tools:context=".LocationSearchFragment"
-        android:id="@+id/linearLayout1"
-        android:orientation="vertical" >
-
-        <LinearLayout
-            android:id="@+id/locationfragmenttopbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" 
-            android:orientation="horizontal">
+		android:id="@+id/locationfragmenttopbar"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal">
             
-            	<Button
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_weight=".5"
-                android:background="@drawable/rtbtn"
-				/>
+    	<Button
+			style="?android:attr/buttonBarButtonStyle"
+       		android:layout_width="wrap_content"
+       		android:layout_height="fill_parent"
+       		android:layout_weight=".5"
+        	android:background="@drawable/rtbtn"
+			/>
 
-            	<Button
-            	    style="?android:attr/buttonBarButtonStyle"
-            	    android:layout_width="wrap_content"
-            	    android:layout_height="fill_parent"
-            	    android:layout_weight="3"
-            	    android:background="@drawable/rtbtn"
-            	    android:text="@string/metaforaString"
-            	    android:textColor="@color/white" />
+       	<Button
+    		style="?android:attr/buttonBarButtonStyle"
+           	android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+          	android:layout_weight="3"
+            android:background="@drawable/rtbtn"
+           	android:text="@string/metaforaString"
+          	android:textColor="@color/white" 
+          	/>
             	
-				<Button
-	            style="?android:attr/buttonBarButtonStyle"
-	            android:layout_width="wrap_content"
-	            android:layout_height="fill_parent"
-	            android:layout_weight=".5"
-	            android:background="@drawable/rtbtn"
-	            android:contentDescription="@string/desc" />
-        </LinearLayout>
+		<Button
+	    	style="?android:attr/buttonBarButtonStyle"
+	 		android:layout_width="wrap_content"
+			android:layout_height="fill_parent"
+	  		android:layout_weight=".5"
+	 		android:background="@drawable/rtbtn"
+	        android:contentDescription="@string/desc" 
+	        />
+	</LinearLayout>
 
         <johankrig.hotmail.com.CustomRelativeLayout
             android:id="@+id/relid"
@@ -103,7 +103,8 @@
                     android:background="@color/textdirectionsgrey"
                     android:gravity="center"
                     android:text="x"
-                    android:textColor="@color/exitblue" />
+                    android:textColor="@color/exitblue" 
+                    />
 
                 <ImageButton
                     android:id="@+id/routeMenuButton"
@@ -111,17 +112,18 @@
                     android:layout_height="fill_parent"
                     android:layout_weight="1"
                     android:background="@color/purple"
-                    android:src="@drawable/ic_action_search" />
+                    android:src="@drawable/ic_action_search"
+                    />
             </LinearLayout>
 		<ProgressBar
                     android:id="@+id/locationSearchProgressBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
-                    android:background="@android:color/transparent"
-                    android:visibility="gone"
+                    android:background="@drawable/progress_bar"
                     android:indeterminate="true" 
+                    android:visibility="gone"
                     />
 
         </johankrig.hotmail.com.CustomRelativeLayout>

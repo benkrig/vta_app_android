@@ -523,8 +523,6 @@ public class RouteSelectionFragment extends Fragment
 		        		markerOptions.flat(true);
 		        		
 		        		markers.add(markerOptions);
-		        		
-			           		
 			         
 		        		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
 		        		JSONObject departure_location = departure_stop.getJSONObject("location");
@@ -535,9 +533,7 @@ public class RouteSelectionFragment extends Fragment
 		        		markerOptions.snippet("Line:  " + transit_details.getString("headsign"));
 		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
 		        		markerOptions.flat(true);
-		        		
 		        		markers.add(markerOptions);
-
 		        	}
 	        	}
 	        	   
@@ -554,18 +550,13 @@ public class RouteSelectionFragment extends Fragment
 	        			polyies.add(new PolylineOptions()
         				.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
         				.width(9)
-        				.color(Color.argb(180, 0, 100, 0)).geodesic(true));
-	        			
+        				.color(Color.argb(180, 0, 100, 0)).geodesic(true));		
 	        		}
-	        	}
-	        			        
+	        	}		        
 	        }
 	    } 
 	    catch (JSONException e) 
-	    {
-	    	//Called if no route is found at Index routeNumber
-            Toast.makeText(getActivity(), "No route found :: E: "+e.toString(), Toast.LENGTH_LONG).show();
-            
+	    {            
             SendErrorAsync log = new SendErrorAsync(e.toString());
         	log.execute();
 	    }

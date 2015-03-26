@@ -139,9 +139,9 @@
             android:layout_weight="1.0"
             android:clickable="true"
             android:gravity="center"
-            android:text="Entertainment"
+            android:text="Fun"
             android:textColor="@color/purple"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <LinearLayout
             android:id="@+id/entertainmentSubLayout"
@@ -183,7 +183,7 @@
             android:layout_weight="1.0"
             android:clickable="true"
             android:gravity="center"
-            android:text="Recreation"
+            android:text="Family"
             android:textColor="@color/purple"
             android:textSize="20sp" />
 

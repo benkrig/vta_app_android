@@ -65,8 +65,8 @@ public class LocationSearchFragment extends Fragment
 	private ProgressBar searchProgress;
 	private PopupWindow changeStatusPopUp;
 	private RelativeLayout touch;
-	private LinearLayout barid;
-	private LinearLayout topBar;
+	private LinearLayout hiddenSearchBar;
+	private LinearLayout topScreenBar;
 
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -80,6 +80,7 @@ public class LocationSearchFragment extends Fragment
 	        if (parent != null)
 	            parent.removeView(rootView);
 	    }
+		
 	    try 
 	    {
 	        rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -91,17 +92,16 @@ public class LocationSearchFragment extends Fragment
 	    
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
-
         map.getUiSettings().setMyLocationButtonEnabled(true);
-                
-		return rootView;
+
+        return rootView;
     }
 	
 	//hide keyboard
 	public void hideKeyBoard()
 	{
 	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	    imm.hideSoftInputFromWindow(barid.getWindowToken(), 0);
+	    imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
 	}
 	
 	@Override
@@ -110,13 +110,9 @@ public class LocationSearchFragment extends Fragment
 		super.onActivityCreated(savedInstanceState);
 		comm = (Communicator) getActivity();
 		
-		
-		final Handler myHandler = new Handler();	
-		
-		barid = (LinearLayout) getActivity().findViewById(R.id.barid);
-		topBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
-
-		
+		final Handler myHandler = new Handler();			
+		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
+		topScreenBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
 		touch = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
 		
 		touch.setOnTouchListener(new OnTouchListener()
@@ -147,12 +143,12 @@ public class LocationSearchFragment extends Fragment
 					int oh = ((RelativeLayout)v).getHeight() / 2;
 					int ow = ((RelativeLayout)v).getWidth() / 2;
 					
-					float x = 0;
-					float y = 0;
-					float x1 = 0;
-					float y1 = 0;
-					float x2 = 0;
-					float y2 = 0;
+					float purpleLayoutX = 0;
+					float purpleLayoutY = 0;
+					float blueLayoutX = 0;
+					float blueLayoutY = 0;
+					float greyLayoutX = 0;
+					float greyLayoutY = 0;
 
 					if(event.getY()*event.getYPrecision() >= oh)
 					{
@@ -162,31 +158,31 @@ public class LocationSearchFragment extends Fragment
 						{
 							//right
 							
-							x = event.getX()*event.getXPrecision()- 10;
-				            y = event.getY()*event.getYPrecision() - 230;
+							purpleLayoutX = event.getX()*event.getXPrecision()- 10;
+				            purpleLayoutY = event.getY()*event.getYPrecision() - 230;
 
 
-				            x1 = event.getX()*event.getXPrecision() - 180;
-				            y1 = event.getY()*event.getYPrecision() - 180;
+				            blueLayoutX = event.getX()*event.getXPrecision() - 180;
+				            blueLayoutY = event.getY()*event.getYPrecision() - 180;
 
 
-				            x2 = event.getX()*event.getXPrecision() - 180;
-				            y2 = event.getY()*event.getYPrecision();
+				            greyLayoutX = event.getX()*event.getXPrecision() - 180;
+				            greyLayoutY = event.getY()*event.getYPrecision();
 						}
 						else
 						{
 							//left
 							
-							x = event.getX()*event.getXPrecision() - 56;
-				            y = event.getY()*event.getYPrecision() - 250;
+							purpleLayoutX = event.getX()*event.getXPrecision() - 56;
+				            purpleLayoutY = event.getY()*event.getYPrecision() - 250;
 
 
-				            x1 = event.getX()*event.getXPrecision() + 100;
-				            y1 = event.getY()*event.getYPrecision() - 200;
+				            blueLayoutX = event.getX()*event.getXPrecision() + 100;
+				            blueLayoutY = event.getY()*event.getYPrecision() - 200;
 
 
-				            x2 = event.getX()*event.getXPrecision() + 100;
-				            y2 = event.getY()*event.getYPrecision() - 44;
+				            greyLayoutX = event.getX()*event.getXPrecision() + 100;
+				            greyLayoutY = event.getY()*event.getYPrecision() - 44;
 						}
 					}
 					else
@@ -198,63 +194,61 @@ public class LocationSearchFragment extends Fragment
 							//right
 							
 							//p
-							x = event.getX()*event.getXPrecision() - 190;
-				            y = event.getY()*event.getYPrecision() - 144;
+							purpleLayoutX = event.getX()*event.getXPrecision() - 190;
+				            purpleLayoutY = event.getY()*event.getYPrecision() - 144;
 
 				            //b
-				            x1 = event.getX()*event.getXPrecision() - 190;
-				            y1 = event.getY()*event.getYPrecision();
+				            blueLayoutX = event.getX()*event.getXPrecision() - 190;
+				            blueLayoutY = event.getY()*event.getYPrecision();
 
 				            //g
-				            x2 = event.getX()*event.getXPrecision() - 44;
-				            y2 = event.getY()*event.getYPrecision() + 64;
+				            greyLayoutX = event.getX()*event.getXPrecision() - 44;
+				            greyLayoutY = event.getY()*event.getYPrecision() + 64;
 						}
 						else
 						{
 							//left
 							
 							//p
-							x = event.getX()*event.getXPrecision() + 90;
-				            y = event.getY()*event.getYPrecision() - 144;
+							purpleLayoutX = event.getX()*event.getXPrecision() + 90;
+				            purpleLayoutY = event.getY()*event.getYPrecision() - 144;
 
 				            //b
-				            x1 = event.getX()*event.getXPrecision() + 90;
-				            y1 = event.getY()*event.getYPrecision();
+				            blueLayoutX = event.getX()*event.getXPrecision() + 90;
+				            blueLayoutY = event.getY()*event.getYPrecision();
 
 				            //g
-				            x2 = event.getX()*event.getXPrecision() - 44;
-				            y2 = event.getY()*event.getYPrecision() + 44;
+				            greyLayoutX = event.getX()*event.getXPrecision() - 44;
+				            greyLayoutY = event.getY()*event.getYPrecision() + 44;
 						}
 					}
 					
-		            RelativeLayout.LayoutParams bp2 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            RelativeLayout.LayoutParams greyLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            greyLayoutParams.leftMargin = (int) greyLayoutX;
+		            greyLayoutParams.topMargin = (int) greyLayoutY;
+		            greyLayoutParams.height = 64;
+		            greyLayoutParams.width = 64;
+		            greylayout.setLayoutParams(greyLayoutParams);
 		            
-		            bp2.leftMargin = (int) x2;
-		            bp2.topMargin = (int) y2;
-		            bp2.height = 64;
-		            bp2.width = 64;
-		            greylayout.setLayoutParams(bp2);
+		            RelativeLayout.LayoutParams purpleLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            purpleLayoutParams.leftMargin = (int) purpleLayoutX;
+		            purpleLayoutParams.topMargin = (int) purpleLayoutY;
+		            purpleLayoutParams.height = 64;
+		            purpleLayoutParams.width = 64;
+		            purplelayout.setLayoutParams(purpleLayoutParams);
 		            
-		            RelativeLayout.LayoutParams bp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		            bp.leftMargin = (int) x;
-		            bp.topMargin = (int) y;
-		            bp.height = 64;
-		            bp.width = 64;
-		            purplelayout.setLayoutParams(bp);
-		            
-		            RelativeLayout.LayoutParams bp1 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		            bp1.leftMargin = (int) x1;
-		            bp1.topMargin = (int) y1;
-		            bp1.height = 64;
-		            bp1.width = 64;
-		            bluelayout.setLayoutParams(bp1);
+		            RelativeLayout.LayoutParams blueLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		            blueLayoutParams.leftMargin = (int) blueLayoutX;
+		            blueLayoutParams.topMargin = (int) blueLayoutY;
+		            blueLayoutParams.height = 64;
+		            blueLayoutParams.width = 64;
+		            bluelayout.setLayoutParams(blueLayoutParams);
 		            
 		            //ontouch listeners
 		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
 		            ((RelativeLayout)v).addView(bluelayout);
 		            ((RelativeLayout)v).addView(greylayout);
-		            
 			    }
 			};
 
@@ -272,12 +266,12 @@ public class LocationSearchFragment extends Fragment
 					this.v = v;
 					this.event = event;	
 					
-					if(!isPointInsideView(event.getRawX(), event.getRawY(), barid))
-						barid.setVisibility(View.GONE);
+					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
+						hiddenSearchBar.setVisibility(View.GONE);
 					
 					myHandler.removeCallbacks(r);
 					myHandler.postDelayed(r, TOUCH_WAIT);
-					//hideKeyBoard();
+					
 					mDownX = event.getX();
 		            mDownY = event.getY();
 		            isOnClick = true;
@@ -287,13 +281,11 @@ public class LocationSearchFragment extends Fragment
 				
 				if(event.getAction() == MotionEvent.ACTION_MOVE)
 			    {
-
 					if (isOnClick && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD)) 
 					{
 		                myHandler.removeCallbacks(r);
 		                isOnClick = false;
 		            }
-					
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout) && !purple)
 					{
 						purple = true;
@@ -315,7 +307,6 @@ public class LocationSearchFragment extends Fragment
 						blue = true;
 			            vb.vibrate(50);
 					}
-					
 					return false;
 			    }
 				
@@ -331,7 +322,7 @@ public class LocationSearchFragment extends Fragment
 						LatLng point = projection.fromScreenLocation(new Point((int)event.getX(), (int)event.getY()));
 						comm.returnRoutes(point);
 					}
-					if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
+					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
 						int[] location = new int[2];
 						v.getLocationOnScreen(location);
@@ -341,9 +332,9 @@ public class LocationSearchFragment extends Fragment
 						
 						nearbyPopUp(getActivity(), p);
 					}
-					if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
+					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
-						barid.setVisibility(View.VISIBLE);
+						hiddenSearchBar.setVisibility(View.VISIBLE);
 					}
 					
 					((RelativeLayout)v).removeView(purplelayout);
@@ -355,7 +346,6 @@ public class LocationSearchFragment extends Fragment
 					
 					return true;
 				}
-				
 				return false;
 			}
 		});
@@ -387,7 +377,7 @@ public class LocationSearchFragment extends Fragment
 				Point p1 = new Point();
 				p1 = projection.toScreenLocation(point);
 				
-				if(isPointInsideView(p1.x, (p1.y + topBar.getHeight() + (topBar.getHeight()/2)), barid))
+				if(isPointInsideView(p1.x, (p1.y + topScreenBar.getHeight() + (topScreenBar.getHeight()/2)), hiddenSearchBar))
 				{
 				}
 				else
@@ -425,7 +415,7 @@ public class LocationSearchFragment extends Fragment
             public void onClick(View v)
             {            	
             	//hide keyboard and search bar
-            	searchBar.dismissDropDown();
+            	//searchBar.dismissDropDown();
             	hideKeyBoard();
             	
         		searchString = searchBar.getEditableText().toString();
@@ -775,7 +765,7 @@ public class LocationSearchFragment extends Fragment
 			}
 	    });
 	    
-	    int h = getStatusBarHeight() + topBar.getHeight();
+	    int h = getStatusBarHeight() + topScreenBar.getHeight();
 	    
 	    //popup is being created at too high of a coord
 	    //Creating the PopupWindow

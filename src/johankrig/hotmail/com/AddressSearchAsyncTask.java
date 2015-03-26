@@ -1,10 +1,3 @@
-
-
-
-//add custom infowindow on marker click, add more detail to text directions,
-
-//smooth transitions between all screens
-
 package johankrig.hotmail.com;
 
 import java.io.IOException;
@@ -15,7 +8,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -28,7 +20,6 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -39,7 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
-class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
+class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
+{
 	
     private final String LOG_TAG = "VTA";
     private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
@@ -86,15 +78,15 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	{
 		addressSearchButton.setVisibility(View.GONE);
 		searchProgress.setVisibility(View.VISIBLE);
+		gps.getLocation();
 	}
 	
     @Override
     protected List<Address> doInBackground(String... params)
     {
     	List<Address> addresses = null;
-    	if(gps.getLatitude() != 0 && gps.getLongitude() != 0)
+    	if(gps.getLatitude() != 0 && gps.getLongitude() != 0 && !(searchKeyword.isEmpty()))
     	{
-	    	// 1. create HttpClient
 	        HttpClient httpclient = new DefaultHttpClient();
 	        
 	        HttpGet httpPost = new HttpGet("http://metafora.herokuapp.com/search");
@@ -125,7 +117,6 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 	
 	        
 	        body = jsonObject.toString();
-	        Log.d("pro", ""+System.getProperties());
 	        
 	        httpPost.setHeader("Accept", "application/json");
 	        httpPost.setHeader("body", body);
@@ -151,11 +142,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 			}
 	        httpPost.abort();
 	        
-	        
-	        if(!searchKeyword.isEmpty())
-	        {
-	            addresses = this.getAddresses(searchKeyword, gps);
-	        }
+	        addresses = this.getAddresses(searchKeyword, gps);
     	}
         return addresses;
     }
@@ -215,11 +202,10 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
         //Send request to PLACES API
         try 
         {
-
             StringBuilder endpointURL = new StringBuilder(PLACES_API_BASE + TYPE_TEXT + OUT_JSON);
             endpointURL.append("?key=" + API_KEY);
             endpointURL.append("&location="+gps.getLatitude()+","+gps.getLongitude());
-           // endpointURL.append("&radius="+RADIUS);
+            // endpointURL.append("&radius="+RADIUS);
             endpointURL.append("&radius="+RADIUS);
             endpointURL.append("&query=" + URLEncoder.encode(keyword, "utf8"));
             
@@ -285,14 +271,13 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>{
 
                 resultList.add(addr);
             }
-            
-        } catch (JSONException e) 
+        } 
+        catch (JSONException e) 
         {
             Log.e(LOG_TAG, "Cannot process JSON results", e);
             
             SendErrorAsync log = new SendErrorAsync(e.toString());
-        	log.execute();
-        	
+        	log.execute();	
         }
         return resultList;
     }
