@@ -25,7 +25,7 @@ public class DirectionsFragment extends Fragment
 {
 	ImageButton directionsBackButton;
 	public View rootView;
-    Communicator comm;
+    FragmentCommunicator comm;
 	public ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
 	public String DirectionsJSON;
@@ -59,7 +59,7 @@ public class DirectionsFragment extends Fragment
     	super.onActivityCreated(savedInstanceState);
         
         mainListView = (ListView) rootView.findViewById(R.id.textDirectionsListView);  
-        comm = (Communicator) getActivity();
+        comm = (FragmentCommunicator) getActivity();
 	}
     
     //TODO change routes jsonobject to have variable named Routenumber

@@ -57,18 +57,18 @@ public class LocationSearchFragment extends Fragment
 	private GoogleMap map;
 	private View rootView;
 	private ImageButton addressSearchButton;
-	private Communicator comm;
+	private FragmentCommunicator comm;
 	private String searchString = "";
 	private AddressSearchAsyncTask geoTask;
 	private GPSTracker gps;
 	private Button clearSearchBarButton;
 	private ProgressBar searchProgress;
 	private PopupWindow changeStatusPopUp;
-	private RelativeLayout touch;
+	private RelativeLayout touchLayout;
 	private LinearLayout hiddenSearchBar;
 	private LinearLayout topScreenBar;
+	private Handler runnableHandler;
 
-	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
@@ -80,7 +80,6 @@ public class LocationSearchFragment extends Fragment
 	        if (parent != null)
 	            parent.removeView(rootView);
 	    }
-		
 	    try 
 	    {
 	        rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -108,27 +107,26 @@ public class LocationSearchFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-		comm = (Communicator) getActivity();
-		
-		final Handler myHandler = new Handler();			
+		comm = (FragmentCommunicator) getActivity();
+		runnableHandler = new Handler();			
 		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
 		topScreenBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
-		touch = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
+		touchLayout = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
 		
-		touch.setOnTouchListener(new OnTouchListener()
+		touchLayout.setOnTouchListener(new OnTouchListener()
 		{
-			Vibrator vb = (Vibrator)   getActivity().getSystemService(Context.VIBRATOR_SERVICE);
+			private Vibrator vb = (Vibrator)   getActivity().getSystemService(Context.VIBRATOR_SERVICE);
             
-			MotionEvent event;
-			View v;
-			RelativeLayout purplelayout = new RelativeLayout(getActivity());
-			RelativeLayout greylayout = new RelativeLayout(getActivity());
-			RelativeLayout bluelayout = new RelativeLayout(getActivity());
-			boolean purple = false;
-			boolean blue = false;
-			boolean grey = false;
+			private MotionEvent event;
+			private View v;
+			private RelativeLayout purplelayout = new RelativeLayout(getActivity());
+			private RelativeLayout greylayout = new RelativeLayout(getActivity());
+			private RelativeLayout bluelayout = new RelativeLayout(getActivity());
+			private boolean purple = false;
+			private boolean blue = false;
+			private boolean grey = false;
 			
-			Runnable r = new Runnable()
+			private Runnable r = new Runnable()
 			{
 			    public void run()
 			    {
@@ -157,14 +155,11 @@ public class LocationSearchFragment extends Fragment
 						if(event.getX()*event.getXPrecision() > ow)
 						{
 							//right
-							
 							purpleLayoutX = event.getX()*event.getXPrecision()- 10;
 				            purpleLayoutY = event.getY()*event.getYPrecision() - 230;
 
-
 				            blueLayoutX = event.getX()*event.getXPrecision() - 180;
 				            blueLayoutY = event.getY()*event.getYPrecision() - 180;
-
 
 				            greyLayoutX = event.getX()*event.getXPrecision() - 180;
 				            greyLayoutY = event.getY()*event.getYPrecision();
@@ -176,10 +171,8 @@ public class LocationSearchFragment extends Fragment
 							purpleLayoutX = event.getX()*event.getXPrecision() - 56;
 				            purpleLayoutY = event.getY()*event.getYPrecision() - 250;
 
-
 				            blueLayoutX = event.getX()*event.getXPrecision() + 100;
 				            blueLayoutY = event.getY()*event.getYPrecision() - 200;
-
 
 				            greyLayoutX = event.getX()*event.getXPrecision() + 100;
 				            greyLayoutY = event.getY()*event.getYPrecision() - 44;
@@ -243,9 +236,7 @@ public class LocationSearchFragment extends Fragment
 		            blueLayoutParams.height = 64;
 		            blueLayoutParams.width = 64;
 		            bluelayout.setLayoutParams(blueLayoutParams);
-		            
-		            //ontouch listeners
-		            		            
+		            		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
 		            ((RelativeLayout)v).addView(bluelayout);
 		            ((RelativeLayout)v).addView(greylayout);
@@ -267,10 +258,13 @@ public class LocationSearchFragment extends Fragment
 					this.event = event;	
 					
 					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
+					{
 						hiddenSearchBar.setVisibility(View.GONE);
+						addressSearchButton.setClickable(false);
+					}
 					
-					myHandler.removeCallbacks(r);
-					myHandler.postDelayed(r, TOUCH_WAIT);
+					runnableHandler.removeCallbacks(r);
+					runnableHandler.postDelayed(r, TOUCH_WAIT);
 					
 					mDownX = event.getX();
 		            mDownY = event.getY();
@@ -283,7 +277,7 @@ public class LocationSearchFragment extends Fragment
 			    {
 					if (isOnClick && (Math.abs(mDownX - event.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - event.getY()) > SCROLL_THRESHOLD)) 
 					{
-		                myHandler.removeCallbacks(r);
+		                runnableHandler.removeCallbacks(r);
 		                isOnClick = false;
 		            }
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout) && !purple)
@@ -316,10 +310,8 @@ public class LocationSearchFragment extends Fragment
 
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout))
 					{
-						Projection projection = map.getProjection();
-
-						//Convert Points to on screen location
-						LatLng point = projection.fromScreenLocation(new Point((int)event.getX(), (int)event.getY()));
+						//Convert touch location to LatLng
+						LatLng point = map.getProjection().fromScreenLocation(new Point((int)event.getX(), (int)event.getY()));
 						comm.returnRoutes(point);
 					}
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
@@ -343,7 +335,7 @@ public class LocationSearchFragment extends Fragment
 					((RelativeLayout)v).removeView(bluelayout);
 					
 			    	map.getUiSettings().setScrollGesturesEnabled(true);
-					myHandler.removeCallbacks(r);
+					runnableHandler.removeCallbacks(r);
 					
 					return true;
 				}
@@ -452,14 +444,15 @@ public class LocationSearchFragment extends Fragment
 				
 				searchBar.setText("");
 			}
-			
 		});
 	}
 	
-	public int getStatusBarHeight() {
+	public int getStatusBarHeight() 
+	{
 	    int result = 0;
 	    int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-	    if (resourceId > 0) {
+	    if (resourceId > 0) 
+	    {
 	        result = getResources().getDimensionPixelSize(resourceId);
 	    }
 	    return result;
@@ -472,7 +465,6 @@ public class LocationSearchFragment extends Fragment
 	    // Inflate the popup_layout.xml
 	    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    final View layout = layoutInflater.inflate(R.layout.status_popup_layout, null);
-	    
 	    
 	    TextView food = (TextView) layout.findViewById(R.id.foodTextView);
 	    
@@ -575,13 +567,9 @@ public class LocationSearchFragment extends Fragment
 					subTextView.setTextColor(context.getResources().getColor(R.color.purple));				
 					foodSub.setVisibility(View.INVISIBLE);
 					return true;
-					
-		        }
-			    
-
+		        }			    
 				return false;			    
 			}
-	    	
 	    });
 
 	    
@@ -775,15 +763,15 @@ public class LocationSearchFragment extends Fragment
 	    changeStatusPopUp = new PopupWindow(context);
 	    changeStatusPopUp.setContentView(layout);
 	    changeStatusPopUp.setWidth(LinearLayout.LayoutParams.MATCH_PARENT);
-	    changeStatusPopUp.setHeight(touch.getHeight());
+	    changeStatusPopUp.setHeight(touchLayout.getHeight());
 	    changeStatusPopUp.setFocusable(true);
 	
 	    //Clear the default translucent background
 	    changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
 	    //Displaying the popup at the specified location, + offsets.
 	    int[] p1 = new int[2];
-	    touch.getLocationOnScreen(p1);
-	    changeStatusPopUp.showAtLocation(touch, Gravity.NO_GRAVITY, 0, h);
+	    touchLayout.getLocationOnScreen(p1);
+	    changeStatusPopUp.showAtLocation(touchLayout, Gravity.NO_GRAVITY, 0, h);
 	}
 	
 	
@@ -847,11 +835,9 @@ public class LocationSearchFragment extends Fragment
 	    @Override
 	    protected void onPostExecute(Address address) 
 	    {
-	    	//do stuff with address
 	    	createMarkerFromTouch(address);
 	    }
 	    
-
 	    public Address getAddresses(LatLng latlng) 
 	    {
 	    	Address addressresult = new Address(Locale.US);
@@ -934,9 +920,9 @@ public class LocationSearchFragment extends Fragment
 class InfoWindowClickAdapter implements OnInfoWindowClickListener
 {
 	Context context;
-	Communicator comm;
+	FragmentCommunicator comm;
 	
-	public InfoWindowClickAdapter(Context context, Communicator comm)
+	public InfoWindowClickAdapter(Context context, FragmentCommunicator comm)
 	{
 		this.context = context;
 		this.comm = comm;

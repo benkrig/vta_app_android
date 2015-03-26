@@ -9,7 +9,6 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.GoogleMap;
@@ -23,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GetBusLocationTask extends TimerTask 
 {
 	GoogleMap map;
-	public HashMap<String, Bus> bushHashMap = new HashMap<String, Bus>();
+	public HashMap<String, Vehicle> bushHashMap = new HashMap<String, Vehicle>();
 	//Markers
 	public HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	
@@ -66,7 +65,8 @@ public class GetBusLocationTask extends TimerTask
 		}
 
 	    @Override
-	    protected ArrayList<MarkerOptions> doInBackground(String... params) {
+	    protected ArrayList<MarkerOptions> doInBackground(String... params) 
+	    {
 	    	buslist.clear();
 
 			String result;
@@ -96,7 +96,7 @@ public class GetBusLocationTask extends TimerTask
 	    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.transit_icon));
 	    		buslist.add(markerOptions);
 	    		
-	    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Bus(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on") ));
+	    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on") ));
 	    	
 			}
 
@@ -137,7 +137,7 @@ public class GetBusLocationTask extends TimerTask
 				//HashMap keys are formatted as follows "Bus: 000000", zeros are the vehicle id
 		    	if(markerList.containsKey(busesOptions.get(c).getTitle()))
 		    	{
-			    		animateMarker(markerList.get(busesOptions.get(c).getTitle()), busesOptions.get(c).getPosition(), busesOptions.get(c).isVisible());
+			    		animateMarker(markerList.get(busesOptions.get(c).getTitle()), busesOptions.get(c).getPosition(), false);
 			    }
 			    else
 			    {
@@ -183,7 +183,7 @@ public class GetBusLocationTask extends TimerTask
                 {
                     if (hideMarker) 
                     {
-                        //marker.setVisible(false);
+                        marker.setVisible(false);
                     } 
                     else 
                     {

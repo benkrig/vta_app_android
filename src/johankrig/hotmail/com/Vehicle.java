@@ -1,15 +1,16 @@
 package johankrig.hotmail.com;
 
-//
+//Basic vehicle class
 
-public class Bus {
+public class Vehicle 
+{
 	
 	String vehicleID;
 	String lat;
 	String lng;
 	String timestamp;
 
-	public Bus(String vehicleID, String lat, String lng, String timestamp) 
+	public Vehicle(String vehicleID, String lat, String lng, String timestamp) 
 	{
 		this.vehicleID = vehicleID;
 		this.lat = lat;
@@ -30,7 +31,8 @@ public class Bus {
 	}
 
 
-	public String getLat() {
+	public String getLat() 
+	{
 		return lat;
 	}
 
@@ -74,5 +76,6 @@ public class Bus {
 	public void setTimestamp(String timestamp) 
 	{
 		this.timestamp = timestamp;
-	}*/
+	}
+*/
 }

@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public class PlaceFragment extends Fragment 
 {
-	Communicator comm;
+	FragmentCommunicator comm;
 	private View rootView;
 	private ProgressBar loadProgressBar = null;
 	private Button loadProgressButton = null;
@@ -100,7 +100,7 @@ public class PlaceFragment extends Fragment
 	{
     	super.onActivityCreated(savedInstanceState);
     	
-        comm = (Communicator) getActivity();
+        comm = (FragmentCommunicator) getActivity();
         
         placeReviewListView = (ListView) rootView.findViewById(R.id.placeReviewList);  
 

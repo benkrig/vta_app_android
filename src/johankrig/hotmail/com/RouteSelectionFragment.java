@@ -64,7 +64,7 @@ public class RouteSelectionFragment extends Fragment
     private Button loadProgressButton = null;
     
     //Interface
-    Communicator comm;
+    FragmentCommunicator comm;
 	
 	//Private variables
 	private Button route1Button;
@@ -100,7 +100,7 @@ public class RouteSelectionFragment extends Fragment
         	log.execute();
     	}
 
-        comm = (Communicator) getActivity();
+        comm = (FragmentCommunicator) getActivity();
 
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);

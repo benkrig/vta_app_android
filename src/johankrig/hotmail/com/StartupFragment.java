@@ -13,7 +13,7 @@ public class StartupFragment extends Fragment
 {
 	private View rootView;
 	Button letsgo;
-	Communicator comm;
+	FragmentCommunicator comm;
 	GPSTracker gps;
 	
 
@@ -45,7 +45,7 @@ public class StartupFragment extends Fragment
 	    	gps.showSettingsAlert();
 	    }
 	    
-	    comm = (Communicator) getActivity();
+	    comm = (FragmentCommunicator) getActivity();
 	    
 	    letsgo = (Button) rootView.findViewById(R.id.letsgoButton); 
 	    letsgo.setOnClickListener(new OnClickListener()

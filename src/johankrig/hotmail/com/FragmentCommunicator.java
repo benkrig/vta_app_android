@@ -2,7 +2,7 @@ package johankrig.hotmail.com;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public interface Communicator 
+public interface FragmentCommunicator 
 {
 	public void goToLocationSearch();
 	

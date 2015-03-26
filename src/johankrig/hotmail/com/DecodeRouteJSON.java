@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -39,25 +37,22 @@ class ResponseObject
 	{
 		return markers;
 	}
-}	
+}
 
 public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject> 
 {
-	GoogleMap map;
-
+	private GoogleMap map;
 	private String json;
 	private int route;
 	ResponseObject response = null;
-	Communicator comm;
+	FragmentCommunicator comm;
 
 	private ProgressBar bar;
 
 	private Button button;
 
-
-	public DecodeRouteJSON(ProgressBar bar, Button button, Communicator comm, GoogleMap map, String json, int route)
+	public DecodeRouteJSON(ProgressBar bar, Button button, FragmentCommunicator comm, GoogleMap map, String json, int route)
 	{
-		Log.d("eee", json.length()+"");
 		this.map = map;
 		this.json = json;
 		this.route = route;
@@ -72,7 +67,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		super.onCancelled();
 		button.setVisibility(View.VISIBLE);
 		bar.setVisibility(View.GONE);
-		
 	}
 		
 	@Override
@@ -86,9 +80,7 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 	
 	@Override
 	protected ResponseObject doInBackground(Void... params) 
-	{
-		Log.d("ee", json);
-	        
+	{	        
 		return drawPath(json, route);
 	}
 	
@@ -112,23 +104,20 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
         	map.addMarker(temp);
         }
         
-
 		button.setVisibility(View.VISIBLE);
 		bar.setVisibility(View.GONE);
 	}
-	
-	    
-	    private List<LatLng> decodePoly(String encoded) 
-		{
-		    List<LatLng> poly = new ArrayList<LatLng>();
-		    int index = 0, len = encoded.length();
-		    int lat = 0, lng = 0;
+	private List<LatLng> decodePoly(String encoded) 
+	{
+		List<LatLng> poly = new ArrayList<LatLng>();
+		int index = 0, len = encoded.length();
+		int lat = 0, lng = 0;
 
-		    while (index < len) 
-		    {
-		        int b, shift = 0, result = 0;
-		        do 
-		        {
+		while (index < len) 
+		{
+			int b, shift = 0, result = 0;
+			do 
+		  	{
 		            b = encoded.charAt(index++) - 63;
 		            result |= (b & 0x1f) << shift;
 		            shift += 5;
