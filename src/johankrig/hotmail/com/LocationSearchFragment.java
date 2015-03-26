@@ -335,6 +335,7 @@ public class LocationSearchFragment extends Fragment
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
 						hiddenSearchBar.setVisibility(View.VISIBLE);
+		            	addressSearchButton.setClickable(true);
 					}
 					
 					((RelativeLayout)v).removeView(purplelayout);
@@ -417,7 +418,9 @@ public class LocationSearchFragment extends Fragment
             	//hide keyboard and search bar
             	//searchBar.dismissDropDown();
             	hideKeyBoard();
-            	
+            	hiddenSearchBar.setVisibility(View.GONE);
+            	addressSearchButton.setClickable(false);
+		
         		searchString = searchBar.getEditableText().toString();
                 
                 //AsyncTask can only execute ONCE
