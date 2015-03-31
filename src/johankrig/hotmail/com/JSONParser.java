@@ -128,7 +128,6 @@ public class JSONParser
     	String json = "";
     	try
     	{
-
     		URL url = new URL(urlString);
 		
     		URLConnection urlConnection = url.openConnection();

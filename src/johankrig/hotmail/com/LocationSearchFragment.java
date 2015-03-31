@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import johankrig.hotmail.com.R;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
@@ -30,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.InflateException;
@@ -91,8 +93,9 @@ public class LocationSearchFragment extends Fragment
 	    
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true);
         map.getUiSettings().setMyLocationButtonEnabled(true);
-
+        
         return rootView;
     }
 	
@@ -101,6 +104,20 @@ public class LocationSearchFragment extends Fragment
 	{
 	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 	    imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
+	}
+	
+	public static int convertPixelsToDp(float px, Context context){
+	    Resources resources = context.getResources();
+	    DisplayMetrics metrics = resources.getDisplayMetrics();
+	    int dp = (int) (px / (metrics.densityDpi / 160f));
+	    return dp;
+	}
+	
+	public int dpToPx(int dp) 
+	{
+	    DisplayMetrics displayMetrics = getActivity().getResources().getDisplayMetrics();
+	    int px = Math.round(dp * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+	    return px;
 	}
 	
 	@Override
@@ -134,9 +151,9 @@ public class LocationSearchFragment extends Fragment
 		            vb.vibrate(50);
 			    	map.getUiSettings().setScrollGesturesEnabled(false);
 			    	
-					purplelayout.setBackgroundResource(R.drawable.purplebg_ic_action_place);
-					greylayout.setBackgroundResource(R.drawable.black_ic_action_search);
-					bluelayout.setBackgroundResource(R.drawable.blue_ic_action_locate);
+					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
+					greylayout.setBackgroundResource(R.drawable.touchsearchbackground);
+					bluelayout.setBackgroundResource(R.drawable.touchnearbybackground);
 					
 					int oh = ((RelativeLayout)v).getHeight() / 2;
 					int ow = ((RelativeLayout)v).getWidth() / 2;
@@ -155,27 +172,27 @@ public class LocationSearchFragment extends Fragment
 						if(event.getX()*event.getXPrecision() > ow)
 						{
 							//right
-							purpleLayoutX = event.getX()*event.getXPrecision()- 10;
-				            purpleLayoutY = event.getY()*event.getYPrecision() - 230;
+							purpleLayoutX = event.getX()*event.getXPrecision() - dpToPx(30);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(175);
 
-				            blueLayoutX = event.getX()*event.getXPrecision() - 180;
-				            blueLayoutY = event.getY()*event.getYPrecision() - 180;
+				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(90);
+				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(130);
 
-				            greyLayoutX = event.getX()*event.getXPrecision() - 180;
-				            greyLayoutY = event.getY()*event.getYPrecision();
+				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(110);
+				            greyLayoutY = event.getY()*event.getYPrecision() - dpToPx(50);
 						}
 						else
 						{
 							//left
 							
-							purpleLayoutX = event.getX()*event.getXPrecision() - 56;
-				            purpleLayoutY = event.getY()*event.getYPrecision() - 250;
+							purpleLayoutX = event.getX()*event.getXPrecision() - dpToPx(30);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(175);
 
-				            blueLayoutX = event.getX()*event.getXPrecision() + 100;
-				            blueLayoutY = event.getY()*event.getYPrecision() - 200;
+				            blueLayoutX = event.getX()*event.getXPrecision() + dpToPx(40);
+				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(130);
 
-				            greyLayoutX = event.getX()*event.getXPrecision() + 100;
-				            greyLayoutY = event.getY()*event.getYPrecision() - 44;
+				            greyLayoutX = event.getX()*event.getXPrecision() + dpToPx(47);
+				            greyLayoutY = event.getY()*event.getYPrecision() - dpToPx(50);
 						}
 					}
 					else
@@ -187,54 +204,55 @@ public class LocationSearchFragment extends Fragment
 							//right
 							
 							//p
-							purpleLayoutX = event.getX()*event.getXPrecision() - 190;
-				            purpleLayoutY = event.getY()*event.getYPrecision() - 144;
+							purpleLayoutX = event.getX()*event.getXPrecision() - dpToPx(100);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(110);
 
 				            //b
-				            blueLayoutX = event.getX()*event.getXPrecision() - 190;
-				            blueLayoutY = event.getY()*event.getYPrecision();
+				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(80);
+				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(35);
 
 				            //g
-				            greyLayoutX = event.getX()*event.getXPrecision() - 44;
-				            greyLayoutY = event.getY()*event.getYPrecision() + 64;
+				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(15);
+				            greyLayoutY = event.getY()*event.getYPrecision() + dpToPx(15);
 						}
 						else
 						{
 							//left
 							
 							//p
-							purpleLayoutX = event.getX()*event.getXPrecision() + 90;
-				            purpleLayoutY = event.getY()*event.getYPrecision() - 144;
+							purpleLayoutX = event.getX()*event.getXPrecision() + dpToPx(53);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(110);
 
 				            //b
-				            blueLayoutX = event.getX()*event.getXPrecision() + 90;
-				            blueLayoutY = event.getY()*event.getYPrecision();
+				            blueLayoutX = event.getX()*event.getXPrecision() + dpToPx(36);
+				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(35);
 
 				            //g
-				            greyLayoutX = event.getX()*event.getXPrecision() - 44;
-				            greyLayoutY = event.getY()*event.getYPrecision() + 44;
+				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(33);
+				            greyLayoutY = event.getY()*event.getYPrecision() + dpToPx(15);
 						}
 					}
 					
 		            RelativeLayout.LayoutParams greyLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            greyLayoutParams.leftMargin = (int) greyLayoutX;
 		            greyLayoutParams.topMargin = (int) greyLayoutY;
-		            greyLayoutParams.height = 64;
-		            greyLayoutParams.width = 64;
+		            greyLayoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+		            greyLayoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
 		            greylayout.setLayoutParams(greyLayoutParams);
+		            
 		            
 		            RelativeLayout.LayoutParams purpleLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            purpleLayoutParams.leftMargin = (int) purpleLayoutX;
 		            purpleLayoutParams.topMargin = (int) purpleLayoutY;
-		            purpleLayoutParams.height = 64;
-		            purpleLayoutParams.width = 64;
+		            purpleLayoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+		            purpleLayoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
 		            purplelayout.setLayoutParams(purpleLayoutParams);
 		            
 		            RelativeLayout.LayoutParams blueLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            blueLayoutParams.leftMargin = (int) blueLayoutX;
 		            blueLayoutParams.topMargin = (int) blueLayoutY;
-		            blueLayoutParams.height = 64;
-		            blueLayoutParams.width = 64;
+		            blueLayoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
+		            blueLayoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
 		            bluelayout.setLayoutParams(blueLayoutParams);
 		            		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
@@ -242,6 +260,8 @@ public class LocationSearchFragment extends Fragment
 		            ((RelativeLayout)v).addView(greylayout);
 			    }
 			};
+			
+			
 
 			private int TOUCH_WAIT = 250;
 			private float mDownX;
@@ -800,8 +820,9 @@ public class LocationSearchFragment extends Fragment
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
 		markerOptions.title("Let's go here!");
 		markerOptions.snippet(address.getAddressLine(0));
-		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.white_ic_action_place));
    		markerOptions.flat(true);
+   		
 		map.addMarker(markerOptions);
 	}
 	

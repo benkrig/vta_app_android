@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,12 +28,14 @@ public class GetBusLocationTask extends TimerTask
 	public HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	
 	public Boolean firstRun = true;
-
+	JSONParser j;
 	
 	public GetBusLocationTask(GoogleMap map)
 	{
 		this.map = map;
 		 firstRun = true;
+		j = new JSONParser();
+
 	}
 
 	public void run() 
@@ -59,7 +62,9 @@ public class GetBusLocationTask extends TimerTask
 		JSONObject json = null;
 		JSONArray buses = null;
 		JSONObject location = null;
-		ArrayList<MarkerOptions> buslist = new ArrayList<MarkerOptions>();		
+		ArrayList<MarkerOptions> buslist = new ArrayList<MarkerOptions>();	
+		String[] vehicleIdArray = null;
+
 		public DrawBus()
 		{
 		}
@@ -70,35 +75,36 @@ public class GetBusLocationTask extends TimerTask
 	    	buslist.clear();
 
 			String result;
-			JSONParser j = new JSONParser();
+			
 			result = j.getVehicleJson();
 			try
 			{
-			json = new JSONObject(result);
-			data = json.getJSONObject("data");
+				json = new JSONObject(result);
+				data = json.getJSONObject("data");
+	
+				buses = data.getJSONArray("255");
+				vehicleIdArray = new String[buses.length()];
+				
+				for(int c = 0; c < buses.length(); c ++)
+				{
+					//buses.getJSONObject(c);
+					//returns the current bus object in the loop
+					
 
-			buses = data.getJSONArray("255");
-			
-			for(int c = 0; c < buses.length(); c ++)
-			{
-				//buses.getJSONObject(c);
-				//returns the current bus object in the loop
-				
-				JSONObject location = buses.getJSONObject(c).getJSONObject("location");
-				LatLng position = new LatLng(Double.parseDouble(location.getString("lat")), Double.parseDouble(location.getString("lng")));
-				
-				//Create Marker Options for bus location
-				markerOptions = new MarkerOptions();
-	    		markerOptions.position(position);
-	    		//markerOptions.title("Lightrail" + buses.getJSONObject(c).getString("vehicle_id"));
-	    		markerOptions.title("Lightrail");
-	    		markerOptions.snippet(""+buses.getJSONObject(c).getDouble("speed"));
-	    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.transit_icon));
-	    		buslist.add(markerOptions);
-	    		
-	    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on") ));
-	    	
-			}
+					JSONObject location = buses.getJSONObject(c).getJSONObject("location");
+					LatLng position = new LatLng(Double.parseDouble(location.getString("lat")), Double.parseDouble(location.getString("lng")));
+					
+					//Create Marker Options for bus location
+					markerOptions = new MarkerOptions();
+		    		markerOptions.position(position);
+		    		markerOptions.title("Lightrail " +buses.getJSONObject(c).getString("call_name"));
+		    		//markerOptions.title("Lightrail");
+		    		markerOptions.snippet("Speed: " + (int) buses.getJSONObject(c).getDouble("speed") + " mph");
+		    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.transit_icon));
+		    		buslist.add(markerOptions);
+		    		
+		    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));
+				}
 
 			}
 			catch(Exception e)
@@ -111,37 +117,38 @@ public class GetBusLocationTask extends TimerTask
 	    }
 
 	    @Override
-	    protected void onPostExecute(ArrayList<MarkerOptions> busesOptions) 
+	    protected void onPostExecute(ArrayList<MarkerOptions> buslist) 
 	    {
-	    	update(busesOptions);
+	    	update(buslist, bushHashMap);
 	    }
 
 	}
 
-	public void update(ArrayList<MarkerOptions> busesOptions) 
+	/**
+	 * @param busesOptions
+	 * @param bushHashMap2
+	 */
+	public void update(ArrayList<MarkerOptions> busesOptions, HashMap<String, Vehicle> bushHashMap2) 
 	{
 		if(markerList.isEmpty())
 		{
-			for(int c = 0; c < busesOptions.size(); c ++)
-	        {
-				MarkerOptions current = busesOptions.get(c);
-				this.markerList.put(current.getTitle(), map.addMarker(current));
-	        }
+			for (Vehicle value : bushHashMap2.values()) 
+			{
+				this.markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
+			}
 		}
 		else
-		{
-			for(int c = 0; c < busesOptions.size(); c ++)
+		{			
+			for (Vehicle value : bushHashMap2.values()) 
 			{
-				//test current.getTitle() against every current marker
-				//current markers on map are stored in markerList, a HashMap<String, Marker> markerList()
-				//HashMap keys are formatted as follows "Bus: 000000", zeros are the vehicle id
-		    	if(markerList.containsKey(busesOptions.get(c).getTitle()))
+				if(markerList.containsKey(value.getVehicleID()))
 		    	{
-			    		animateMarker(markerList.get(busesOptions.get(c).getTitle()), busesOptions.get(c).getPosition(), false);
+					markerList.get(value.getVehicleID()).setSnippet(value.getMarkerOptions().getSnippet());
+			   		animateMarker(markerList.get(value.getVehicleID()), value.getMarkerOptions().getPosition(), false);
 			    }
 			    else
 			    {
-			    	markerList.put(busesOptions.get(c).getTitle(), map.addMarker(busesOptions.get(c)));
+			    	markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
 			    }
 			}
         }  
@@ -192,7 +199,5 @@ public class GetBusLocationTask extends TimerTask
                 }
             }
         });
-}
-	
-
+    }
 }

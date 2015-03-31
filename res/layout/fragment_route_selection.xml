@@ -138,6 +138,7 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_action_new" />
 
+            
         </RelativeLayout>
 
     </LinearLayout>

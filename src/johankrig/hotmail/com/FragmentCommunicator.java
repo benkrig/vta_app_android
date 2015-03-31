@@ -19,5 +19,7 @@ public interface FragmentCommunicator
 	public void gotoRouteSelection();
 
 	public void goToPlaceDetails();
+
+	public void goToStepLocation(LatLng latLng);
 	
 }

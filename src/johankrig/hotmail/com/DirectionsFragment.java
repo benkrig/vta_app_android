@@ -4,18 +4,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import johankrig.hotmail.com.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,7 +32,7 @@ public class DirectionsFragment extends Fragment
 {
 	ImageButton directionsBackButton;
 	public View rootView;
-    FragmentCommunicator comm;
+    public FragmentCommunicator comm;
 	public ListView mainListView;  
 	MobileArrayAdapter directionsAdapter;
 	public String DirectionsJSON;
@@ -87,7 +94,8 @@ public class DirectionsFragment extends Fragment
 				String departTime = departure_time.getString("text");
 
 				TextView header1 = (TextView) headerView.findViewById(R.id.departTextView);
-				header1.setText("Depart at: " + departTime);				
+				
+				header1.setText(Html.fromHtml("Depart at: " + "<b><font color=#790ebd>" + departTime + "</font></b>"));				
 			}
 			if(leg.has("arrival_time"))
 			{				
@@ -95,7 +103,9 @@ public class DirectionsFragment extends Fragment
 				String arrivalTime = arrival_time.getString("text");
 
 				TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
-		    	header2.setText("Arrive at: " + arrivalTime);
+				header2.setText(Html.fromHtml("Arrive at: " + "<b><font color=#790ebd>" + arrivalTime + "</font></b>"));				
+
+				//header2.setText("Arrive at: " + arrivalTime);
 			}
 			//end header veiw
 
@@ -106,6 +116,7 @@ public class DirectionsFragment extends Fragment
 			String[] durations = new String[steps.length()];
 			String[] transitArrivals = new String[steps.length()];
 			String[] vehicleTypes = new String[steps.length()];
+			LatLng[] locations = new LatLng[steps.length()];
 	           
 
 	           
@@ -117,9 +128,16 @@ public class DirectionsFragment extends Fragment
 				String html_instructions = step.getString("html_instructions");
 				String travel_mode = step.getString("travel_mode");
 	        	   
+				JSONObject startLocation = step.getJSONObject("start_location");
+				locations[index] = new LatLng(startLocation.getDouble("lat"), startLocation.getDouble("lng"));
+				
+				
 				JSONObject distance = step.getJSONObject("distance");
+				
 				String distanceString = distance.getString("text");
-	        	   
+				String[] distanceparts = distanceString.split("\\ ");
+				String htmlDistanceString = "<b>" + distanceparts[0] +"</b>" + "<small><font color=#212121>" + distanceparts[1] + "</font></small>";
+				
 				JSONObject duration = step.getJSONObject("duration");
 				int durationSec = duration.getInt("value");
 				String durationString = duration.getString("text");
@@ -135,16 +153,16 @@ public class DirectionsFragment extends Fragment
 					JSONObject vehicle = line.getJSONObject("vehicle");
 					vehicleTypes[index] = vehicle.getString("name");
 				}
-				distances[index] = distanceString;
+				
+				distances[index] = htmlDistanceString;
 				durations[index] = durationString;
 				instructions[index] = html_instructions;
 				travel_modes[index] = travel_mode;
 			}
 			if(directionsAdapter == null)
 			{
-				directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes);
+				directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations);
 			}
-			
 	           
 	    	//set footer view
 	    	TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
@@ -201,10 +219,11 @@ public class DirectionsFragment extends Fragment
 	    	//end footer
 	    	if(mainListView.getAdapter() == null)
 	    	{
-	    		mainListView.setAdapter(directionsAdapter);	 
 
 	    		mainListView.addHeaderView(headerView);
 	    		mainListView.addFooterView(footerView);
+	    		
+	    		mainListView.setAdapter(directionsAdapter);	 
 	    	}
 	    	else
 	    	{
@@ -214,7 +233,7 @@ public class DirectionsFragment extends Fragment
 	    		mainListView.addHeaderView(headerView);
 	    		mainListView.addFooterView(footerView);
 		           
-	    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes));
+	    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations));
 	    	}
  	   	}
 		catch (JSONException e) 
@@ -232,17 +251,21 @@ public class DirectionsFragment extends Fragment
  class MobileArrayAdapter extends ArrayAdapter<String> 
  {
 	private final Context context;
+	private final FragmentCommunicator comm;
 	private final String[] values;
 	String[] modes;
 	private String[] distances;
 	private String[] durations;
 	private String[] transitArrivals;
 	private String[] vehicleTypes;
+	private LatLng[] locations;
  
-	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations, String[] transitArrivals, String[] vehicleTypes) 
+	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations, String[] transitArrivals, String[] vehicleTypes, LatLng[] location) 
 	{
 		super(context, R.layout.directionsrow, values);
 		this.context = context;
+		this.comm = (FragmentCommunicator) context;
+		this.locations = location;
 		this.values = values;
 		this.modes = modes;
 		this.distances = distances;
@@ -257,14 +280,66 @@ public class DirectionsFragment extends Fragment
 		LayoutInflater inflater = (LayoutInflater) context
 			.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		
-		View rowView = inflater.inflate(R.layout.directionsrow, parent, false);
-		
+		final View rowView = inflater.inflate(R.layout.directionsrow, parent, false);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.vehicleTypeImage);
 
 		TextView directionsText = (TextView) rowView.findViewById(R.id.directionsText);
 		TextView directionsDetails = (TextView) rowView.findViewById(R.id.directionsDetails);
 		TextView directionsRowTimeText = (TextView) rowView.findViewById(R.id.directionsRowTimeTextView);
+		LinearLayout touchLayout = (LinearLayout) rowView.findViewById(R.id.clickableDirectionLayout);
+		
+		final int p = position;
+		
+		touchLayout.setOnTouchListener( new OnTouchListener()
+	    {
+			public boolean isPointInsideView(float x, float y, View view)
+			{
+			    int location[] = new int[2];
+			    view.getLocationOnScreen(location);
+			    int viewX = location[0];
+			    int viewY = location[1];
 
+			    //point is inside view bounds
+			    if(( x > viewX && x < (viewX + view.getWidth())) &&
+			            ( y > viewY && y < (viewY + view.getHeight())))
+			    {
+			        return true;
+			    }
+			    else 
+			    {
+			        return false;
+			    }
+			}
+			
+	        @Override
+	        public boolean onTouch(View v, MotionEvent event) 
+	        {
+	            if(event.getAction() == MotionEvent.ACTION_DOWN)
+	            {
+	            	rowView.setBackgroundColor(Color.LTGRAY);
+	            	return true;
+	            }
+	            else if(event.getAction() == MotionEvent.ACTION_UP)
+	            {
+	            	if(isPointInsideView(event.getRawX(), event.getRawY(), v))
+		        	{
+		        		comm.goToStepLocation(locations[p]);
+		        	}	
+	            	
+	            	rowView.setBackgroundColor(Color.WHITE); 
+	            	return true;
+
+	            }
+	            else if(event.getAction() == MotionEvent.ACTION_CANCEL)
+	            {
+	            	rowView.setBackgroundColor(Color.WHITE); 
+	            	return true;
+	            }
+	            
+	            return false;
+	        }
+	    });
+		
 		
 		if(position+1 < transitArrivals.length)
 		{
@@ -276,9 +351,11 @@ public class DirectionsFragment extends Fragment
 			}
 		}
 		
-		directionsDetails.setText(distances[position]);
-		directionsRowTimeText.setText(durations[position]);
+		directionsDetails.setText(Html.fromHtml(distances[position]));
 		
+		String[] parts = durations[position].split("\\ ");
+		directionsRowTimeText.setText(Html.fromHtml("<b>" + parts[0] +"</b>" + "<small><font color=#212121>" + parts[1] + "</font></small>"));
+	
 		directionsText.setText(values[position]);
  
 		// Change icon based on name
@@ -286,7 +363,14 @@ public class DirectionsFragment extends Fragment
  
 		if (imageType.equals("TRANSIT")) 
 		{
-			imageView.setImageResource(R.drawable.bus);
+			if(vehicleTypes[position].equals("Light rail"))
+			{
+				imageView.setImageResource(R.drawable.smalllightrail);
+			}
+			else if(vehicleTypes[position].equals("Bus"))
+			{
+				imageView.setImageResource(R.drawable.bus);
+			}
 		} 
 		else if (imageType.equals("WALKING")) 
 		{

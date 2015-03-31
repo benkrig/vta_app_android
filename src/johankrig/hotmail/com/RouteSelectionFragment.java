@@ -38,6 +38,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -50,7 +51,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class RouteSelectionFragment extends Fragment
 {
@@ -63,6 +63,10 @@ public class RouteSelectionFragment extends Fragment
     public ProgressBar loadProgress = null;
     private Button loadProgressButton = null;
     
+    
+    DisplayMetrics displayMetrics;
+    int px;
+	 
     //Interface
     FragmentCommunicator comm;
 	
@@ -102,6 +106,9 @@ public class RouteSelectionFragment extends Fragment
 
         comm = (FragmentCommunicator) getActivity();
 
+        displayMetrics = getActivity().getResources().getDisplayMetrics();
+        px = Math.round(8 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+        
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -144,13 +151,14 @@ public class RouteSelectionFragment extends Fragment
 		        dialog.setTitle("Departure Time");
 		        dialog.setCancelable(true);
 		        dialog.setCanceledOnTouchOutside(true);
+		        
 		        dialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", this);
 		        return dialog;
 		    }
 		
 		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		    {
-		    	if(callCount==1)
+		    	if(callCount==0)
 		    	{
 			    	String am_pm = "";
 	
@@ -180,6 +188,12 @@ public class RouteSelectionFragment extends Fragment
 							drawRoute.cancel(true);
 						}
 						
+
+						route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
+			        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+			        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
+			        	
+						
 						drawRoute = new DirectionsAsyncTask();
 						drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 				    	drawRoute.setTime(datetime.getTimeInMillis()/1000);
@@ -192,7 +206,7 @@ public class RouteSelectionFragment extends Fragment
 		                	myTask.cancel();
 		                }
 		            	myTask = new GetBusLocationTask(map);
-		                myTimer.schedule(myTask, 3000, 1000);
+		                myTimer.schedule(myTask, 0, 1000);
 					}
 		    	}
 		    	callCount++;
@@ -250,7 +264,7 @@ public class RouteSelectionFragment extends Fragment
                 	{
                 		draw.cancel(true);
                 	}
-                	draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
+                	draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
                 	draw.execute();
                 	  	
 		            Timer myTimer = new Timer();
@@ -259,7 +273,7 @@ public class RouteSelectionFragment extends Fragment
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000);
+	                myTimer.schedule(myTask, 0, 1000);
             	}
                 
                 
@@ -285,7 +299,7 @@ public class RouteSelectionFragment extends Fragment
                 		draw.cancel(true);
                 	}
                 	
-                	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
+                	DecodeRouteJSON draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
                 	draw.execute();
                 	  	
 		            Timer myTimer = new Timer();
@@ -294,7 +308,7 @@ public class RouteSelectionFragment extends Fragment
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000);
+	                myTimer.schedule(myTask, 0, 1000);
             	}
             }
         });
@@ -317,7 +331,7 @@ public class RouteSelectionFragment extends Fragment
                 		draw.cancel(true);
                 	}
                 	
-                	DecodeRouteJSON draw = new DecodeRouteJSON(loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
+                	DecodeRouteJSON draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
                 	draw.execute();
                 	  	
                 	Timer myTimer = new Timer();
@@ -326,7 +340,7 @@ public class RouteSelectionFragment extends Fragment
 	                	myTask.cancel();
 	                }
 	            	myTask = new GetBusLocationTask(map);
-	                myTimer.schedule(myTask, 3000, 1000);
+	                myTimer.schedule(myTask, 0, 1000);
             	}
             }
         });
@@ -483,9 +497,10 @@ public class RouteSelectionFragment extends Fragment
 	        			LatLng src = list.get(x);
 		       		   	LatLng dest = list.get(x+1);
 		       		   	
-		       		   	polyies.add(new PolylineOptions()
+		       		   	
+		       		 polyies.add(new PolylineOptions()
 		       		   		.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-			                .width(9)
+			                .width(px)
 			                .color(Color.argb(190, 121, 14, 189)).geodesic(true));
 	    	        }
 	        		
@@ -547,9 +562,10 @@ public class RouteSelectionFragment extends Fragment
 	        			LatLng src = list.get(x);
 	        			LatLng dest = list.get(x+1);
 	        			
+	        			   
 	        			polyies.add(new PolylineOptions()
         				.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-        				.width(9)
+        				.width(px)
         				.color(Color.argb(180, 0, 100, 0)).geodesic(true));		
 	        		}
 	        	}		        
@@ -601,7 +617,7 @@ public class RouteSelectionFragment extends Fragment
     		markerOptions.position(eloc);
     		markerOptions.flat(true);
     		markerOptions.title("Destination");
-    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
+    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place));
     		markerOptions.flat(true);
     		map.addMarker(markerOptions);	     
     		
@@ -743,7 +759,7 @@ public class RouteSelectionFragment extends Fragment
 	            	myTask.cancel();
 	            }
 	        	myTask = new GetBusLocationTask(map);
-	            myTimer.schedule(myTask, 3000, 1000);
+	            myTimer.schedule(myTask, 0, 1000);
 			}
 		}
 		catch(Exception e)
@@ -752,6 +768,13 @@ public class RouteSelectionFragment extends Fragment
         	log.execute();
 		}
 
+	}
+
+
+
+	public void goToLocation(LatLng location) 
+	{
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 	}
 	
 }

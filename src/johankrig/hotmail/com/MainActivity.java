@@ -147,6 +147,14 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 
 	}
 	
+	@Override
+	public void goToStepLocation(LatLng location)
+	{
+		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
+		rtFrag.goToLocation(location);
+		this.gotoRouteSelection();
+	}
+	
 	@Override 
 	public void gotoRouteSelection()
 	{

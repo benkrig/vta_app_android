@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,8 @@ class ResponseObject
 {
 	List<PolylineOptions> polyies;
 	List<MarkerOptions> markers;
+	
+	
 	
 	public ResponseObject(List<PolylineOptions> polyies, List<MarkerOptions> markers)
 	{
@@ -45,14 +48,16 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 	private String json;
 	private int route;
 	ResponseObject response = null;
-	FragmentCommunicator comm;
-
+	int lineWidth;
+	
 	private ProgressBar bar;
 
 	private Button button;
+	private FragmentCommunicator comm;
 
-	public DecodeRouteJSON(ProgressBar bar, Button button, FragmentCommunicator comm, GoogleMap map, String json, int route)
+	public DecodeRouteJSON(int px, ProgressBar bar, Button button, FragmentCommunicator comm, GoogleMap map, String json, int route)
 	{
+		this.lineWidth = px;
 		this.map = map;
 		this.json = json;
 		this.route = route;
@@ -90,19 +95,22 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		super.onPostExecute(result);  
 		map.clear();
 		
-		List<MarkerOptions> markers = result.getmarkers();
-		Log.d("aaa", markers.get(0).getPosition()+"");
-
-		List<PolylineOptions> polyies = result.getpolyies();
-
-		for (PolylineOptions temp : polyies) 
-        {
-        	map.addPolyline(temp);
-        }
-        for (MarkerOptions temp : markers)
-        {
-        	map.addMarker(temp);
-        }
+		if(result != null)
+		{
+			List<MarkerOptions> markers = result.getmarkers();
+			Log.d("aaa", markers.get(0).getPosition()+"");
+	
+			List<PolylineOptions> polyies = result.getpolyies();
+	
+			for (PolylineOptions temp : polyies) 
+	        {
+	        	map.addPolyline(temp);
+	        }
+	        for (MarkerOptions temp : markers)
+	        {
+	        	map.addMarker(temp);
+	        }
+		}
         
 		button.setVisibility(View.VISIBLE);
 		bar.setVisibility(View.GONE);
@@ -149,7 +157,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 			List<PolylineOptions> polyies = new ArrayList<PolylineOptions>();
 			List<MarkerOptions> markers = new ArrayList<MarkerOptions>();
 			
-			
 		    try 
 		    {
 		    	//Tranform the String response RESULT into a JSON object
@@ -158,7 +165,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		        JSONArray routeArray = json.getJSONArray("routes");
 		        Log.d("Routes: ", ""+routeArray.length());
 
-		           
 		        //Select which route to draw
 		        //Throws a JSONException if no route is found at index routeNumber
 		        JSONObject routes = routeArray.getJSONObject(routeNumber);
@@ -185,14 +191,14 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 			       		   	
 			       		   	polyies.add(new PolylineOptions()
 			       		   		.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-				                .width(9)
+				                .width(lineWidth)
 				                .color(Color.argb(190, 121, 14, 189)).geodesic(true));
 		    	        }
 		        		
 		        		if(step.has("transit_details"))
 			        	{
 			        		JSONObject transit_details = step.getJSONObject("transit_details");
-				           
+			        		
 			        		JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
 			        		JSONObject arrival_location = arrival_stop.getJSONObject("location");
 
@@ -235,13 +241,11 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		        			
 		        			polyies.add(new PolylineOptions()
 	        				.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-	        				.width(9)
+	        				.width(lineWidth)
 	        				.color(Color.argb(150, 0, 100, 0)).geodesic(true));
 		        			
 		        		}
-		        	}
-		        	
-		        			        
+		        	}		        
 		        }
 		    } 
 		    catch (JSONException e) 
