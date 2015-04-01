@@ -68,7 +68,8 @@
                 android:layout_height="match_parent" />
 
             <LinearLayout
-                android:id="@+id/linearLayout2"
+                android:id="@+id/routeBottomBar"
+                android:animateLayoutChanges="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

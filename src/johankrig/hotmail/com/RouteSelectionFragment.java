@@ -29,6 +29,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -50,6 +53,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -86,6 +90,7 @@ public class RouteSelectionFragment extends Fragment
 	private TextView routeZoomOutButton;
 	private ImageView myLocationButton;
 	private GPSTracker gps;
+	private LinearLayout bottomBar;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -107,7 +112,8 @@ public class RouteSelectionFragment extends Fragment
     		SendErrorAsync log = new SendErrorAsync(e.toString());
         	log.execute();
     	}
-
+    	
+    	bottomBar = (LinearLayout) rootView.findViewById(R.id.routeBottomBar);
     	gps = new GPSTracker(getActivity());
         comm = (FragmentCommunicator) getActivity();
 
@@ -269,7 +275,7 @@ public class RouteSelectionFragment extends Fragment
                 	{
                 		draw.cancel(true);
                 	}
-                	draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
+                	draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
                 	draw.execute();
                 	  	
 		            Timer myTimer = new Timer();
@@ -304,7 +310,7 @@ public class RouteSelectionFragment extends Fragment
                 		draw.cancel(true);
                 	}
                 	
-                	DecodeRouteJSON draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
+                	DecodeRouteJSON draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
                 	draw.execute();
                 	  	
 		            Timer myTimer = new Timer();
@@ -336,7 +342,7 @@ public class RouteSelectionFragment extends Fragment
                 		draw.cancel(true);
                 	}
                 	
-                	DecodeRouteJSON draw = new DecodeRouteJSON(px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
+                	DecodeRouteJSON draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
                 	draw.execute();
                 	  	
                 	Timer myTimer = new Timer();
@@ -626,6 +632,8 @@ public class RouteSelectionFragment extends Fragment
 	    @Override
 	    protected void onPreExecute() 
 	    {
+	    	hideBottomBar();
+	    	
 	        super.onPreExecute();
 	        loadProgressButton.setVisibility(View.GONE);
 	        loadProgress.setVisibility(View.VISIBLE);
@@ -640,6 +648,7 @@ public class RouteSelectionFragment extends Fragment
 	        directionsurl = "https://maps.googleapis.com/maps/api/directions/json?origin=" + uloc.latitude + "," + uloc.longitude + "&destination=" + eloc.latitude + "," + eloc.longitude + "&sensor=true" + "&departure_time=" + time + "&mode=transit&alternatives=true" + "&key=" + DAPIKEY;
 			Log.d("url", directionsurl);
 	    }
+	    
 	    @Override
 	    protected ResponseObject doInBackground(Void... params) 
 	    {
@@ -715,10 +724,12 @@ public class RouteSelectionFragment extends Fragment
 	        
 	        return response;
 	    }
+	    
 	    @Override
 	    protected void onPostExecute(ResponseObject result) 
 	    {
 	        super.onPostExecute(result);  
+	        showBottomBar();
 	        loadProgressButton.setVisibility(View.VISIBLE);
 	        loadProgress.setVisibility(View.GONE);
 	        
@@ -786,11 +797,38 @@ public class RouteSelectionFragment extends Fragment
 
 	}
 
-
-
 	public void goToLocation(LatLng location) 
 	{
-		map.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+		map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+	}
+	
+	public void hideBottomBar()
+	{
+		bottomBar.animate()
+        .translationY(bottomBar.getHeight())
+        .alpha(0.0f)
+        .setDuration(300)
+        .setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                bottomBar.setVisibility(View.GONE);
+            }
+        });
+	}
+	public void showBottomBar()
+	{
+		bottomBar.animate()
+        .translationY(0)
+        .alpha(1.0f)
+        .setDuration(300)
+        .setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+        		bottomBar.setVisibility(View.VISIBLE);
+            }
+        });
 	}
 	
 }

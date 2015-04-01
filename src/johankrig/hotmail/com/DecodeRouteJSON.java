@@ -5,11 +5,15 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -22,8 +26,6 @@ class ResponseObject
 {
 	List<PolylineOptions> polyies;
 	List<MarkerOptions> markers;
-	
-	
 	
 	public ResponseObject(List<PolylineOptions> polyies, List<MarkerOptions> markers)
 	{
@@ -53,9 +55,11 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 
 	private Button button;
 	private FragmentCommunicator comm;
+	private LinearLayout bottomBar;
 
-	public DecodeRouteJSON(int px, ProgressBar bar, Button button, FragmentCommunicator comm, GoogleMap map, String json, int route)
+	public DecodeRouteJSON(LinearLayout bottomBar, int px, ProgressBar bar, Button button, FragmentCommunicator comm, GoogleMap map, String json, int route)
 	{
+		this.bottomBar = bottomBar;
 		this.lineWidth = px;
 		this.map = map;
 		this.json = json;
@@ -65,12 +69,44 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		this.button = button;
 	}
 	
+	public void hideBottomBar()
+	{
+		bottomBar.animate()
+        .translationY(bottomBar.getHeight())
+        .alpha(0.0f)
+        .setDuration(300)
+        .setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                bottomBar.setVisibility(View.GONE);
+            }
+        });
+	}
+	public void showBottomBar()
+	{
+		bottomBar.animate()
+        .translationY(0)
+        .alpha(1.0f)
+        .setDuration(300)
+        .setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+        		bottomBar.setVisibility(View.VISIBLE);
+            }
+        });
+	}
+	
 	@Override
 	protected void onCancelled()
 	{
 		super.onCancelled();
 		button.setVisibility(View.VISIBLE);
 		bar.setVisibility(View.GONE);
+		
+		bottomBar.animate().alpha(1.0f).setDuration(2000);
+        //bottomBar.setVisibility(View.VISIBLE);
 	}
 		
 	@Override
@@ -80,6 +116,8 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 		button.setVisibility(View.GONE);
 		bar.setVisibility(View.VISIBLE);
         comm.updateDirectionsList(json, route);
+        
+		hideBottomBar();
 	}
 	
 	@Override
@@ -93,7 +131,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
 	{
 		super.onPostExecute(result);  
 		map.clear();
-		
 		if(result != null)
 		{
 			List<MarkerOptions> markers = result.getmarkers();
@@ -113,6 +150,8 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, ResponseObject>
         
 		button.setVisibility(View.VISIBLE);
 		bar.setVisibility(View.GONE);
+		
+		showBottomBar();
 	}
 	private List<LatLng> decodePoly(String encoded) 
 	{
