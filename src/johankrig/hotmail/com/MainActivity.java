@@ -94,7 +94,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    	//route selection fragment, goes to placedetails
 	    	else if(viewPager.getCurrentItem() == 2)
 	    	{
-	    		viewPager.setCurrentItem(4, false);
+	    		viewPager.setCurrentItem(1, false);
 	    	}
 	    	else if(viewPager.getCurrentItem() == 3)
 	    	{
