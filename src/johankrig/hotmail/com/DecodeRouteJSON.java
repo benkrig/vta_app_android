@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;

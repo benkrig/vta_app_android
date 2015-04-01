@@ -47,6 +47,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -70,6 +71,10 @@ public class LocationSearchFragment extends Fragment
 	private LinearLayout hiddenSearchBar;
 	private LinearLayout topScreenBar;
 	private Handler runnableHandler;
+	private ImageView myLocationButton;
+	private ImageView zoomIn;
+	private TextView zoomOut;
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -93,8 +98,9 @@ public class LocationSearchFragment extends Fragment
 	    
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
-        map.getUiSettings().setZoomControlsEnabled(true);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+        
         
         return rootView;
     }
@@ -129,6 +135,64 @@ public class LocationSearchFragment extends Fragment
 		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
 		topScreenBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
 		touchLayout = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
+		
+		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
+		myLocationButton.setOnTouchListener(new OnTouchListener()
+		{
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locmylocationbutton)))
+					{
+						gps.getLocation();
+						map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		
+		zoomIn = (ImageView) getActivity().findViewById(R.id.locZoomIn);
+		zoomIn.setOnTouchListener(new OnTouchListener()
+		{
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomIn)))
+					{
+		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 500, null);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+		
+		zoomOut = (TextView) getActivity().findViewById(R.id.locZoomOut);
+		zoomOut.setOnTouchListener(new OnTouchListener()
+		{
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) 
+			{
+				if(event.getAction() == MotionEvent.ACTION_UP)
+				{
+					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomOut)))
+					{
+		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 500, null);
+					}
+					return true;
+				}
+				return false;
+			}
+		});
 		
 		touchLayout.setOnTouchListener(new OnTouchListener()
 		{
@@ -300,6 +364,7 @@ public class LocationSearchFragment extends Fragment
 		                runnableHandler.removeCallbacks(r);
 		                isOnClick = false;
 		            }
+					
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout) && !purple)
 					{
 						purple = true;
@@ -307,6 +372,7 @@ public class LocationSearchFragment extends Fragment
 						blue = false;
 			            vb.vibrate(50);
 					}
+					
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout) && !grey)
 					{
 						purple = false;
@@ -314,12 +380,20 @@ public class LocationSearchFragment extends Fragment
 						blue = false;
 			            vb.vibrate(50);
 					}
+					
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout) && !blue)
 					{
 						purple = false;
 						grey = false;
 						blue = true;
 			            vb.vibrate(50);
+					}
+					
+					else
+					{
+						purple = false;
+						grey = false;
+						blue = false;
 					}
 					return false;
 			    }
@@ -412,7 +486,6 @@ public class LocationSearchFragment extends Fragment
 		//hide keyboard once user selects item
 		searchBar.setOnItemClickListener(new OnItemClickListener()
 		{
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) 
@@ -481,7 +554,6 @@ public class LocationSearchFragment extends Fragment
     // The method that displays the popup.
 	private void nearbyPopUp(final Activity context, Point p) 
 	{
-
 	    // Inflate the popup_layout.xml
 	    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    final View layout = layoutInflater.inflate(R.layout.status_popup_layout, null);
@@ -493,7 +565,6 @@ public class LocationSearchFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event) 
 			{
-				
 				TextView subTextView = (TextView) layout.findViewById(R.id.foodTextView);
 				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
 			    LinearLayout foodSub = (LinearLayout) layout.findViewById(R.id.foodSubLayout);
@@ -729,7 +800,6 @@ public class LocationSearchFragment extends Fragment
 			@Override
 			public boolean onTouch(View v, MotionEvent event) 
 			{				
-				
 				TextView subTextView = (TextView) layout.findViewById(R.id.recreationTextView);
 				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
 				
@@ -787,7 +857,8 @@ public class LocationSearchFragment extends Fragment
 	    changeStatusPopUp.setFocusable(true);
 	
 	    //Clear the default translucent background
-	    changeStatusPopUp.setBackgroundDrawable(new BitmapDrawable());
+	    changeStatusPopUp.setBackgroundDrawable(null);
+	    
 	    //Displaying the popup at the specified location, + offsets.
 	    int[] p1 = new int[2];
 	    touchLayout.getLocationOnScreen(p1);

@@ -63,6 +63,7 @@
             android:clickable="false"
 
              >
+
                 
 
             </RelativeLayout>
@@ -122,6 +123,39 @@
                     android:indeterminate="true" 
                     android:visibility="gone"
                     />
+		<ImageView
+                    android:id="@+id/locmylocationbutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_margin="10dp"
+                    android:src="@drawable/ic_action_location_found"
+
+                     />
+		
+		<TextView
+                android:id="@+id/locZoomOut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/locZoomIn"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:text="-"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
+                android:textColor="@color/buttondarkgreytransparent"
+                android:textSize="40sp" />
+
+            <ImageView
+                android:id="@+id/locZoomIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/locZoomOut"
+                android:layout_alignParentRight="true"
+                android:paddingRight="10dp"
+                android:src="@drawable/ic_action_new" />
 
         </johankrig.hotmail.com.CustomRelativeLayout>
 

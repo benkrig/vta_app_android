@@ -67,6 +67,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    super.onConfigurationChanged(newConfig);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+	
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) 
 	{

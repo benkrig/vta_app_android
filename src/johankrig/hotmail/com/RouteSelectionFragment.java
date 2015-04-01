@@ -42,8 +42,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -66,7 +68,7 @@ public class RouteSelectionFragment extends Fragment
     
     DisplayMetrics displayMetrics;
     int px;
-	 
+	
     //Interface
     FragmentCommunicator comm;
 	
@@ -82,6 +84,8 @@ public class RouteSelectionFragment extends Fragment
     String googleDirectionsResultJSON;
 	private ImageView routeZoomInButton;
 	private TextView routeZoomOutButton;
+	private ImageView myLocationButton;
+	private GPSTracker gps;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
@@ -104,15 +108,16 @@ public class RouteSelectionFragment extends Fragment
         	log.execute();
     	}
 
+    	gps = new GPSTracker(getActivity());
         comm = (FragmentCommunicator) getActivity();
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
-        px = Math.round(8 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+        px = Math.round(5 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
         
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setMyLocationButtonEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
     	
     	route1Button = (Button) rootView.findViewById(R.id.routebutton1);
         route2Button = (Button) rootView.findViewById(R.id.routebutton2);
@@ -368,13 +373,25 @@ public class RouteSelectionFragment extends Fragment
             }
         });
         
+        myLocationButton = (ImageView) rootView.findViewById(R.id.routemylocationbutton);
+		myLocationButton.setOnClickListener(new OnClickListener()
+		{
+			@Override
+			public void onClick(View v) 
+			{
+				gps.getLocation();
+				map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));
+
+			}
+		});
+        
         routeZoomInButton = (ImageView) rootView.findViewById(R.id.routeZoomInButton);
         routeZoomInButton.setOnClickListener(new OnClickListener()
         {
         	@Override
         	public void onClick(View v)
         	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 1000, null);
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 500, null);
         	}
         	
         });
@@ -384,7 +401,7 @@ public class RouteSelectionFragment extends Fragment
         	@Override
         	public void onClick(View v)
         	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 1000, null);
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 500, null);
         	}
         	
         });
@@ -615,7 +632,6 @@ public class RouteSelectionFragment extends Fragment
 			
 	        MarkerOptions markerOptions = new MarkerOptions();
     		markerOptions.position(eloc);
-    		markerOptions.flat(true);
     		markerOptions.title("Destination");
     		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place));
     		markerOptions.flat(true);
@@ -739,7 +755,7 @@ public class RouteSelectionFragment extends Fragment
 				
 				map.moveCamera(CameraUpdateFactory.newLatLngZoom(userLatLng, 15));
 				
-				if(drawRoute !=null)
+				if(drawRoute != null)
 				{
 					drawRoute.cancel(true);
 				}
