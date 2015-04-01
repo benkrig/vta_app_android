@@ -81,7 +81,7 @@ public class RouteSelectionFragment extends Fragment
 	private Button route2Button;
     private Button route3Button;
     private ImageButton textDirectionsButton;
-    private ImageButton gotoPlaceDetailsButton;
+    private ImageButton routeBackButton;
     private DirectionsAsyncTask drawRoute;
     private DecodeRouteJSON draw;
 	private View rootView;
@@ -367,15 +367,14 @@ public class RouteSelectionFragment extends Fragment
         });
 
         //This button returns the user to home search screen
-        gotoPlaceDetailsButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
-        gotoPlaceDetailsButton.setOnClickListener(new OnClickListener() 
+        routeBackButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
+        routeBackButton.setOnClickListener(new OnClickListener() 
         {
             @Override
             public void onClick(View v)
             {            	
             	//Return to Place Details Screen
-                comm.goToPlaceDetails();
-                
+                comm.goToLocationSearch();
             }
         });
         

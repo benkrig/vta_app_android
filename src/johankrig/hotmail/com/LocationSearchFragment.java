@@ -399,8 +399,14 @@ public class LocationSearchFragment extends Fragment
 					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout))
 					{
 						//Convert touch location to LatLng
-						LatLng point = map.getProjection().fromScreenLocation(new Point((int)event.getX(), (int)event.getY()));
+						
+						LatLng point = map.getProjection().fromScreenLocation(new Point((int)mDownX, (int)mDownY));
+						
+						GetMarkerFromTouch go = new GetMarkerFromTouch(getActivity(), point);
+						go.execute();
 						comm.returnRoutes(point);
+						
+						
 					}
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
@@ -885,7 +891,7 @@ public class LocationSearchFragment extends Fragment
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
 		markerOptions.title("Let's go here!");
 		markerOptions.snippet(address.getAddressLine(0));
-		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.white_ic_action_place));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
    		markerOptions.flat(true);
    		
 		map.addMarker(markerOptions);
