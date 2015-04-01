@@ -143,6 +143,7 @@
                 android:layout_alignParentBottom="true"
                 android:gravity="center"
                 android:text="-"
+                
                 android:paddingBottom="10dp"
                 android:paddingRight="10dp"
                 android:textColor="@color/buttondarkgreytransparent"

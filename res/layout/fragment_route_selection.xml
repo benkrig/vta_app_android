@@ -120,13 +120,14 @@
                 android:id="@+id/routeZoomOutButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/linearLayout2"
+                android:layout_alignParentBottom="true"
                 android:layout_alignLeft="@+id/routeZoomInButton"
                 android:layout_alignParentRight="true"
                 android:gravity="center"
                 android:text="-"
                 android:paddingBottom="10dp"
-                android:paddingRight="10dp"
+                android:layout_marginBottom="50dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/buttondarkgreytransparent"
                 android:textSize="40sp" />
 

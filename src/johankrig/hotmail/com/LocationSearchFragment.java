@@ -389,12 +389,6 @@ public class LocationSearchFragment extends Fragment
 			            vb.vibrate(50);
 					}
 					
-					else
-					{
-						purple = false;
-						grey = false;
-						blue = false;
-					}
 					return false;
 			    }
 				
