@@ -18,7 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public class MainActivity extends FragmentActivity implements FragmentCommunicator
 {	  
-	private NoSwipeViewPager viewPager;
+	private static NoSwipeViewPager viewPager;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
@@ -28,12 +28,39 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		
 		//Ensure keyboard is not showing on startup
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		
+
 		//Create no swipe view pager (see NoSwipeViewPager.java)
 		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
+		
 		viewPager.setOffscreenPageLimit(3);
 		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
+		
+	}
+	@Override
+	protected void onRestoreInstanceState(Bundle s)
+	{
+		super.onRestoreInstanceState(s);
+	
+		
+		((MyAdapter) viewPager.getAdapter()).startFrag = (StartupFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:"+R.id.pager+":0");
+		((MyAdapter) viewPager.getAdapter()).locationsearchFrag = (LocationSearchFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:"+R.id.pager+":1");
+		((MyAdapter) viewPager.getAdapter()).routeFrag = (RouteSelectionFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:"+R.id.pager+":2");
+		((MyAdapter) viewPager.getAdapter()).directionsFrag = (DirectionsFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:"+R.id.pager+":3");
+		((MyAdapter) viewPager.getAdapter()).placeFrag = (PlaceFragment) getSupportFragmentManager().findFragmentByTag(
+                "android:switcher:"+R.id.pager+":4");
+		
+		viewPager.setCurrentItem(1, false);
+	}
+	@Override
+	protected void onSaveInstanceState(Bundle s)
+	{
+		super.onSaveInstanceState(s);	
+
 	}
 
 	@Override
@@ -66,13 +93,6 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	{
 	    super.onConfigurationChanged(newConfig);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-	}
-	
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) 
-	{
-	    super.onRestoreInstanceState(savedInstanceState);
-		viewPager.setCurrentItem(1, true);
 	}
 	
 	/**
@@ -129,9 +149,12 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	@Override
 	public void returnRoutes(LatLng destination)
 	{
-		viewPager.setCurrentItem(2, false);
-		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).getRouteFragment();
+		RouteSelectionFragment rtFrag = ((MyAdapter) viewPager.getAdapter()).routeFrag;
+		
 		rtFrag.updateFragment(destination);
+		
+		viewPager.setCurrentItem(2, false);
+
 	}
 
 	@Override
@@ -179,19 +202,24 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 //pager adapter class
 class MyAdapter extends FragmentPagerAdapter
 {
+    private final FragmentManager mFragmentManager;
+    
 	public MyAdapter(FragmentManager fm) 
 	{
 		super(fm);
+		mFragmentManager = fm;
 	}
 	
 	//slick as fuuuuuuuuu
 	//create and maintain reference to each fragment dynamically
-	private LocationSearchFragment locationsearchFrag;
-	private RouteSelectionFragment routeFrag;
-	private DirectionsFragment directionsFrag;
-	private PlaceFragment placeFrag;
-	private StartupFragment startFrag;
+	public LocationSearchFragment locationsearchFrag;
+	public RouteSelectionFragment routeFrag;
+	public DirectionsFragment directionsFrag;
+	public PlaceFragment placeFrag;
+	public StartupFragment startFrag;
 
+
+	
 	public StartupFragment getStartFragment()
 	{
 		return startFrag;
@@ -245,6 +273,7 @@ class MyAdapter extends FragmentPagerAdapter
 		}
 		return fragment;
 	}
+	
 
 	@Override
 	public int getCount() 

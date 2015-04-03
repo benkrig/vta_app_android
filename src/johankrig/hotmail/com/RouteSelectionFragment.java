@@ -45,10 +45,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -108,12 +106,17 @@ public class RouteSelectionFragment extends Fragment
     	catch (InflateException e) 
     	{
     		/* map is already there, just return view as it is */
-    		
-    		SendErrorAsync log = new SendErrorAsync(e.toString());
-        	log.execute();
     	}
-    	
-    	bottomBar = (LinearLayout) rootView.findViewById(R.id.routeBottomBar);
+    	    	
+        return rootView;
+    }
+    
+    @Override
+	public void onActivityCreated(Bundle savedInstanceState)
+	{
+		super.onActivityCreated(savedInstanceState);
+				
+    	bottomBar = (LinearLayout) getActivity().findViewById(R.id.routeBottomBar);
     	gps = new GPSTracker(getActivity());
         comm = (FragmentCommunicator) getActivity();
 
@@ -125,14 +128,14 @@ public class RouteSelectionFragment extends Fragment
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
     	
-    	route1Button = (Button) rootView.findViewById(R.id.routebutton1);
-        route2Button = (Button) rootView.findViewById(R.id.routebutton2);
-        route3Button = (Button) rootView.findViewById(R.id.routebutton3);
+    	route1Button = (Button) getActivity().findViewById(R.id.routebutton1);
+        route2Button = (Button) getActivity().findViewById(R.id.routebutton2);
+        route3Button = (Button) getActivity().findViewById(R.id.routebutton3);
 
-        textDirectionsButton = (ImageButton) rootView.findViewById(R.id.textDirectionsButton);
+        textDirectionsButton = (ImageButton) getActivity().findViewById(R.id.textDirectionsButton);
         
-    	loadProgress = (ProgressBar) rootView.findViewById(R.id.routeProgressBar);
-        loadProgressButton = (Button) rootView.findViewById(R.id.routeProgressButton);
+    	loadProgress = (ProgressBar) getActivity().findViewById(R.id.routeProgressBar);
+        loadProgressButton = (Button) getActivity().findViewById(R.id.routeProgressButton);
     	
     	        
         
@@ -233,7 +236,7 @@ public class RouteSelectionFragment extends Fragment
 			}
 		}
         
-        final Button routeTimeButton = (Button) rootView.findViewById(R.id.selectRouteDepartTime);
+        final Button routeTimeButton = (Button) getActivity().findViewById(R.id.selectRouteDepartTime);
         Calendar datetime = Calendar.getInstance();
         datetime.setTimeInMillis(System.currentTimeMillis());
 
@@ -323,7 +326,6 @@ public class RouteSelectionFragment extends Fragment
             	}
             }
         });
-        
     	//OnClick ROUTEBUTTON3
     	//Alternate route 2 directions will be drawn onto map
         route3Button.setOnClickListener(new OnClickListener() 
@@ -367,7 +369,7 @@ public class RouteSelectionFragment extends Fragment
         });
 
         //This button returns the user to home search screen
-        routeBackButton = (ImageButton) rootView.findViewById(R.id.directionsBackButton);
+        routeBackButton = (ImageButton) getActivity().findViewById(R.id.directionsBackButton);
         routeBackButton.setOnClickListener(new OnClickListener() 
         {
             @Override
@@ -378,7 +380,7 @@ public class RouteSelectionFragment extends Fragment
             }
         });
         
-        myLocationButton = (ImageView) rootView.findViewById(R.id.routemylocationbutton);
+        myLocationButton = (ImageView) getActivity().findViewById(R.id.routemylocationbutton);
 		myLocationButton.setOnClickListener(new OnClickListener()
 		{
 			@Override
@@ -390,7 +392,7 @@ public class RouteSelectionFragment extends Fragment
 			}
 		});
         
-        routeZoomInButton = (ImageView) rootView.findViewById(R.id.routeZoomInButton);
+        routeZoomInButton = (ImageView) getActivity().findViewById(R.id.routeZoomInButton);
         routeZoomInButton.setOnClickListener(new OnClickListener()
         {
         	@Override
@@ -400,7 +402,7 @@ public class RouteSelectionFragment extends Fragment
         	}
         	
         });
-        routeZoomOutButton = (TextView) rootView.findViewById(R.id.routeZoomOutButton);
+        routeZoomOutButton = (TextView) getActivity().findViewById(R.id.routeZoomOutButton);
         routeZoomOutButton.setOnClickListener(new OnClickListener()
         {
         	@Override
@@ -410,9 +412,8 @@ public class RouteSelectionFragment extends Fragment
         	}
         	
         });
-        
-        return rootView;
-    }
+    	
+	}
     
 
     

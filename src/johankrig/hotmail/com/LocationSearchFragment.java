@@ -95,11 +95,6 @@ public class LocationSearchFragment extends Fragment
 	    {
 	        //map is already there, just return view as it is
 	    }	    
-	    
-		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
-        map.setMyLocationEnabled(true);
-        map.getUiSettings().setZoomControlsEnabled(false);
-        map.getUiSettings().setMyLocationButtonEnabled(false);
         
         
         return rootView;
@@ -130,16 +125,21 @@ public class LocationSearchFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
+		
 		comm = (FragmentCommunicator) getActivity();
 		runnableHandler = new Handler();			
 		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
 		topScreenBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
 		touchLayout = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
 		
+		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setMyLocationButtonEnabled(false);
+		
 		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
 		myLocationButton.setOnTouchListener(new OnTouchListener()
 		{
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) 
 			{
@@ -404,6 +404,7 @@ public class LocationSearchFragment extends Fragment
 						
 						GetMarkerFromTouch go = new GetMarkerFromTouch(getActivity(), point);
 						go.execute();
+						Log.e("", point.toString());
 						comm.returnRoutes(point);
 						
 						
