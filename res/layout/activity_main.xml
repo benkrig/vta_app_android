@@ -2,7 +2,7 @@
 android:layout_width="match_parent"
 android:windowActionBar="false"
 android:layout_height="match_parent">
-<johankrig.hotmail.com.NoSwipeViewPager
+<com.metafora.droid.NoSwipeViewPager
 	android:id="@+id/pager"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent" />

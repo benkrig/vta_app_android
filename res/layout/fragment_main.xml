@@ -41,7 +41,7 @@
 	        />
 	</LinearLayout>
 
-        <johankrig.hotmail.com.CustomRelativeLayout
+        <com.metafora.droid.CustomRelativeLayout
             android:id="@+id/relid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -158,6 +158,6 @@
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_action_new" />
 
-        </johankrig.hotmail.com.CustomRelativeLayout>
+        </com.metafora.droid.CustomRelativeLayout>
 
     </LinearLayout>
