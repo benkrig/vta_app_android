@@ -1,5 +1,6 @@
 package com.metafora.droid;
 
+import java.util.ArrayList;
 import java.util.Timer;
 
 import org.json.JSONArray;
@@ -73,6 +74,9 @@ public class DirectionsFragment extends Fragment
     //TODO change routes jsonobject to have variable named Routenumber
     public void updateDirectionsList(String JSON, int routeNumber)
     {
+    	if(directionsAdapter != null)
+    			directionsAdapter.stopTimers();
+    	
         DirectionsJSON = JSON;   
 		try 
 		{
@@ -254,6 +258,7 @@ public class DirectionsFragment extends Fragment
 
  class MobileArrayAdapter extends ArrayAdapter<String> 
  {
+	private ArrayList<Timer> timers;
 	private final Context context;
 	private final FragmentCommunicator comm;
 	private final String[] values;
@@ -268,6 +273,7 @@ public class DirectionsFragment extends Fragment
 	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations, String[] transitArrivals, String[] vehicleTypes, LatLng[] location) 
 	{
 		super(context, R.layout.directionsrow, values);
+		timers = new ArrayList<Timer>();
 		this.context = context;
 		this.comm = (FragmentCommunicator) context;
 		this.locations = location;
@@ -278,6 +284,13 @@ public class DirectionsFragment extends Fragment
 		this.transitArrivals = transitArrivals;
 		this.vehicleTypes = vehicleTypes;
 		this.main = (Activity) context;
+	}
+	public void stopTimers()
+	{
+		for(Timer ite : timers)
+		{
+			ite.cancel();
+		}
 	}
  
 	@Override
@@ -369,7 +382,8 @@ public class DirectionsFragment extends Fragment
 					{}
 					
 					Timer myTimer = new Timer();
-			        myTimer.schedule(task, 5000, 30000);
+			        myTimer.schedule(task, 10000, 45000);
+			        timers.add(myTimer);
 				}
 			}
 		}
