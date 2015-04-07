@@ -99,10 +99,11 @@ public class GetBusLocationTask extends TimerTask
 					//Create Marker Options for bus location
 					markerOptions = new MarkerOptions();
 		    		markerOptions.position(position);
+		    		markerOptions.rotation((float)buses.getJSONObject(c).getInt("heading"));
 		    		markerOptions.title("Lightrail " +buses.getJSONObject(c).getString("call_name"));
 		    		//markerOptions.title("Lightrail");
 		    		markerOptions.snippet("Speed: " + (int) buses.getJSONObject(c).getDouble("speed") + " mph");
-		    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.transit_icon));
+		    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.light_rail123));
 		    		buslist.add(markerOptions);
 		    		
 		    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));

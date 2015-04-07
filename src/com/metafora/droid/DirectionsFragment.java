@@ -1,11 +1,14 @@
 package com.metafora.droid;
 
+import java.util.Timer;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -63,7 +66,6 @@ public class DirectionsFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
     	super.onActivityCreated(savedInstanceState);
-        
         mainListView = (ListView) rootView.findViewById(R.id.textDirectionsListView);  
         comm = (FragmentCommunicator) getActivity();
 	}
@@ -122,7 +124,7 @@ public class DirectionsFragment extends Fragment
 			for(int index = 0; index < steps.length(); index++)
 			{
 				//consider adding transit details in here as well.
-	        	   
+	        	
 				JSONObject step = steps.getJSONObject(index);
 				String html_instructions = step.getString("html_instructions");
 				String travel_mode = step.getString("travel_mode");
@@ -158,26 +160,29 @@ public class DirectionsFragment extends Fragment
 				instructions[index] = html_instructions;
 				travel_modes[index] = travel_mode;
 			}
+			
 			if(directionsAdapter == null)
 			{
 				directionsAdapter = new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations);
 			}
 	           
 	    	//set footer view
-	    	TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
+	    	//TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
 	    	JSONObject firstleg = legs.getJSONObject(0);
 	    	JSONObject lastleg = legs.getJSONObject(legs.length()-1);
 	    	Log.d("firstlegs", firstleg.getString("start_address"));
 	    	Log.d("lastleg", lastleg.getString("end_address"));
 	    	Log.d("footerview", footerView.toString());
-	    	Log.d("footerviewtext", footer1.toString());
+	    	//Log.d("footerviewtext", footer1.toString());
 
 
-	    	footer1.setText(firstleg.getString("start_address"));
+	    	//footer1.setText(firstleg.getString("start_address"));
 	         
 	    	TextView footerEndAddress = (TextView) footerView.findViewById(R.id.directionsEndAddress);
 	    	footerEndAddress.setText(lastleg.getString("end_address"));
 	    	TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
+
+	    	
 	    	int distanceMeters = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
@@ -258,6 +263,7 @@ public class DirectionsFragment extends Fragment
 	private String[] transitArrivals;
 	private String[] vehicleTypes;
 	private LatLng[] locations;
+	Activity main;
  
 	public MobileArrayAdapter(Context context, String[] values, String[] modes, String[] distances, String[] durations, String[] transitArrivals, String[] vehicleTypes, LatLng[] location) 
 	{
@@ -271,6 +277,7 @@ public class DirectionsFragment extends Fragment
 		this.durations = durations;
 		this.transitArrivals = transitArrivals;
 		this.vehicleTypes = vehicleTypes;
+		this.main = (Activity) context;
 	}
  
 	@Override
@@ -286,6 +293,9 @@ public class DirectionsFragment extends Fragment
 		TextView directionsDetails = (TextView) rowView.findViewById(R.id.directionsDetails);
 		TextView directionsRowTimeText = (TextView) rowView.findViewById(R.id.directionsRowTimeTextView);
 		LinearLayout touchLayout = (LinearLayout) rowView.findViewById(R.id.clickableDirectionLayout);
+		
+		
+		
 		
 		final int p = position;
 		
@@ -347,6 +357,20 @@ public class DirectionsFragment extends Fragment
 				TextView transitDetails = (TextView) rowView.findViewById(R.id.transitTextView);
 				transitDetails.setVisibility(View.VISIBLE);
 				transitDetails.setText(vehicleTypes[position+1] + " arrives here at " + transitArrivals[position+1]);
+				
+				if(vehicleTypes[position+1].equals("Light rail"))
+				{
+					RealTimeStopsTask task = new RealTimeStopsTask(rowView, main);
+					try 
+					{
+						task.init(locations[position+1]);
+					} 
+					catch (JSONException e) 
+					{}
+					
+					Timer myTimer = new Timer();
+			        myTimer.schedule(task, 5000, 30000);
+				}
 			}
 		}
 		
@@ -365,10 +389,21 @@ public class DirectionsFragment extends Fragment
 			if(vehicleTypes[position].equals("Light rail"))
 			{
 				imageView.setImageResource(R.drawable.smalllightrail);
+				
+				
 			}
 			else if(vehicleTypes[position].equals("Bus"))
 			{
 				imageView.setImageResource(R.drawable.bus);
+				RealTimeStopsTask task = new RealTimeStopsTask(rowView, main);
+				try 
+				{
+					task.init(locations[position]);
+				} catch (JSONException e) 
+				{}
+				
+				Timer myTimer = new Timer();
+		        myTimer.schedule(task, 5000, 30000);
 			}
 		} 
 		else if (imageType.equals("WALKING")) 

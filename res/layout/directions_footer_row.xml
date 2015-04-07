@@ -75,12 +75,14 @@
     </LinearLayout>
 
    	<TextView
+   	    android:visibility="gone"
    	    android:id="@+id/directionsLocation"
    	    android:layout_width="match_parent"
    	    android:layout_height="wrap_content"
    	    android:text="FROM TO HERE"
    	    android:gravity="center"
    	    android:paddingTop="10dp"
+   	    android:textSize="10sp"
    	    android:textColor="@color/buttondarkgrey"
    	     />
 
@@ -88,7 +90,9 @@
    	    android:id="@+id/textView4"
    	    android:layout_width="match_parent"
    	    android:layout_height="wrap_content"
-   	    android:text="to"
+   	    android:text="Destination"
+   	    android:textSize="10dp"   	 
+   	    android:paddingTop="20dp"   
    	    android:gravity="center"
    	    android:textColor="@color/purple" />
 
@@ -97,6 +101,7 @@
    	    android:layout_width="match_parent"
    	    android:layout_height="wrap_content"
    	    android:gravity="center"
+   	    android:textSize="10dp"
    	    android:text="END ADDRESS 12142 af asf "
    	    android:textColor="@color/buttondarkgrey" />
 

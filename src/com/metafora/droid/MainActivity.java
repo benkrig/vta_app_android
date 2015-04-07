@@ -1,6 +1,5 @@
 package com.metafora.droid;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -15,12 +14,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.maps.model.LatLng;
+import com.metafora.droid.Metafora.TrackerName;
 
 public class MainActivity extends FragmentActivity implements FragmentCommunicator
 {	  
+
+	
 	private static NoSwipeViewPager viewPager;
 	
 	@Override
@@ -30,22 +34,41 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		setContentView(R.layout.activity_main);
 		//Ensure keyboard is not showing on startup
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+		
+		Tracker t = ((Metafora) getApplication()).getTracker(TrackerName.APP_TRACKER);
+		t.setScreenName("Home");
+		t.send(new HitBuilders.AppViewBuilder().build());
+		
+		
 		//Create no swipe view pager (see NoSwipeViewPager.java)
 		viewPager = (NoSwipeViewPager) findViewById(R.id.pager);
 		viewPager.setAdapter(new MyAdapter(getSupportFragmentManager()));
 		
 		viewPager.setOffscreenPageLimit(3);
-		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
-		
-		
+		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);	
 	}
+	
+
+	@Override
+	protected void onStart() 
+	{
+		super.onStart();
+		GoogleAnalytics.getInstance(MainActivity.this).reportActivityStart(this);
+	}
+
+
+	@Override
+	protected void onStop() 
+	{
+		super.onStop();
+		GoogleAnalytics.getInstance(MainActivity.this).reportActivityStop(this);
+	}
+	
 	@Override
 	protected void onRestoreInstanceState(Bundle s)
 	{
 		super.onRestoreInstanceState(s);
 	
-		
 		((MyAdapter) viewPager.getAdapter()).startFrag = (StartupFragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:"+R.id.pager+":0");
 		((MyAdapter) viewPager.getAdapter()).locationsearchFrag = (LocationSearchFragment) getSupportFragmentManager().findFragmentByTag(
@@ -97,6 +120,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    super.onConfigurationChanged(newConfig);
 	    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+	
 	
 	/**
 	 * Hardware back-button handles

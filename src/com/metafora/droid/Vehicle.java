@@ -16,7 +16,7 @@ public class Vehicle
 	String lng;
 	String timestamp;
 	MarkerOptions markerOptions;
-	String heading;
+	private int heading;
 	
 	public MarkerOptions getMarkerOptions() 
 	{
@@ -80,12 +80,12 @@ public class Vehicle
 		this.lng = lng;
 	}
 
-	public String getHeading() 
+	public int getHeading() 
 	{
 		return heading;
 	}
 
-	public void setHeading(String heading) 
+	public void setHeading(int heading) 
 	{
 		this.heading = heading;
 	}

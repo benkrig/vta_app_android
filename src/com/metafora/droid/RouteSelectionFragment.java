@@ -65,7 +65,6 @@ public class RouteSelectionFragment extends Fragment
     public ProgressBar loadProgress = null;
     private Button loadProgressButton = null;
     
-    
     DisplayMetrics displayMetrics;
     int px;
 	
@@ -727,6 +726,10 @@ public class RouteSelectionFragment extends Fragment
 	    protected void onPostExecute(ResponseObject result) 
 	    {
 	        super.onPostExecute(result);  
+	        
+	        
+	        
+	        
 	        showBottomBar();
 	        loadProgressButton.setVisibility(View.VISIBLE);
 	        loadProgress.setVisibility(View.GONE);
