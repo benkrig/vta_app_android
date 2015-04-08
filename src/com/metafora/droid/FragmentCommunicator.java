@@ -21,5 +21,7 @@ public interface FragmentCommunicator
 	public void goToPlaceDetails();
 
 	public void goToStepLocation(LatLng latLng);
+
+	public void cancelTimers();
 	
 }

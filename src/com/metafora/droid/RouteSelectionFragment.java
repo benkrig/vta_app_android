@@ -759,7 +759,14 @@ public class RouteSelectionFragment extends Fragment
 		{
 			if(!dest.equals(destinationLatLng))
 			{
+				comm.cancelTimers();
+				if(myTask != null)
+	            {
+	            	myTask.cancel();
+	            }
 				map.clear();
+				
+				
 				
 				GPSTracker gps = new GPSTracker(getActivity());
 				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
@@ -776,16 +783,14 @@ public class RouteSelectionFragment extends Fragment
 	        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 	        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 	        	
+	        	
 				drawRoute = new DirectionsAsyncTask();
 				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
 		    	drawRoute.setRouteNumber(0);
 				drawRoute.execute();
 				
 				Timer myTimer = new Timer();
-	            if(myTask != null)
-	            {
-	            	myTask.cancel();
-	            }
+	            
 	        	myTask = new GetBusLocationTask(map);
 	            myTimer.schedule(myTask, 0, 1000);
 			}

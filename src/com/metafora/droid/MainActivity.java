@@ -162,6 +162,11 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 
 	//Communicator methods
 	@Override
+	public void cancelTimers()
+	{
+		DirectionsFragment dFrag = ((MyAdapter) viewPager.getAdapter()).directionsFrag;
+	}
+	@Override
 	public void startupSlide()
 	{
 		viewPager.setCurrentItem(1, true);

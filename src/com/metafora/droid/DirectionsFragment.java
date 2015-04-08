@@ -15,7 +15,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,7 +40,12 @@ public class DirectionsFragment extends Fragment
 	public String DirectionsJSON;
 	View headerView;
 	View footerView;
-
+	public void cancelTimers()
+	{
+		if(directionsAdapter != null)
+			directionsAdapter.stopTimers();
+	}
+	
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) 
 	{
@@ -109,8 +113,6 @@ public class DirectionsFragment extends Fragment
 
 				TextView header2 = (TextView) headerView.findViewById(R.id.arriveTextView);
 				header2.setText(Html.fromHtml("Arrive at: " + "<b><font color=#790ebd>" + arrivalTime + "</font></b>"));				
-
-				//header2.setText("Arrive at: " + arrivalTime);
 			}
 			//end header veiw
 
@@ -171,32 +173,26 @@ public class DirectionsFragment extends Fragment
 			}
 	           
 	    	//set footer view
-	    	//TextView footer1 = (TextView) footerView.findViewById(R.id.directionsLocation);
-	    	JSONObject firstleg = legs.getJSONObject(0);
-	    	JSONObject lastleg = legs.getJSONObject(legs.length()-1);
-	    	Log.d("firstlegs", firstleg.getString("start_address"));
-	    	Log.d("lastleg", lastleg.getString("end_address"));
-	    	Log.d("footerview", footerView.toString());
-	    	//Log.d("footerviewtext", footer1.toString());
-
-
-	    	//footer1.setText(firstleg.getString("start_address"));
-	         
-	    	TextView footerEndAddress = (TextView) footerView.findViewById(R.id.directionsEndAddress);
-	    	footerEndAddress.setText(lastleg.getString("end_address"));
-	    	TextView footer2 = (TextView) footerView.findViewById(R.id.directionsDistance);
+	    	JSONObject lastleg = legs.getJSONObject(legs.length()-1);	         
+	    	TextView footerEndAddressTextView = (TextView) footerView.findViewById(R.id.directionsEndAddress);
+	    	footerEndAddressTextView.setText(lastleg.getString("end_address"));
+	    	TextView footerTotalDistanceTextView = (TextView) footerView.findViewById(R.id.directionsDistance);
+	    	TextView footerTotalTimeTextView = (TextView) footerView.findViewById(R.id.directionsTime);
+	    	TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
 
 	    	
-	    	int distanceMeters = 0;
+	    	//Get total Distance
+	    	int totalDistanceMeters = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
-	    		JSONObject curleg = legs.getJSONObject(c);
-	    		JSONObject distance = curleg.getJSONObject("distance");
-	    		distanceMeters += distance.getInt("value");
+	    		JSONObject currentLeg = legs.getJSONObject(c);
+	    		JSONObject distance = currentLeg.getJSONObject("distance");
+	    		totalDistanceMeters += distance.getInt("value");
 	    	}
-	    	footer2.setText((int)(distanceMeters * 0.00062137) + " mi");
+	    	
+	    	footerTotalDistanceTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + (int)(totalDistanceMeters * 0.00062137) + "</font></b>" + "<small><font color=#212121> mi</font></small>"));
 
-	    	TextView footer3 = (TextView) footerView.findViewById(R.id.directionsTime);
+	    	//Get total Seconds
 	    	int seconds = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
@@ -204,24 +200,25 @@ public class DirectionsFragment extends Fragment
 	    		JSONObject duration = curleg.getJSONObject("duration");
 	    		seconds += duration.getInt("value");
 	    	}
+	    	
 	    	if(((int)((seconds/60)/60)) == 0)
 	    	{
-	    		footer3.setText(((int)((seconds/60)%60)) + " mins");
+	    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
 	    	}
 	    	else
 	    	{
-	    		footer3.setText(((int)((seconds/60)/60)) + " hrs " + ((int)((seconds/60)%60)) + " mins");
+	    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
 	    	}
-	           
-	    	TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
+	          
+	    	//Get route Fare
 	    	if(route.has("fare"))
 	    	{
 	    		String fareCost = "$"+route.getJSONObject("fare").getDouble("value");
-	    		footerFare.setText(fareCost);
+	    		footerFare.setText(Html.fromHtml("<b><font color=#790ebd>" + fareCost + "</font></b>"));
 	    	}
 	     	else
 	     	{
-	     		footerFare.setText("unknown");
+	     		footerFare.setText("");
 	     	}
 	           
 	    	//end footer
@@ -245,11 +242,7 @@ public class DirectionsFragment extends Fragment
 	    	}
  	   	}
 		catch (JSONException e) 
-		{			
-			SendErrorAsync log = new SendErrorAsync(e.toString());
-        	log.execute();
-        	
-			e.printStackTrace();
+		{
 		}
     }
 
@@ -373,6 +366,7 @@ public class DirectionsFragment extends Fragment
 				
 				if(vehicleTypes[position+1].equals("Light rail"))
 				{
+					rowView.findViewById(R.id.nextarrivalsid).setVisibility(View.VISIBLE);
 					RealTimeStopsTask task = new RealTimeStopsTask(rowView, main);
 					try 
 					{

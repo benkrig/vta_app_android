@@ -198,6 +198,17 @@ public class GetBusLocationTask extends TimerTask
                     else 
                     {
                         marker.setVisible(true);
+                        /*
+                         * InfoWindows are static views rendered on top of 
+                         * the map canvas. To show a change to the window 
+                         * we have to hideInfoWindow() and call
+                         * showInfoWindow()
+                         * */
+                        if(marker.isInfoWindowShown())
+                        {
+                            marker.hideInfoWindow();
+                            marker.showInfoWindow();
+                        }
                     }
                 }
             }

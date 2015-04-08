@@ -30,6 +30,7 @@ public class RealTimeStopsTask extends TimerTask
 	private View row;
 	private Activity main;
 	Stop stop;
+	private TextView directionsText;
 
 	
 	public RealTimeStopsTask(View row, Activity main)
@@ -97,7 +98,7 @@ public class RealTimeStopsTask extends TimerTask
 				stopsObj = new JSONObject(b);
 				
 				jstops = stopsObj.getJSONArray("data");
-			} 
+			}
 			catch (JSONException e) 
 			{}
 			if(stopLocations != null)
@@ -118,7 +119,6 @@ public class RealTimeStopsTask extends TimerTask
 						directionStop.setLatitude(stopLocations.latitude);
 						directionStop.setLongitude(stopLocations.longitude);
 						
-						
 						float d = iterationStop.distanceTo(directionStop);
 							
 						if(d < 5)
@@ -131,6 +131,8 @@ public class RealTimeStopsTask extends TimerTask
 							
 					}
 				}
+				
+				run();
 			}
 	    } 
 	}
@@ -193,8 +195,6 @@ public class RealTimeStopsTask extends TimerTask
     	JSONArray arrivalsArray = dataObj.getJSONArray("arrivals");
     	
     	Date current = new Date();
-		TextView directionsText = (TextView) row.findViewById(R.id.nextarrivalsid);
-
     	Long times[] = new Long[arrivalsArray.length()];
     	
     	for(int i = 0; i < arrivalsArray.length(); i++)
@@ -232,7 +232,7 @@ public class RealTimeStopsTask extends TimerTask
     	String text = "";
     	for(int i = 0; i < 3 && i < times.length; i ++)
     	{
-    		if(i == (times.length - 1))
+    		if(i == (times.length - 1) || i == 2)
     		{
     			text += times[i]+"";
     		}
@@ -241,8 +241,8 @@ public class RealTimeStopsTask extends TimerTask
     			text += times[i]+", ";
     		}
     	}
-    	
-    	directionsText.setVisibility(View.VISIBLE);
+		directionsText = (TextView) row.findViewById(R.id.nextarrivalsid);
+		directionsText.setVisibility(View.VISIBLE);
     	directionsText.setText(Html.fromHtml("Arrivals here in: " + "<font color=#790ebd>" + text + "</font>" +  " minutes"));
 	}
 
