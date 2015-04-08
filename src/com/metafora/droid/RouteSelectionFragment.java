@@ -34,6 +34,7 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -53,6 +54,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class RouteSelectionFragment extends Fragment
 {
@@ -142,7 +144,6 @@ public class RouteSelectionFragment extends Fragment
         TimePickerDialog.OnTimeSetListener, android.content.DialogInterface.OnClickListener 
         {
         	Button time = null;
-        	int callCount = 0;
         	
         	public mytimepicker(Button time)
         	{
@@ -151,7 +152,6 @@ public class RouteSelectionFragment extends Fragment
 		    @Override
 		    public Dialog onCreateDialog(Bundle savedInstanceState) 
 		    {
-		    	
 		        final Calendar c = Calendar.getInstance();
 		        int hour = c.get(Calendar.HOUR_OF_DAY);
 		        int minute = c.get(Calendar.MINUTE);
@@ -160,6 +160,7 @@ public class RouteSelectionFragment extends Fragment
 		                DateFormat.is24HourFormat(getActivity()));
 		        
 		        dialog.setTitle("Departure Time");
+		        dialog.setButton(Dialog.BUTTON_POSITIVE, "Set Time", this);
 		        dialog.setCancelable(true);
 		        dialog.setCanceledOnTouchOutside(true);
 		        
@@ -167,10 +168,12 @@ public class RouteSelectionFragment extends Fragment
 		        return dialog;
 		    }
 		
+		    @Override
 		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		    {
-		    	if(callCount==0)
+		    	if(view.isShown())
 		    	{
+		    		
 			    	String am_pm = "";
 	
 			        Calendar datetime = Calendar.getInstance();
@@ -219,9 +222,9 @@ public class RouteSelectionFragment extends Fragment
 		            	myTask = new GetBusLocationTask(map);
 		                myTimer.schedule(myTask, 0, 1000);
 					}
-		    	}
-		    	callCount++;
+		    	}		    	
 		    }
+		    
 			@Override
 			public void onClick(DialogInterface dialog, int which) 
 			{
@@ -264,10 +267,15 @@ public class RouteSelectionFragment extends Fragment
             @Override
             public void onClick(View v)
             {
+            	
+            	int buttonColor = ((ColorDrawable) route1Button.getBackground()).getColor();
+            	if(buttonColor == getResources().getColor(R.color.greytransparent))
+            	{
+            		return;          	
+            	}
             	route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
             	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
             	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-
             	if(googleDirectionsResultJSON != null)
             	{
 		            
@@ -298,6 +306,11 @@ public class RouteSelectionFragment extends Fragment
             @Override
             public void onClick(View v) 
             {
+            	int buttonColor = ((ColorDrawable) route2Button.getBackground()).getColor();
+            	if(buttonColor == getResources().getColor(R.color.greytransparent))
+            	{
+            		return;          	
+            	}
             	route2Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
             	route1Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
             	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
@@ -330,6 +343,11 @@ public class RouteSelectionFragment extends Fragment
             @Override
             public void onClick(View v) 
             {
+            	int buttonColor = ((ColorDrawable) route3Button.getBackground()).getColor();
+            	if(buttonColor == getResources().getColor(R.color.greytransparent))
+            	{
+            		return;          	
+            	}
             	route3Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
             	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
             	route1Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
@@ -395,7 +413,7 @@ public class RouteSelectionFragment extends Fragment
         	@Override
         	public void onClick(View v)
         	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 500, null);
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 300, null);
         	}
         	
         });
@@ -405,7 +423,7 @@ public class RouteSelectionFragment extends Fragment
         	@Override
         	public void onClick(View v)
         	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 500, null);
+        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 300, null);
         	}
         	
         });

@@ -164,7 +164,7 @@ public class LocationSearchFragment extends Fragment
 				{
 					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomIn)))
 					{
-		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 500, null);
+		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 300, null);
 					}
 					return true;
 				}
@@ -183,7 +183,7 @@ public class LocationSearchFragment extends Fragment
 				{
 					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomOut)))
 					{
-		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 500, null);
+		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 300, null);
 					}
 					return true;
 				}
