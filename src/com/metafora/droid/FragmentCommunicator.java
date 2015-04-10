@@ -11,7 +11,7 @@ public interface FragmentCommunicator
 	public void updateDirectionsList(String JSON, int routeNumber);
 
 	public void gotoTextDirections();
-	
+
 	public void getPlaceDetails(LatLng location, String place, String address);
 
 	public void startupSlide();
@@ -23,5 +23,5 @@ public interface FragmentCommunicator
 	public void goToStepLocation(LatLng latLng);
 
 	public void cancelTimers();
-	
+
 }

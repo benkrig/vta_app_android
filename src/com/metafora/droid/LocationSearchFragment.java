@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LocationSearchFragment extends Fragment
 {
@@ -103,6 +105,7 @@ public class LocationSearchFragment extends Fragment
 	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 	    imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
 	}
+	
 	
 	public static int convertPixelsToDp(float px, Context context){
 	    Resources resources = context.getResources();
@@ -855,7 +858,7 @@ public class LocationSearchFragment extends Fragment
 	    changeStatusPopUp.setFocusable(true);
 	
 	    //Clear the default translucent background
-	    changeStatusPopUp.setBackgroundDrawable(null);
+	    changeStatusPopUp.setBackgroundDrawable(new ColorDrawable());
 	    
 	    //Displaying the popup at the specified location, + offsets.
 	    int[] p1 = new int[2];
@@ -1004,6 +1007,14 @@ public class LocationSearchFragment extends Fragment
 	        }
 	        return addressresult;
 	    }
+	}
+	public boolean dismissNearby()
+	{
+		if(changeStatusPopUp == null)
+			return false;
+		
+		changeStatusPopUp.dismiss();
+		return changeStatusPopUp.isShowing();
 	}
 }
 

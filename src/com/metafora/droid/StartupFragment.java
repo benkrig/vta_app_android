@@ -54,6 +54,7 @@ public class StartupFragment extends Fragment
 			@Override
 			public void onClick(View v) 
 			{
+				
 				comm.startupSlide();
 				rootView.destroyDrawingCache();
 			}

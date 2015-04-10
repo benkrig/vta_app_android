@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/buttondarkgrey"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="100"
+        android:layout_height="0dp"
+        android:layout_weight="2.4"
         android:background="@color/purple"
         android:orientation="vertical" >
 
@@ -15,6 +16,7 @@
             android:id="@+id/startlin"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
+            
             android:layout_centerInParent="true"
             android:layout_height="wrap_content" >
 
@@ -70,9 +72,9 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@drawable/cityscape"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:scaleType="fitXY" >
 
         <RelativeLayout

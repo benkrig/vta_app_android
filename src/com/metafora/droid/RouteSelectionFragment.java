@@ -27,7 +27,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Dialog;
@@ -54,7 +53,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class RouteSelectionFragment extends Fragment
 {
@@ -219,7 +217,7 @@ public class RouteSelectionFragment extends Fragment
 		                {
 		                	myTask.cancel();
 		                }
-		            	myTask = new GetBusLocationTask(map);
+		            	myTask = new GetBusLocationTask(map, getActivity());
 		                myTimer.schedule(myTask, 0, 1000);
 					}
 		    	}		    	
@@ -291,7 +289,7 @@ public class RouteSelectionFragment extends Fragment
 	                {
 	                	myTask.cancel();
 	                }
-	            	myTask = new GetBusLocationTask(map);
+	            	myTask = new GetBusLocationTask(map, getActivity());
 	                myTimer.schedule(myTask, 0, 1000);
             	}
                 
@@ -331,7 +329,7 @@ public class RouteSelectionFragment extends Fragment
 	                {
 	                	myTask.cancel();
 	                }
-	            	myTask = new GetBusLocationTask(map);
+	            	myTask = new GetBusLocationTask(map, getActivity());
 	                myTimer.schedule(myTask, 0, 1000);
             	}
             }
@@ -367,7 +365,7 @@ public class RouteSelectionFragment extends Fragment
 	                {
 	                	myTask.cancel();
 	                }
-	            	myTask = new GetBusLocationTask(map);
+	            	myTask = new GetBusLocationTask(map, getActivity());
 	                myTimer.schedule(myTask, 0, 1000);
             	}
             }
@@ -809,7 +807,7 @@ public class RouteSelectionFragment extends Fragment
 				
 				Timer myTimer = new Timer();
 	            
-	        	myTask = new GetBusLocationTask(map);
+	        	myTask = new GetBusLocationTask(map, getActivity());
 	            myTimer.schedule(myTask, 0, 1000);
 			}
 		}

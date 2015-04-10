@@ -7,13 +7,18 @@ import java.util.TimerTask;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import android.content.Context;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import android.widget.Toast;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -28,14 +33,18 @@ public class GetBusLocationTask extends TimerTask
 	public HashMap<String, Vehicle> bushHashMap = new HashMap<String, Vehicle>();
 	//Markers
 	public HashMap<String, Marker> markerList = new HashMap<String, Marker>();
-	
 	public Boolean firstRun = true;
+	public Context context;
+	public GPSTracker gps;
 	JSONParser j;
 	
-	public GetBusLocationTask(GoogleMap map)
+	public GetBusLocationTask(GoogleMap map, Context context)
 	{
 		this.map = map;
-		 firstRun = true;
+		this.context = context;
+		gps = new GPSTracker(context);
+		gps.getLocation();
+		firstRun = true;
 		j = new JSONParser();
 
 	}
@@ -86,7 +95,7 @@ public class GetBusLocationTask extends TimerTask
 	
 				buses = data.getJSONArray("255");
 				vehicleIdArray = new String[buses.length()];
-				
+				gps.getLocation();
 				for(int c = 0; c < buses.length(); c ++)
 				{
 					//buses.getJSONObject(c);
@@ -96,25 +105,35 @@ public class GetBusLocationTask extends TimerTask
 					JSONObject location = buses.getJSONObject(c).getJSONObject("location");
 					LatLng position = new LatLng(Double.parseDouble(location.getString("lat")), Double.parseDouble(location.getString("lng")));
 					
-					//Create Marker Options for bus location
-					markerOptions = new MarkerOptions();
-		    		markerOptions.position(position);
-		    		markerOptions.rotation((float)buses.getJSONObject(c).getInt("heading"));
-		    		markerOptions.title("Lightrail " +buses.getJSONObject(c).getString("call_name"));
-		    		//markerOptions.title("Lightrail");
-		    		markerOptions.snippet("Speed: " + (int) buses.getJSONObject(c).getDouble("speed") + " mph");
-		    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.light_rail123));
-		    		buslist.add(markerOptions);
-		    		
-		    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));
+					Location loc = new Location("Loc");
+					loc.setLatitude(position.latitude);
+					loc.setLongitude(position.longitude);
+					
+					
+					if(gps.location.distanceTo(loc) < 5000)
+					{
+						//Create Marker Options for bus location
+						markerOptions = new MarkerOptions();
+			    		markerOptions.position(position);
+			    		markerOptions.rotation((float)buses.getJSONObject(c).getInt("heading"));
+			    		markerOptions.title("Lightrail " +buses.getJSONObject(c).getString("call_name"));
+			    		markerOptions.snippet("Speed: " + (int) buses.getJSONObject(c).getDouble("speed") + " mph");
+			    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.light_rail123));
+			    		buslist.add(markerOptions);
+			    		
+			    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));
+					}
+					else
+					{
+						bushHashMap.remove(buses.getJSONObject(c).getString("vehicle_id"));
+					}
+					
+					
 				}
 
 			}
 			catch(Exception e)
-			{      
-				SendErrorAsync log = new SendErrorAsync(e.toString());
-	        	log.execute();
-	    	}
+			{}
 			
 			return buslist;
 	    }

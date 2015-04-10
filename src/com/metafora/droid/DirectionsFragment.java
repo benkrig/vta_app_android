@@ -86,7 +86,6 @@ public class DirectionsFragment extends Fragment
 		{
 		
 			final JSONObject json = new JSONObject(DirectionsJSON);
-	           
 			JSONArray routes = json.getJSONArray("routes");
 			JSONObject route = routes.getJSONObject(routeNumber);
 	           
@@ -331,7 +330,7 @@ public class DirectionsFragment extends Fragment
 	        {
 	            if(event.getAction() == MotionEvent.ACTION_DOWN)
 	            {
-	            	rowView.setBackgroundColor(Color.LTGRAY);
+	            	rowView.setBackgroundColor(context.getResources().getColor(R.color.purple));
 	            	return true;
 	            }
 	            else if(event.getAction() == MotionEvent.ACTION_UP)

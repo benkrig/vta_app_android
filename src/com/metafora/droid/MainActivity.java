@@ -1,10 +1,16 @@
 package com.metafora.droid;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -14,6 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -26,11 +36,15 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 
 	
 	private static NoSwipeViewPager viewPager;
+	private boolean showHelp;
+	SharedPreferences sf;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
+		
+		
 		setContentView(R.layout.activity_main);
 		//Ensure keyboard is not showing on startup
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -46,6 +60,9 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		
 		viewPager.setOffscreenPageLimit(3);
 		viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);	
+		
+		sf = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+		showHelp = sf.getBoolean("showHelp", true);
 	}
 	
 
@@ -136,8 +153,12 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    	}
 	    	if(viewPager.getCurrentItem() == 1)
 	    	{
-	 	       	return super.onKeyDown(keyCode, event);
-	    	}	
+	    		LocationSearchFragment lFrag = ((MyAdapter) viewPager.getAdapter()).locationsearchFrag;
+	    		if(!lFrag.dismissNearby())
+	    		{
+		    		return super.onKeyDown(keyCode, event);
+	    		}
+	    	}
 	    	//route selection fragment, goes to placedetails
 	    	else if(viewPager.getCurrentItem() == 2)
 	    	{
@@ -161,15 +182,49 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 
 
 	//Communicator methods
+	
 	@Override
 	public void cancelTimers()
 	{
 		DirectionsFragment dFrag = ((MyAdapter) viewPager.getAdapter()).directionsFrag;
+		dFrag.cancelTimers();
 	}
 	@Override
 	public void startupSlide()
 	{
 		viewPager.setCurrentItem(1, true);
+		if(showHelp)
+		{
+			View checkBoxView = View.inflate(this, R.layout.checkbox, null);
+			CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
+			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() 
+			{
+
+			    @Override
+			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
+			    {
+			    	showHelp = !isChecked;
+					SharedPreferences.Editor editor = sf.edit();
+					editor.putBoolean("showHelp", showHelp).commit();
+
+			    }
+			});
+			checkBox.setTextSize(14);
+			checkBox.setText("(Don't tell me again!)");
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			    builder.setTitle("Welcome to Metafora!");
+			    builder.setMessage("Press anywhere on the map to get started!")
+			           .setView(checkBoxView)
+			           .setCancelable(false)
+			           .setPositiveButton("Ok", new DialogInterface.OnClickListener() 
+			           {
+			               public void onClick(DialogInterface dialog, int id) 
+			               {
+			                                         
+			               }
+			           }).show();
+		}
 	}
 	
 	@Override
