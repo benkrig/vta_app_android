@@ -75,7 +75,6 @@ public class DirectionsFragment extends Fragment
         comm = (FragmentCommunicator) getActivity();
 	}
     
-    //TODO change routes jsonobject to have variable named Routenumber
     public void updateDirectionsList(String JSON, int routeNumber)
     {
     	if(directionsAdapter != null)
@@ -123,8 +122,6 @@ public class DirectionsFragment extends Fragment
 			String[] transitArrivals = new String[steps.length()];
 			String[] vehicleTypes = new String[steps.length()];
 			LatLng[] locations = new LatLng[steps.length()];
-	           
-
 	           
 			for(int index = 0; index < steps.length(); index++)
 			{

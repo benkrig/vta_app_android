@@ -211,24 +211,22 @@ public class RealTimeStopsTask extends TimerTask
 				 
 			} catch (ParseException e) 
 			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
     		if(date.after(current))
     		{
-    			Log.d("date","success");
-    			Log.d("current", current.toString());
-    			Log.d("test", date.toString());
     			long diff = date.getTime() - current.getTime();
 			    long diffMinutes = diff / (60 * 1000) % 60;
     			times[i] = diffMinutes;
     		}
     		else
     		{
-    			Log.d("date","badie");
+    			//date is before current time, ignore
     		}
     	}
-    	Arrays.sort(times);
+    	if(times != null)
+    	{
+    		Arrays.sort(times);
+    	}
     	String text = "";
     	for(int i = 0; i < 3 && i < times.length; i ++)
     	{

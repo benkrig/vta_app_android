@@ -52,7 +52,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class LocationSearchFragment extends Fragment
 {
@@ -340,6 +339,9 @@ public class LocationSearchFragment extends Fragment
 				{
 					this.v = v;
 					this.event = event;	
+					purple = false;
+					grey = false;
+					blue = false;
 					
 					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
 					{
@@ -365,30 +367,51 @@ public class LocationSearchFragment extends Fragment
 		                isOnClick = false;
 		            }
 					
-					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout) && !purple)
+					if(isPointInsideView(event.getRawX(), event.getRawY(), purplelayout))
 					{
+						if(purple)
+							return false;
+						
+						purplelayout.setBackgroundResource(R.drawable.touchgobackgroundsel);
 						purple = true;
 						grey = false;
 						blue = false;
-			            vb.vibrate(50);
+						vb.vibrate(50);
+						return false;
 					}
+
 					
-					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout) && !grey)
+					if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
+						if(grey)
+							return false;
+						
+						greylayout.setBackgroundResource(R.drawable.touchsearchbackgroundsel);
 						purple = false;
 						grey = true;
 						blue = false;
 			            vb.vibrate(50);
+			            return false;
 					}
-					
-					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout) && !blue)
+					if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
+						if(blue)
+							return false;
+						
+						bluelayout.setBackgroundResource(R.drawable.touchnearbybackgroundsel);
 						purple = false;
 						grey = false;
 						blue = true;
 			            vb.vibrate(50);
+			            return false;
 					}
-					
+					grey = false;
+					blue = false;
+					purple = false;
+					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
+					greylayout.setBackgroundResource(R.drawable.touchsearchbackground);
+					bluelayout.setBackgroundResource(R.drawable.touchnearbybackground);
+
 					return false;
 			    }
 				
@@ -569,7 +592,6 @@ public class LocationSearchFragment extends Fragment
 				TextView subTextView = (TextView) layout.findViewById(R.id.foodTextView);
 				subTextView.setTextColor(context.getResources().getColor(R.color.backgroundblue));				
 			    LinearLayout foodSub = (LinearLayout) layout.findViewById(R.id.foodSubLayout);
-			    
 			    foodSub.setVisibility(View.VISIBLE);
 			    
 			    if(event.getAction() == MotionEvent.ACTION_MOVE)

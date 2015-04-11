@@ -3,22 +3,16 @@ package com.metafora.droid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.TimerTask;
-
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import android.content.Context;
 import android.graphics.Point;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
-import android.widget.Toast;
-
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -30,13 +24,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 public class GetBusLocationTask extends TimerTask 
 {
 	GoogleMap map;
-	public HashMap<String, Vehicle> bushHashMap = new HashMap<String, Vehicle>();
+	public HashMap<String, Vehicle> vehicleHashMap = new HashMap<String, Vehicle>();
 	//Markers
 	public HashMap<String, Marker> markerList = new HashMap<String, Marker>();
 	public Boolean firstRun = true;
 	public Context context;
 	public GPSTracker gps;
 	JSONParser j;
+	public int DISTANCE_LIMIT = 5000;
 	
 	public GetBusLocationTask(GoogleMap map, Context context)
 	{
@@ -101,7 +96,6 @@ public class GetBusLocationTask extends TimerTask
 					//buses.getJSONObject(c);
 					//returns the current bus object in the loop
 					
-
 					JSONObject location = buses.getJSONObject(c).getJSONObject("location");
 					LatLng position = new LatLng(Double.parseDouble(location.getString("lat")), Double.parseDouble(location.getString("lng")));
 					
@@ -110,7 +104,7 @@ public class GetBusLocationTask extends TimerTask
 					loc.setLongitude(position.longitude);
 					
 					
-					if(gps.location.distanceTo(loc) < 5000)
+					if(gps.location.distanceTo(loc) < DISTANCE_LIMIT)
 					{
 						//Create Marker Options for bus location
 						markerOptions = new MarkerOptions();
@@ -121,14 +115,18 @@ public class GetBusLocationTask extends TimerTask
 			    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.light_rail123));
 			    		buslist.add(markerOptions);
 			    		
-			    		bushHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));
+			    		vehicleHashMap.put(buses.getJSONObject(c).getString("vehicle_id"), new Vehicle(buses.getJSONObject(c).getString("vehicle_id"), location.getString("lat"), location.getString("lng"), buses.getJSONObject(c).getString("last_updated_on"), markerOptions ));
 					}
 					else
 					{
-						bushHashMap.remove(buses.getJSONObject(c).getString("vehicle_id"));
+						if(markerList.containsKey(buses.getJSONObject(c).getString("vehicle_id")))
+						{
+							markerList.get(buses.getJSONObject(c).getString("vehicle_id")).remove();
+							markerList.remove(buses.getJSONObject(c).getString("vehicle_id"));
+						}
+						vehicleHashMap.remove(buses.getJSONObject(c).getString("vehicle_id"));
+
 					}
-					
-					
 				}
 
 			}
@@ -141,7 +139,7 @@ public class GetBusLocationTask extends TimerTask
 	    @Override
 	    protected void onPostExecute(ArrayList<MarkerOptions> buslist) 
 	    {
-	    	update(buslist, bushHashMap);
+	    	update(buslist, vehicleHashMap);
 	    }
 
 	}
@@ -149,6 +147,8 @@ public class GetBusLocationTask extends TimerTask
 	/**
 	 * @param busesOptions
 	 * @param bushHashMap2
+	 * 
+	 * 
 	 */
 	public void update(ArrayList<MarkerOptions> busesOptions, HashMap<String, Vehicle> bushHashMap2) 
 	{
