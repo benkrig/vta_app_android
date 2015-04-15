@@ -162,7 +162,11 @@
                 android:layout_alignParentRight="true"
                 android:paddingRight="10dp"
                 android:src="@drawable/ic_action_new" />
+            
+            
 
         </com.metafora.droid.CustomRelativeLayout>
+        
+        
 
     </LinearLayout>

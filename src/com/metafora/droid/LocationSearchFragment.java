@@ -28,7 +28,6 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -194,9 +193,7 @@ public class LocationSearchFragment extends Fragment
 		});
 		
 		touchLayout.setOnTouchListener(new OnTouchListener()
-		{
-			private Vibrator vb = (Vibrator)   getActivity().getSystemService(Context.VIBRATOR_SERVICE);
-            
+		{            
 			private MotionEvent event;
 			private View v;
 			private RelativeLayout purplelayout = new RelativeLayout(getActivity());
@@ -211,7 +208,6 @@ public class LocationSearchFragment extends Fragment
 			    public void run()
 			    {
 			    	((RelativeLayout)v).setBackgroundColor(0xAA000000);
-		            vb.vibrate(50);
 			    	map.getUiSettings().setScrollGesturesEnabled(false);
 			    	
 					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
@@ -376,7 +372,6 @@ public class LocationSearchFragment extends Fragment
 						purple = true;
 						grey = false;
 						blue = false;
-						vb.vibrate(50);
 						return false;
 					}
 
@@ -390,7 +385,6 @@ public class LocationSearchFragment extends Fragment
 						purple = false;
 						grey = true;
 						blue = false;
-			            vb.vibrate(50);
 			            return false;
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
@@ -402,7 +396,6 @@ public class LocationSearchFragment extends Fragment
 						purple = false;
 						grey = false;
 						blue = true;
-			            vb.vibrate(50);
 			            return false;
 					}
 					grey = false;
