@@ -73,53 +73,100 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 	{
 		if(routeFragmentProgressBar.getVisibility() == View.VISIBLE)
 		{
-			routeFragmentProgressBar.setVisibility(View.GONE);
-			routeFragmentProgressPlaceholder.setVisibility(View.VISIBLE);
+			routeFragmentProgressBar.post(new Runnable()
+			{
+				@Override
+				public void run() {
+					routeFragmentProgressBar.setVisibility(View.GONE);
+					
+				}
+			});
+			routeFragmentProgressPlaceholder.post(new Runnable()
+			{
+				@Override
+				public void run() 
+				{
+					routeFragmentProgressPlaceholder.setVisibility(View.VISIBLE);
+				
+				}
+
+			});
 		}
 		else
 		{
-			routeFragmentProgressBar.setVisibility(View.VISIBLE);
-			routeFragmentProgressPlaceholder.setVisibility(View.GONE);
+			routeFragmentProgressBar.post(new Runnable()
+			{
+				@Override
+				public void run() 
+				{
+					routeFragmentProgressBar.setVisibility(View.VISIBLE);
+					
+				}
+			});
+			routeFragmentProgressPlaceholder.post(new Runnable()
+			{
+				@Override
+				public void run() 
+				{
+					routeFragmentProgressPlaceholder.setVisibility(View.GONE);
+				
+				}
+
+			});
 		}
 	}
 	public void hideBottomBar()
 	{
-		routeFragmentBottomBar.animate()
-		.translationY(routeFragmentBottomBar.getHeight())
-		.alpha(0.0f)
-		.setDuration(300)
-		.setListener(new AnimatorListenerAdapter() 
+		routeFragmentBottomBar.post(new Runnable()
 		{
 			@Override
-			public void onAnimationEnd(Animator animation) 
+			public void run()
 			{
-				super.onAnimationEnd(animation);
-				routeFragmentBottomBar.setVisibility(View.GONE);
+				routeFragmentBottomBar.animate()
+				.translationY(routeFragmentBottomBar.getHeight())
+				.alpha(0.0f)
+				.setDuration(300)
+				.setListener(new AnimatorListenerAdapter() 
+				{
+					@Override
+					public void onAnimationEnd(Animator animation) 
+					{
+						super.onAnimationEnd(animation);
+						routeFragmentBottomBar.setVisibility(View.GONE);
+					}
+				});
 			}
 		});
+		
 	}
 	public void showBottomBar()
 	{
-		routeFragmentBottomBar.animate()
-		.translationY(0)
-		.alpha(1.0f)
-		.setDuration(300)
-		.setListener(new AnimatorListenerAdapter() {
+		routeFragmentBottomBar.post(new Runnable()
+		{
 			@Override
-			public void onAnimationStart(Animator animation) {
-				super.onAnimationStart(animation);
-				routeFragmentBottomBar.setVisibility(View.VISIBLE);
+			public void run()
+			{
+				routeFragmentBottomBar.animate()
+				.translationY(0)
+				.alpha(1.0f)
+				.setDuration(300)
+				.setListener(new AnimatorListenerAdapter() {
+					@Override
+					public void onAnimationStart(Animator animation) {
+						super.onAnimationStart(animation);
+						routeFragmentBottomBar.setVisibility(View.VISIBLE);
+					}
+				});
 			}
 		});
+		
 	}
 
 	@Override
 	protected void onCancelled()
 	{
 		super.onCancelled();
-		routeFragmentProgressPlaceholder.setVisibility(View.VISIBLE);
-		routeFragmentProgressBar.setVisibility(View.GONE);
-
+		toggleProgressBar();
 		showBottomBar();
 	}
 
@@ -129,10 +176,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 		super.onPreExecute();
 		toggleProgressBar();
 		hideBottomBar();
-		//routeFragmentProgressPlaceholder.setVisibility(View.GONE);
-		//routeFragmentProgressBar.setVisibility(View.VISIBLE);
-		comm.updateDirectionsList(json, jsonArrayIndex);
-
 	}
 
 	@Override
@@ -144,7 +187,9 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 	@Override
 	protected void onPostExecute(RouteDetails route) 
 	{
-		super.onPostExecute(route);  
+		super.onPostExecute(route); 
+		comm.updateDirectionsList(json, jsonArrayIndex);
+
 		map.clear();
 		if(route != null)
 		{

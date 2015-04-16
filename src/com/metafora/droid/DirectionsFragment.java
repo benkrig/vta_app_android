@@ -86,7 +86,7 @@ public class DirectionsFragment extends Fragment
 		
 			final JSONObject json = new JSONObject(DirectionsJSON);
 			JSONArray routes = json.getJSONArray("routes");
-			JSONObject route = routes.getJSONObject(routeNumber);
+			final JSONObject route = routes.getJSONObject(routeNumber);
 	           
 	           
 			JSONArray legs = route.getJSONArray("legs");
@@ -115,13 +115,13 @@ public class DirectionsFragment extends Fragment
 			//end header veiw
 
 	           
-			String[] instructions = new String[steps.length()];
-			String[] travel_modes = new String[steps.length()];
-			String[] distances = new String[steps.length()];
-			String[] durations = new String[steps.length()];
-			String[] transitArrivals = new String[steps.length()];
-			String[] vehicleTypes = new String[steps.length()];
-			LatLng[] locations = new LatLng[steps.length()];
+			final String[] instructions = new String[steps.length()];
+			final String[] travel_modes = new String[steps.length()];
+			final String[] distances = new String[steps.length()];
+			final String[] durations = new String[steps.length()];
+			final String[] transitArrivals = new String[steps.length()];
+			final String[] vehicleTypes = new String[steps.length()];
+			final LatLng[] locations = new LatLng[steps.length()];
 	           
 			for(int index = 0; index < steps.length(); index++)
 			{
@@ -169,72 +169,144 @@ public class DirectionsFragment extends Fragment
 			}
 	           
 	    	//set footer view
-	    	JSONObject lastleg = legs.getJSONObject(legs.length()-1);	         
-	    	TextView footerEndAddressTextView = (TextView) footerView.findViewById(R.id.directionsEndAddress);
-	    	footerEndAddressTextView.setText(lastleg.getString("end_address"));
-	    	TextView footerTotalDistanceTextView = (TextView) footerView.findViewById(R.id.directionsDistance);
-	    	TextView footerTotalTimeTextView = (TextView) footerView.findViewById(R.id.directionsTime);
-	    	TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
+	    	final JSONObject lastleg = legs.getJSONObject(legs.length()-1);	         
+	    	final TextView footerEndAddressTextView = (TextView) footerView.findViewById(R.id.directionsEndAddress);
+	    	footerEndAddressTextView.post(new Runnable()
+	    	{
+
+				@Override
+				public void run() 
+				{
+					
+			    	try {
+						footerEndAddressTextView.setText(lastleg.getString("end_address"));
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+	    		
+	    	});
+	    	final TextView footerTotalDistanceTextView = (TextView) footerView.findViewById(R.id.directionsDistance);
+	    	final TextView footerTotalTimeTextView = (TextView) footerView.findViewById(R.id.directionsTime);
+	    	final TextView footerFare = (TextView) footerView.findViewById(R.id.directionsFare);
 
 	    	
 	    	//Get total Distance
-	    	int totalDistanceMeters = 0;
+	    	int count = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
 	    		JSONObject currentLeg = legs.getJSONObject(c);
 	    		JSONObject distance = currentLeg.getJSONObject("distance");
-	    		totalDistanceMeters += distance.getInt("value");
+	    		count += distance.getInt("value");
 	    	}
+	    	final int totalDistanceMeters = count;
 	    	
-	    	footerTotalDistanceTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + (int)(totalDistanceMeters * 0.00062137) + "</font></b>" + "<small><font color=#212121> mi</font></small>"));
+	    	footerTotalDistanceTextView.post(new Runnable()
+	    	{
+
+				@Override
+				public void run() 
+				{
+			    	footerTotalDistanceTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + (int)(totalDistanceMeters * 0.00062137) + "</font></b>" + "<small><font color=#212121> mi</font></small>"));
+				}
+	    		
+	    	});
 
 	    	//Get total Seconds
-	    	int seconds = 0;
+	    	int secondCount = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
 	    		JSONObject curleg = legs.getJSONObject(c);
 	    		JSONObject duration = curleg.getJSONObject("duration");
-	    		seconds += duration.getInt("value");
+	    		secondCount += duration.getInt("value");
 	    	}
+	    	final int seconds = secondCount;
+
+	    	footerTotalTimeTextView.post(new Runnable()
+	    	{
+
+				@Override
+				public void run() 
+				{
+			    	if(((int)((seconds/60)/60)) == 0)
+			    	{
+			    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
+			    	}
+			    	else
+			    	{
+			    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
+			    	}
+			          					
+				}
+	    		
+	    	});
 	    	
-	    	if(((int)((seconds/60)/60)) == 0)
+	    	footerFare.post(new Runnable()
 	    	{
-	    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
-	    	}
-	    	else
-	    	{
-	    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
-	    	}
-	          
-	    	//Get route Fare
-	    	if(route.has("fare"))
-	    	{
-	    		String fareCost = "$"+route.getJSONObject("fare").getDouble("value");
-	    		footerFare.setText(Html.fromHtml("<b><font color=#790ebd>" + fareCost + "</font></b>"));
-	    	}
-	     	else
-	     	{
-	     		footerFare.setText("");
-	     	}
+
+				@Override
+				public void run() 
+				{
+
+			    	//Get route Fare
+			    	if(route.has("fare"))
+			    	{
+			    		String fareCost = null;
+						try 
+						{
+							fareCost = "$"+route.getJSONObject("fare").getDouble("value");
+						} 
+						catch (JSONException e) 
+						{
+				     		footerFare.setText("");
+						}
+			    		footerFare.setText(Html.fromHtml("<b><font color=#790ebd>" + fareCost + "</font></b>"));
+			    	}
+			     	else
+			     	{
+			     		footerFare.setText("");
+			     	}					
+				}
+	    		
+	    	});
 	           
 	    	//end footer
 	    	if(mainListView.getAdapter() == null)
 	    	{
+	    		mainListView.post(new Runnable()
+	    		{
 
-	    		mainListView.addHeaderView(headerView);
-	    		mainListView.addFooterView(footerView);
-	    		
-	    		mainListView.setAdapter(directionsAdapter);	 
+					@Override
+					public void run() 
+					{
+			    		mainListView.addHeaderView(headerView);
+			    		mainListView.addFooterView(footerView);
+			    		mainListView.setAdapter(directionsAdapter);	 						
+					}
+	    			
+	    		});
 	    	}
 	    	else
 	    	{
-	    		mainListView.removeHeaderView(headerView);
-	    		mainListView.removeFooterView(footerView);
+	    		mainListView.post(new Runnable()
+	    		{
 
-	    		mainListView.addHeaderView(headerView);
-	    		mainListView.addFooterView(footerView);
-		           
-	    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations));
+					@Override
+					public void run() 
+					{
+						mainListView.removeHeaderView(headerView);
+			    		mainListView.removeFooterView(footerView);
+
+			    		mainListView.addHeaderView(headerView);
+			    		mainListView.addFooterView(footerView);
+				           
+			    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations));
+					}
+	    			
+	    		});
+	    		
 	    	}
  	   	}
 		catch (JSONException e) 

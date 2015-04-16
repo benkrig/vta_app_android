@@ -244,8 +244,18 @@ public class RouteSelectionFragment extends Fragment
         else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
             am_pm = "PM";
         
-    	String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
-        routeTimeButton.setText(strTimeToShow + " "+ am_pm);
+        final String finam_pm = am_pm;
+    	final String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
+        
+    	routeTimeButton.post(new Runnable()
+    	{
+			@Override
+			public void run() 
+			{
+		    	routeTimeButton.setText(strTimeToShow + " "+ finam_pm);
+			}
+    		
+    	});
         
         routeTimeButton.setOnClickListener(new OnClickListener()
         {
@@ -283,17 +293,14 @@ public class RouteSelectionFragment extends Fragment
                 	}
                 	draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 0);
                 	draw.execute();
-                	  	
-		            Timer myTimer = new Timer();
-	                if(myTask != null)
-	                {
-	                	myTask.cancel();
-	                }
-	            	myTask = new GetBusLocationTask(map, getActivity());
-	                myTimer.schedule(myTask, 0, 1000);
+                	if(myTask != null)
+    	            {
+    	            	myTask.cancel();
+    	            }
+    	            
+    	        	myTask = new GetBusLocationTask(map, getActivity());
+    	            myTimer.schedule(myTask, 0, 1000);
             	}
-                
-                
             }
         });
         
@@ -323,14 +330,13 @@ public class RouteSelectionFragment extends Fragment
                 	
                 	DecodeRouteJSON draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 1);
                 	draw.execute();
-                	  	
-		            Timer myTimer = new Timer();
-	                if(myTask != null)
-	                {
-	                	myTask.cancel();
-	                }
-	            	myTask = new GetBusLocationTask(map, getActivity());
-	                myTimer.schedule(myTask, 0, 1000);
+                	if(myTask != null)
+    	            {
+    	            	myTask.cancel();
+    	            }
+    	            
+    	        	myTask = new GetBusLocationTask(map, getActivity());
+    	            myTimer.schedule(myTask, 0, 1000);
             	}
             }
         });
@@ -359,14 +365,14 @@ public class RouteSelectionFragment extends Fragment
                 	
                 	DecodeRouteJSON draw = new DecodeRouteJSON(bottomBar, px, loadProgress, loadProgressButton, comm, map, googleDirectionsResultJSON, 2);
                 	draw.execute();
+                	if(myTask != null)
+    	            {
+    	            	myTask.cancel();
+    	            }
+    	            
+    	        	myTask = new GetBusLocationTask(map, getActivity());
+    	            myTimer.schedule(myTask, 0, 1000);
                 	  	
-                	Timer myTimer = new Timer();
-	                if(myTask != null)
-	                {
-	                	myTask.cancel();
-	                }
-	            	myTask = new GetBusLocationTask(map, getActivity());
-	                myTimer.schedule(myTask, 0, 1000);
             	}
             }
         });
@@ -577,7 +583,7 @@ public class RouteSelectionFragment extends Fragment
 			         
 		        		JSONObject departure_stop = transit_details.getJSONObject("departure_stop");
 		        		JSONObject departure_location = departure_stop.getJSONObject("location");
-			           		
+			           	
 		        		markerOptions = new MarkerOptions();
 		        		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
 		        		markerOptions.title("Stop: " + departure_stop.getString("name"));
@@ -776,10 +782,7 @@ public class RouteSelectionFragment extends Fragment
 			if(!dest.equals(destinationLatLng))
 			{
 				comm.cancelTimers();
-				if(myTask != null)
-	            {
-	            	myTask.cancel();
-	            }
+				
 				map.clear();
 				
 				
@@ -795,10 +798,10 @@ public class RouteSelectionFragment extends Fragment
 					drawRoute.cancel(true);
 				}
 				
+				
 				route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
 	        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 	        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
-	        	
 	        	
 				drawRoute = new DirectionsAsyncTask();
 				drawRoute.updateUserLocation(userLatLng, destinationLatLng);
@@ -806,6 +809,10 @@ public class RouteSelectionFragment extends Fragment
 				drawRoute.execute();
 				
 				Timer myTimer = new Timer();
+				if(myTask != null)
+	            {
+	            	myTask.cancel();
+	            }
 	            
 	        	myTask = new GetBusLocationTask(map, getActivity());
 	            myTimer.schedule(myTask, 0, 1000);
@@ -826,31 +833,48 @@ public class RouteSelectionFragment extends Fragment
 	
 	public void hideBottomBar()
 	{
-		bottomBar.animate()
-        .translationY(bottomBar.getHeight())
-        .alpha(0.0f)
-        .setDuration(300)
-        .setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                bottomBar.setVisibility(View.GONE);
-            }
-        });
+		bottomBar.post(new Runnable()
+		{
+			@Override
+			public void run() 
+			{
+				bottomBar.animate()
+		        .translationY(bottomBar.getHeight())
+		        .alpha(0.0f)
+		        .setDuration(300)
+		        .setListener(new AnimatorListenerAdapter() 
+		        {
+		            @Override
+		            public void onAnimationEnd(Animator animation) 
+		            {
+		                super.onAnimationEnd(animation);
+		                bottomBar.setVisibility(View.GONE);
+		            }
+		        });		
+			}
+		});
 	}
 	public void showBottomBar()
 	{
-		bottomBar.animate()
-        .translationY(0)
-        .alpha(1.0f)
-        .setDuration(300)
-        .setListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-        		bottomBar.setVisibility(View.VISIBLE);
-            }
-        });
+		bottomBar.post(new Runnable()
+		{
+			@Override
+			public void run() 
+			{
+				bottomBar.animate()
+		        .translationY(0)
+		        .alpha(1.0f)
+		        .setDuration(300)
+		        .setListener(new AnimatorListenerAdapter() 
+		        {
+		            @Override
+		            public void onAnimationStart(Animator animation) 
+		            {
+		                super.onAnimationStart(animation);
+		        		bottomBar.setVisibility(View.VISIBLE);
+		            }
+		        });				
+			}
+		});
 	}
-	
 }

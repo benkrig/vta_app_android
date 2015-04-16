@@ -207,7 +207,7 @@ public class GetBusLocationTask extends TimerTask
                 {
                     // Post again 16ms later.
                     handler.postDelayed(this, 16);
-                } 
+                }
                 else 
                 {
                     if (hideMarker) 
