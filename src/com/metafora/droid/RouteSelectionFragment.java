@@ -13,6 +13,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -36,6 +39,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
@@ -158,20 +162,20 @@ public class RouteSelectionFragment extends Fragment
 		                DateFormat.is24HourFormat(getActivity()));
 		        
 		        dialog.setTitle("Departure Time");
-		        dialog.setButton(Dialog.BUTTON_POSITIVE, "Set Time", this);
+		        //dialog.setButton(T.BUTTON_POSITIVE, "Set Time", this);
 		        dialog.setCancelable(true);
 		        dialog.setCanceledOnTouchOutside(true);
 		        
-		        dialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", this);
+		        //dialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", this);
 		        return dialog;
 		    }
 		
 		    @Override
 		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		    {
+		    	Log.d("lll", ""+view.isShown());
 		    	if(view.isShown())
 		    	{
-		    		
 			    	String am_pm = "";
 	
 			        Calendar datetime = Calendar.getInstance();
@@ -218,7 +222,7 @@ public class RouteSelectionFragment extends Fragment
 		                	myTask.cancel();
 		                }
 		            	myTask = new GetBusLocationTask(map, getActivity());
-		                myTimer.schedule(myTask, 0, 1000);
+		                myTimer.schedule(myTask, 0, 2000);
 					}
 		    	}		    	
 		    }
@@ -228,9 +232,17 @@ public class RouteSelectionFragment extends Fragment
 			{
 				if(which == DialogInterface.BUTTON_NEGATIVE)
 				{
+			    	Log.d("lll", "lklklk00");
+
 					dialog.cancel();
 					dialog.dismiss();
 				}
+				if(which == DialogInterface.BUTTON_POSITIVE)
+				{
+			    	Log.d("lll", "popopopop");
+
+				}
+				
 			}
 		}
         
@@ -246,16 +258,8 @@ public class RouteSelectionFragment extends Fragment
         
         final String finam_pm = am_pm;
     	final String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
-        
-    	routeTimeButton.post(new Runnable()
-    	{
-			@Override
-			public void run() 
-			{
-		    	routeTimeButton.setText(strTimeToShow + " "+ finam_pm);
-			}
-    		
-    	});
+    	routeTimeButton.setText(strTimeToShow + " "+ am_pm);
+
         
         routeTimeButton.setOnClickListener(new OnClickListener()
         {
@@ -263,7 +267,7 @@ public class RouteSelectionFragment extends Fragment
 			public void onClick(View v) 
 			{
 				DialogFragment newFragment = new mytimepicker(routeTimeButton);
-                newFragment.show(getFragmentManager(), "timePicker");
+                newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
 			}
         });
         
@@ -299,7 +303,7 @@ public class RouteSelectionFragment extends Fragment
     	            }
     	            
     	        	myTask = new GetBusLocationTask(map, getActivity());
-    	            myTimer.schedule(myTask, 0, 1000);
+    	            myTimer.schedule(myTask, 0, 2000);
             	}
             }
         });
@@ -336,7 +340,7 @@ public class RouteSelectionFragment extends Fragment
     	            }
     	            
     	        	myTask = new GetBusLocationTask(map, getActivity());
-    	            myTimer.schedule(myTask, 0, 1000);
+    	            myTimer.schedule(myTask, 0, 2000);
             	}
             }
         });
@@ -371,7 +375,7 @@ public class RouteSelectionFragment extends Fragment
     	            }
     	            
     	        	myTask = new GetBusLocationTask(map, getActivity());
-    	            myTimer.schedule(myTask, 0, 1000);
+    	            myTimer.schedule(myTask, 0, 2000);
                 	  	
             	}
             }
@@ -749,9 +753,6 @@ public class RouteSelectionFragment extends Fragment
 	    {
 	        super.onPostExecute(result);  
 	        
-	        
-	        
-	        
 	        showBottomBar();
 	        loadProgressButton.setVisibility(View.VISIBLE);
 	        loadProgress.setVisibility(View.GONE);
@@ -762,6 +763,7 @@ public class RouteSelectionFragment extends Fragment
 	        
 	        List<PolylineOptions> polyies = result.getpolyies();
 	        List<MarkerOptions> markers = result.getmarkers();
+	        
 	        
 	        for (PolylineOptions temp : polyies) 
 	        {
@@ -808,14 +810,16 @@ public class RouteSelectionFragment extends Fragment
 		    	drawRoute.setRouteNumber(0);
 				drawRoute.execute();
 				
+				
+				
 				Timer myTimer = new Timer();
 				if(myTask != null)
 	            {
 	            	myTask.cancel();
 	            }
-	            
 	        	myTask = new GetBusLocationTask(map, getActivity());
-	            myTimer.schedule(myTask, 0, 1000);
+
+	            myTimer.schedule(myTask, 0, 2000);
 			}
 		}
 		catch(Exception e)

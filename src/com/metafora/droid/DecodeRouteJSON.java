@@ -9,6 +9,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -193,17 +194,27 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 		map.clear();
 		if(route != null)
 		{
-			List<MarkerOptions> markers = route.getmarkers();
-			List<PolylineOptions> polyies = route.getpolyies();
+			final List<MarkerOptions> markers = route.getmarkers();
+			final List<PolylineOptions> polyies = route.getpolyies();
+			
+			new Handler().postAtFrontOfQueue(new Runnable()
+			{
 
-			for (PolylineOptions temp : polyies) 
-			{
-				map.addPolyline(temp);
-			}
-			for (MarkerOptions temp : markers)
-			{
-				map.addMarker(temp);
-			}
+				@Override
+				public void run() 
+				{
+					for (PolylineOptions temp : polyies) 
+					{
+						map.addPolyline(temp);
+					}
+					for (MarkerOptions temp : markers)
+					{
+						map.addMarker(temp);
+					}
+				}
+				
+			});
+			
 		}
 
 		toggleProgressBar();

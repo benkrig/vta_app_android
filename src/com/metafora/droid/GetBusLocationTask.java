@@ -150,29 +150,45 @@ public class GetBusLocationTask extends TimerTask
 	 * 
 	 * 
 	 */
-	public void update(ArrayList<MarkerOptions> busesOptions, HashMap<String, Vehicle> bushHashMap2) 
+	public void update(ArrayList<MarkerOptions> busesOptions, final HashMap<String, Vehicle> bushHashMap2) 
 	{
 		if(markerList.isEmpty())
 		{
-			for (Vehicle value : bushHashMap2.values()) 
+			new Handler().post(new Runnable()
 			{
-				this.markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
-			}
+				@Override
+				public void run() 
+				{
+					for (Vehicle value : bushHashMap2.values()) 
+					{
+						markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
+					}					
+				}
+			});	
 		}
 		else
-		{			
-			for (Vehicle value : bushHashMap2.values()) 
+		{		
+			new Handler().post(new Runnable()
 			{
-				if(markerList.containsKey(value.getVehicleID()))
-		    	{
-					markerList.get(value.getVehicleID()).setSnippet(value.getMarkerOptions().getSnippet());
-			   		animateMarker(markerList.get(value.getVehicleID()), value.getMarkerOptions().getPosition(), false);
-			    }
-			    else
-			    {
-			    	markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
-			    }
-			}
+
+				@Override
+				public void run() 
+				{
+					for (Vehicle value : bushHashMap2.values()) 
+					{
+						if(markerList.containsKey(value.getVehicleID()))
+				    	{
+							markerList.get(value.getVehicleID()).setSnippet(value.getMarkerOptions().getSnippet());
+					   		animateMarker(markerList.get(value.getVehicleID()), value.getMarkerOptions().getPosition(), false);
+					    }
+					    else
+					    {
+					    	markerList.put(value.getVehicleID(), map.addMarker(value.getMarkerOptions()));
+					    }
+					}
+				}
+				
+			});
         }  
 	}
 	
