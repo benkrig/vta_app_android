@@ -73,9 +73,8 @@ public class LocationSearchFragment extends Fragment
 	private ImageView zoomIn;
 	private TextView zoomOut;
 
-
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) 
+            Bundle savedInstanceState)
 	{
 		if (rootView != null) 
 		{
@@ -101,7 +100,7 @@ public class LocationSearchFragment extends Fragment
 	public void hideKeyBoard()
 	{
 	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	    imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
+	    //imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
 	}
 	
 	
@@ -157,7 +156,6 @@ public class LocationSearchFragment extends Fragment
 		zoomIn = (ImageView) getActivity().findViewById(R.id.locZoomIn);
 		zoomIn.setOnTouchListener(new OnTouchListener()
 		{
-
 			@Override
 			public boolean onTouch(View v, MotionEvent event) 
 			{
@@ -316,7 +314,7 @@ public class LocationSearchFragment extends Fragment
 		            		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
 		            ((RelativeLayout)v).addView(bluelayout);
-		            ((RelativeLayout)v).addView(greylayout);
+		            //((RelativeLayout)v).addView(greylayout);
 			    }
 			};
 			
@@ -341,8 +339,8 @@ public class LocationSearchFragment extends Fragment
 					
 					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
 					{
-						hiddenSearchBar.setVisibility(View.GONE);
-						addressSearchButton.setClickable(false);
+						//hiddenSearchBar.setVisibility(View.GONE);
+						//addressSearchButton.setClickable(false);
 					}
 					
 					runnableHandler.removeCallbacks(r);
@@ -437,8 +435,8 @@ public class LocationSearchFragment extends Fragment
 					}
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
 					{
-						hiddenSearchBar.setVisibility(View.VISIBLE);
-		            	addressSearchButton.setClickable(true);
+						//hiddenSearchBar.setVisibility(View.VISIBLE);
+		            	//addressSearchButton.setClickable(true);
 					}
 					
 					((RelativeLayout)v).removeView(purplelayout);
@@ -499,6 +497,7 @@ public class LocationSearchFragment extends Fragment
     	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
+		searchBar.setDropDownBackgroundResource(R.drawable.white_search_button);
 		searchBar.setAdapter(new PlacesAutoCompleteAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line));
 		//hide keyboard once user selects item
 		searchBar.setOnItemClickListener(new OnItemClickListener()
@@ -520,7 +519,7 @@ public class LocationSearchFragment extends Fragment
             	//hide keyboard and search bar
             	//searchBar.dismissDropDown();
             	hideKeyBoard();
-            	hiddenSearchBar.setVisibility(View.GONE);
+            	//hiddenSearchBar.setVisibility(View.GONE);
             	addressSearchButton.setClickable(false);
 		
         		searchString = searchBar.getEditableText().toString();

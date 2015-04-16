@@ -226,7 +226,6 @@ public class DirectionsFragment extends Fragment
 
 	    	footerTotalTimeTextView.post(new Runnable()
 	    	{
-
 				@Override
 				public void run() 
 				{
@@ -237,10 +236,8 @@ public class DirectionsFragment extends Fragment
 			    	else
 			    	{
 			    		footerTotalTimeTextView.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((seconds/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((seconds/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
-			    	}
-			          					
+			    	}     					
 				}
-	    		
 	    	});
 	    	
 	    	footerFare.post(new Runnable()

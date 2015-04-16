@@ -162,11 +162,9 @@ public class RouteSelectionFragment extends Fragment
 		                DateFormat.is24HourFormat(getActivity()));
 		        
 		        dialog.setTitle("Departure Time");
-		        //dialog.setButton(T.BUTTON_POSITIVE, "Set Time", this);
 		        dialog.setCancelable(true);
 		        dialog.setCanceledOnTouchOutside(true);
 		        
-		        //dialog.setButton(TimePickerDialog.BUTTON_NEGATIVE, "Cancel", this);
 		        return dialog;
 		    }
 		
@@ -786,8 +784,6 @@ public class RouteSelectionFragment extends Fragment
 				comm.cancelTimers();
 				
 				map.clear();
-				
-				
 				
 				GPSTracker gps = new GPSTracker(getActivity());
 				userLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());

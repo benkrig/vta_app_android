@@ -9,18 +9,18 @@
     android:shape="oval">
 
    <solid 
-       android:color="@color/purplehighlight"/>
+       android:color="@color/transparent"/>
 
    <size 
-       android:width="50dp"
-        android:height="50dp"/>
+       android:width="38dp"
+        android:height="38dp"/>
 </shape>
 
    </item>
  	<item>
             <bitmap
             android:gravity="center"
-            android:src="@drawable/white_ic_action_place" />
+            android:src="@drawable/ic_action_new_black" />
             </item>       
 
 </layer-list>
