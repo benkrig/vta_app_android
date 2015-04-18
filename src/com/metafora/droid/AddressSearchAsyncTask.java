@@ -51,15 +51,13 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	GPSTracker gps;
 	String searchKeyword;
 	ProgressBar searchProgress;
-	private ImageButton addressSearchButton;
 	
-	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress, ImageButton addressSearchButton)
+	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress)
 	{
 		this.map = map;
 		this.context = context;
 		this.gps = new GPSTracker(context);
 		this.searchProgress = searchProgress;
-		this.addressSearchButton = addressSearchButton;
 	}
 	
 	public void setLocation(String newKeyword)
@@ -70,14 +68,12 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     @Override
     protected void onCancelled() 
     {
-    	searchProgress.setVisibility(View.GONE);
-    	addressSearchButton.setVisibility(View.VISIBLE);
+    	searchProgress.setVisibility(View.INVISIBLE);
     }
 	
 	@Override 
 	protected void onPreExecute()
 	{
-		addressSearchButton.setVisibility(View.GONE);
 		searchProgress.setVisibility(View.VISIBLE);
 		gps.getLocation();
 	}
@@ -151,8 +147,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     @Override
     protected void onPostExecute(List<Address> addresses) 
     {
-    	searchProgress.setVisibility(View.GONE);
-    	addressSearchButton.setVisibility(View.VISIBLE);
+    	searchProgress.setVisibility(View.INVISIBLE);
     	
     	if(searchKeyword.isEmpty())
     	{

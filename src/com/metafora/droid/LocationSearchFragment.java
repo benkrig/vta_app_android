@@ -19,9 +19,18 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -33,12 +42,14 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.InflateException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -50,6 +61,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class LocationSearchFragment extends Fragment
@@ -57,21 +69,20 @@ public class LocationSearchFragment extends Fragment
 	private AutoCompleteTextView searchBar;
 	private GoogleMap map;
 	private View rootView;
-	private ImageButton addressSearchButton;
 	private FragmentCommunicator comm;
 	private String searchString = "";
 	private AddressSearchAsyncTask geoTask;
 	private GPSTracker gps;
-	private Button clearSearchBarButton;
+	private ImageButton clearSearchBarButton;
 	private ProgressBar searchProgress;
 	private PopupWindow changeStatusPopUp;
 	private RelativeLayout touchLayout;
 	private LinearLayout hiddenSearchBar;
-	private LinearLayout topScreenBar;
 	private Handler runnableHandler;
 	private ImageView myLocationButton;
-	private ImageView zoomIn;
-	private TextView zoomOut;
+	TextView go;
+	TextView near;
+
 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState)
@@ -100,7 +111,8 @@ public class LocationSearchFragment extends Fragment
 	public void hideKeyBoard()
 	{
 	    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-	    //imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
+	    searchBar.clearFocus();
+	    imm.hideSoftInputFromWindow(hiddenSearchBar.getWindowToken(), 0);
 	}
 	
 	
@@ -126,69 +138,28 @@ public class LocationSearchFragment extends Fragment
 		comm = (FragmentCommunicator) getActivity();
 		runnableHandler = new Handler();			
 		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
-		topScreenBar = (LinearLayout) getActivity().findViewById(R.id.locationfragmenttopbar);
 		touchLayout = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
-		
+		go = (TextView)getActivity().findViewById(R.id.goTextView);
+		near = (TextView)getActivity().findViewById(R.id.nearTextView);
+
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
 		
 		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
-		myLocationButton.setOnTouchListener(new OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View v, MotionEvent event) 
-			{
-				if(event.getAction() == MotionEvent.ACTION_UP)
-				{
-					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locmylocationbutton)))
-					{
-						gps.getLocation();
-						map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));
-					}
-					return true;
-				}
-				return false;
-			}
-		});
-		
-		zoomIn = (ImageView) getActivity().findViewById(R.id.locZoomIn);
-		zoomIn.setOnTouchListener(new OnTouchListener()
-		{
-			@Override
-			public boolean onTouch(View v, MotionEvent event) 
-			{
-				if(event.getAction() == MotionEvent.ACTION_UP)
-				{
-					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomIn)))
-					{
-		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 300, null);
-					}
-					return true;
-				}
-				return false;
-			}
-		});
-		
-		zoomOut = (TextView) getActivity().findViewById(R.id.locZoomOut);
-		zoomOut.setOnTouchListener(new OnTouchListener()
+		myLocationButton.setOnClickListener(new OnClickListener()
 		{
 
 			@Override
-			public boolean onTouch(View v, MotionEvent event) 
+			public void onClick(View v) 
 			{
-				if(event.getAction() == MotionEvent.ACTION_UP)
-				{
-					if(isPointInsideView(event.getRawX(), event.getRawY(), getActivity().findViewById(R.id.locZoomOut)))
-					{
-		        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 300, null);
-					}
-					return true;
-				}
-				return false;
+				gps.getLocation();
+				map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));				
 			}
+			
 		});
+		
 		
 		touchLayout.setOnTouchListener(new OnTouchListener()
 		{            
@@ -261,42 +232,29 @@ public class LocationSearchFragment extends Fragment
 							//right
 							
 							//p
-							purpleLayoutX = event.getX()*event.getXPrecision() - dpToPx(100);
-				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(110);
+							purpleLayoutX = event.getX()*event.getXPrecision() - dpToPx(120);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(5);
 
 				            //b
-				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(80);
-				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(35);
+				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(20);
+				            blueLayoutY = event.getY()*event.getYPrecision() + dpToPx(30);
 
-				            //g
-				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(15);
-				            greyLayoutY = event.getY()*event.getYPrecision() + dpToPx(15);
 						}
 						else
 						{
 							//left
 							
 							//p
-							purpleLayoutX = event.getX()*event.getXPrecision() + dpToPx(53);
-				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(110);
+							purpleLayoutX = event.getX()*event.getXPrecision() + dpToPx(65);
+				            purpleLayoutY = event.getY()*event.getYPrecision() - dpToPx(5);
 
 				            //b
-				            blueLayoutX = event.getX()*event.getXPrecision() + dpToPx(36);
-				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(35);
+				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(20);
+				            blueLayoutY = event.getY()*event.getYPrecision() + dpToPx(30);
 
-				            //g
-				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(33);
-				            greyLayoutY = event.getY()*event.getYPrecision() + dpToPx(15);
 						}
 					}
 					
-		            RelativeLayout.LayoutParams greyLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		            greyLayoutParams.leftMargin = (int) greyLayoutX;
-		            greyLayoutParams.topMargin = (int) greyLayoutY;
-		            greyLayoutParams.width = RelativeLayout.LayoutParams.WRAP_CONTENT;
-		            greyLayoutParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
-		            greylayout.setLayoutParams(greyLayoutParams);
-		            
 		            
 		            RelativeLayout.LayoutParams purpleLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		            purpleLayoutParams.leftMargin = (int) purpleLayoutX;
@@ -365,25 +323,14 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(purple)
 							return false;
-						
 						purplelayout.setBackgroundResource(R.drawable.touchgobackgroundsel);
+						
+						go.setVisibility(View.VISIBLE);
+						
 						purple = true;
 						grey = false;
 						blue = false;
 						return false;
-					}
-
-					
-					if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
-					{
-						if(grey)
-							return false;
-						
-						greylayout.setBackgroundResource(R.drawable.touchsearchbackgroundsel);
-						purple = false;
-						grey = true;
-						blue = false;
-			            return false;
 					}
 					if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
@@ -391,6 +338,8 @@ public class LocationSearchFragment extends Fragment
 							return false;
 						
 						bluelayout.setBackgroundResource(R.drawable.touchnearbybackgroundsel);
+						near.setVisibility(View.VISIBLE);
+						
 						purple = false;
 						grey = false;
 						blue = true;
@@ -399,6 +348,9 @@ public class LocationSearchFragment extends Fragment
 					grey = false;
 					blue = false;
 					purple = false;
+					go.setVisibility(View.GONE);
+					near.setVisibility(View.GONE);
+					
 					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
 					greylayout.setBackgroundResource(R.drawable.touchsearchbackground);
 					bluelayout.setBackgroundResource(R.drawable.touchnearbybackground);
@@ -415,9 +367,10 @@ public class LocationSearchFragment extends Fragment
 						//Convert touch location to LatLng
 						
 						LatLng point = map.getProjection().fromScreenLocation(new Point((int)mDownX, (int)mDownY));
-						
-						GetMarkerFromTouch go = new GetMarkerFromTouch(getActivity(), point);
-						go.execute();
+						go.setVisibility(View.GONE);
+
+						GetMarkerFromTouch goTo = new GetMarkerFromTouch(getActivity(), point);
+						goTo.execute();
 						Log.e("", point.toString());
 						comm.returnRoutes(point);
 						
@@ -430,13 +383,9 @@ public class LocationSearchFragment extends Fragment
 						Point p = new Point();
 						p.x = location[0];
 						p.y = location[1];
-						
+
+						near.setVisibility(View.GONE);
 						nearbyPopUp(getActivity(), p);
-					}
-					else if(isPointInsideView(event.getRawX(), event.getRawY(), greylayout))
-					{
-						//hiddenSearchBar.setVisibility(View.VISIBLE);
-		            	//addressSearchButton.setClickable(true);
 					}
 					
 					((RelativeLayout)v).removeView(purplelayout);
@@ -479,9 +428,8 @@ public class LocationSearchFragment extends Fragment
 				Point p1 = new Point();
 				p1 = projection.toScreenLocation(point);
 				
-				if(isPointInsideView(p1.x, (p1.y + topScreenBar.getHeight() + (topScreenBar.getHeight()/2)), hiddenSearchBar))
-				{
-				}
+				if(isPointInsideView(p1.x, p1.y, hiddenSearchBar))
+				{}
 				else
 				{
 					hideKeyBoard();
@@ -491,10 +439,9 @@ public class LocationSearchFragment extends Fragment
 
 		
 	    searchProgress = (ProgressBar) getActivity().findViewById(R.id.locationSearchProgressBar);
-		addressSearchButton = (ImageButton) getActivity().findViewById(R.id.routeMenuButton);
 
 		
-    	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+    	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		
 		searchBar = (AutoCompleteTextView) getActivity().findViewById(R.id.searchBar);
 		searchBar.setDropDownBackgroundResource(R.drawable.white_search_button);
@@ -510,36 +457,64 @@ public class LocationSearchFragment extends Fragment
 			}
 			
 		});
+		searchBar.setOnEditorActionListener(new TextView.OnEditorActionListener() 
+		{
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) 
+			{
+				if(actionId == EditorInfo.IME_ACTION_SEARCH)
+				{
+					//hide keyboard and search bar
+	            	searchBar.dismissDropDown();
+	            	hideKeyBoard();
+			
+	        		searchString = searchBar.getEditableText().toString();
+	                
+	                //AsyncTask can only execute ONCE
+	                //Status.FINISHED, create a new instance : this sets mStatus to PENDING
+	                //Status.PENDING, execute.
+	                if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
+	                {
+	                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
+	                }
+	                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
+	                {
+	                	geoTask.setLocation(searchString);
+	                	geoTask.execute();
+	                }  
+					return true;
+				}
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 		
-		addressSearchButton.setOnClickListener(new OnClickListener() 
-        {
-            @Override
-            public void onClick(View v)
-            {            	
-            	//hide keyboard and search bar
-            	//searchBar.dismissDropDown();
-            	hideKeyBoard();
-            	//hiddenSearchBar.setVisibility(View.GONE);
-            	addressSearchButton.setClickable(false);
-		
-        		searchString = searchBar.getEditableText().toString();
-                
-                //AsyncTask can only execute ONCE
+		searchBar.setOnItemClickListener(new OnItemClickListener()
+		{
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) 
+			{
+				searchString = (String) ((TextView)view).getText();
+				//AsyncTask can only execute ONCE
                 //Status.FINISHED, create a new instance : this sets mStatus to PENDING
                 //Status.PENDING, execute.
                 if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
                 {
-                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
                 }
                 if(geoTask.getStatus() == AsyncTask.Status.PENDING)
                 {
                 	geoTask.setLocation(searchString);
                 	geoTask.execute();
-                }                
-            }
-        });
+                }  
+			}
+			
+		});
 		
-		clearSearchBarButton = (Button) getActivity().findViewById(R.id.clearSearchBarButton);
+		
+		clearSearchBarButton = (ImageButton) getActivity().findViewById(R.id.clearSearchBarButton);
 		clearSearchBarButton.setOnClickListener(new OnClickListener()
 		{
 
@@ -631,7 +606,7 @@ public class LocationSearchFragment extends Fragment
 						Log.i("", "IN ASIAN");
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -645,7 +620,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -659,7 +634,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -724,7 +699,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -738,7 +713,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -791,7 +766,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -843,7 +818,7 @@ public class LocationSearchFragment extends Fragment
 					{
 						if(geoTask.getStatus() == AsyncTask.Status.FINISHED)
 		                {
-		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress, addressSearchButton);
+		                	geoTask = new AddressSearchAsyncTask(getActivity(), map, searchProgress);
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
@@ -861,9 +836,8 @@ public class LocationSearchFragment extends Fragment
 			}
 	    });
 	    
-	    int h = getStatusBarHeight() + topScreenBar.getHeight();
+	    int h = getStatusBarHeight();
 	    
-	    //popup is being created at too high of a coord
 	    //Creating the PopupWindow
 	    changeStatusPopUp = new PopupWindow(context);
 	    changeStatusPopUp.setContentView(layout);

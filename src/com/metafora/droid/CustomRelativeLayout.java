@@ -8,21 +8,16 @@ import android.widget.RelativeLayout;
 
 public class CustomRelativeLayout extends RelativeLayout 
 {
-	Context context;
 	public CustomRelativeLayout(Context context) 
     {
 		super(context);
-		this.context=context;
 	}
-
-
     public CustomRelativeLayout(Context context, AttributeSet attrs) 
     {
         super(context, attrs);
-        this.context = context;
     }
     
-    public static boolean isPointInsideView(float x, float y, View view)
+    private static boolean isPointInsideView(float x, float y, View view)
 	{
 	    int location[] = new int[2];
 	    view.getLocationOnScreen(location);
@@ -40,14 +35,55 @@ public class CustomRelativeLayout extends RelativeLayout
 	        return false;
 	    }
 	}
+    
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) 
     {
+    	View searchView = null;
+    	View myLoc = null;
     	for(int i = 0; i < this.getChildCount(); i++)
     	{
-    		this.getChildAt(i).dispatchTouchEvent(event);
+    		if(this.getChildAt(i).getId() == R.id.barid)
+    			searchView = this.getChildAt(i);
+    		
+    		if(this.getChildAt(i).getId() == R.id.locmylocationbutton)
+    			myLoc = this.getChildAt(i);
     	} 
-    	return false;
+    	boolean insearch = false;
+    	boolean inloc = false;
+    	
+    	
+    	insearch = isPointInsideView(event.getRawX(), event.getRawY(), searchView);
+    	
+    	
+    	inloc = isPointInsideView(event.getX(0), event.getY(0), myLoc);
+    	
+    	if(insearch)
+    	{
+    		searchView.dispatchTouchEvent(event);
+    		return false;
+    	}
+    	else if(inloc)
+    	{
+	    	myLoc.dispatchTouchEvent(event);
+	    	return false;
+    	}
+    	else
+    	{
+    		for(int i = 0; i < this.getChildCount(); i++)
+        	{	
+        		if(this.getChildAt(i).getId() == R.id.barid || this.getChildAt(i).getId() == R.id.locmylocationbutton)
+        		{
+        		}
+        		
+        		
+        		
+        		else
+        			this.getChildAt(i).dispatchTouchEvent(event);
+        	}
+    	}
+		return false;
+
     }
 
     @Override

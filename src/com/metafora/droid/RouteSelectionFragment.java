@@ -85,8 +85,6 @@ public class RouteSelectionFragment extends Fragment
     private DecodeRouteJSON draw;
 	private View rootView;
     String googleDirectionsResultJSON;
-	private ImageView routeZoomInButton;
-	private TextView routeZoomOutButton;
 	private ImageView myLocationButton;
 	private GPSTracker gps;
 	private LinearLayout bottomBar;
@@ -412,27 +410,6 @@ public class RouteSelectionFragment extends Fragment
 
 			}
 		});
-        
-        routeZoomInButton = (ImageView) getActivity().findViewById(R.id.routeZoomInButton);
-        routeZoomInButton.setOnClickListener(new OnClickListener()
-        {
-        	@Override
-        	public void onClick(View v)
-        	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom+1), 300, null);
-        	}
-        	
-        });
-        routeZoomOutButton = (TextView) getActivity().findViewById(R.id.routeZoomOutButton);
-        routeZoomOutButton.setOnClickListener(new OnClickListener()
-        {
-        	@Override
-        	public void onClick(View v)
-        	{
-        		map.animateCamera(CameraUpdateFactory.zoomTo(map.getCameraPosition().zoom-1), 300, null);
-        	}
-        	
-        });
     	
 	}
     

@@ -7,41 +7,6 @@
     android:id="@+id/linearLayout1"
     android:orientation="vertical" >
 
-    <LinearLayout
-		android:id="@+id/locationfragmenttopbar"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content" 
-		android:visibility="gone"
-		android:orientation="horizontal">
-            
-    	<Button
-			style="?android:attr/buttonBarButtonStyle"
-       		android:layout_width="wrap_content"
-       		android:layout_height="fill_parent"
-       		android:layout_weight=".5"
-        	android:background="@drawable/rtbtn"
-			/>
-
-       	<Button
-    		style="?android:attr/buttonBarButtonStyle"
-           	android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-          	android:layout_weight="3"
-            android:background="@drawable/rtbtn"
-           	android:text="@string/metaforaString"
-          	android:textColor="@color/white" 
-          	/>
-            	
-		<Button
-	    	style="?android:attr/buttonBarButtonStyle"
-	 		android:layout_width="wrap_content"
-			android:layout_height="fill_parent"
-	  		android:layout_weight=".5"
-	 		android:background="@drawable/rtbtn"
-	        android:contentDescription="@string/desc" 
-	        />
-	</LinearLayout>
-
         <com.metafora.droid.CustomRelativeLayout
             android:id="@+id/relid"
             android:layout_width="match_parent"
@@ -65,7 +30,7 @@
 
              >
 
-                
+              
 
             </RelativeLayout>
 
@@ -93,87 +58,73 @@
                     android:layout_weight="4"
                     android:ems="10"
                     android:hint="@string/search_field"
-                    android:imeOptions="actionDone"
                     android:inputType="textPostalAddress"
                 	android:background="@color/transparent"
                     android:paddingLeft="5dp"
                     android:text="@string/searchBarText"
                     android:textSize="15sp"
                     android:dropDownWidth="wrap_content"
-                    android:dropDownAnchor="@+id/searchBar">
-					
-                    <requestFocus />
+                    android:dropDownAnchor="@+id/searchBar"
+                    android:imeOptions="actionSearch" 
+                    >
                 </AutoCompleteTextView>
+                
+                <ProgressBar
+                    android:id="@+id/locationSearchProgressBar"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/progress_bar"
+                    android:indeterminate="true"
+                    android:visibility="invisible" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/clearSearchBarButton"
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
                     android:layout_weight="0.5"
                     android:gravity="center"
                     android:background="@color/transparent"
-                    android:text="x"
+                    android:src= "@drawable/ic_action_clear_search"
                     android:textColor="@color/buttondarkgrey" 
                     />
 
-                <ImageButton
-                    android:id="@+id/routeMenuButton"
-                    android:layout_width="0dp"
-                    android:layout_height="fill_parent"
-                    android:layout_weight="1"
-                    android:background="@color/transparent"
-                    android:src="@drawable/ic_action_search"
-                    />
             </LinearLayout>
-		<ProgressBar
-                    android:id="@+id/locationSearchProgressBar"
+            
+              <TextView
+                    android:id="@+id/goTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:background="@drawable/progress_bar"
-                    android:indeterminate="true" 
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/barid"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"
                     android:visibility="gone"
-                    />
+                    android:text="Go To Touch" />
+                <TextView
+                    android:id="@+id/nearTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/barid"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:paddingTop="10dp"
+                    android:visibility="gone"
+                    android:text="Nearby Places" />
 		<ImageView
                     android:id="@+id/locmylocationbutton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
                     android:layout_alignParentBottom="true"
-                    android:layout_margin="10dp"
+                    android:layout_alignParentRight="true"
                     android:paddingBottom="20dp"
-                    android:src="@drawable/ic_action_location_found"
-
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="20dp"
+                    android:src="@drawable/map_zoom_in"
+                    android:clickable="true"
                      />
-		
-		<TextView
-                android:id="@+id/locZoomOut"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/locZoomIn"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:gravity="center"
-                android:text="-"
-                
-                android:paddingBottom="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@color/buttondarkgreytransparent"
-                android:textSize="40sp" />
-
-            <ImageView
-                android:id="@+id/locZoomIn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/locZoomOut"
-                android:layout_alignParentRight="true"
-                android:paddingRight="10dp"
-            	android:clickable="true"
-                
-                android:src="@drawable/ic_action_new" />
-            
-            
 
         </com.metafora.droid.CustomRelativeLayout>
         

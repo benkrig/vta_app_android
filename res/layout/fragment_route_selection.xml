@@ -12,7 +12,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@color/purple"
+           	 >
 
             <ImageButton
                 android:id="@+id/directionsBackButton"
@@ -20,7 +22,7 @@
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_weight="2"
-                android:background="@color/buttondarkgrey"
+                android:background="@drawable/buttondarkgrey_button"
                 android:contentDescription="@string/desc"
                 android:src="@drawable/white_ic_action_remove" />
 
@@ -31,14 +33,14 @@
                 android:layout_height="fill_parent"
                 android:layout_gravity="center"
                 android:layout_weight="6"
-                android:background="@color/purple"
+                android:background="@drawable/letsgo_button"
                 android:text="@string/choose_time"
                 android:textColor="@color/white" />
 
             <ProgressBar
                 android:id="@+id/routeProgressBar"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:visibility="gone"                
                 android:layout_weight="2"
                 android:background="@color/purple"
@@ -47,7 +49,7 @@
             <Button
                 android:id="@+id/routeProgressButton"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_weight="2"
                 android:background="@color/purple"
 			 	/>
@@ -74,16 +76,25 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true" >
-
+                
+                <LinearLayout
+                android:animateLayoutChanges="true"
+                android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+               	android:background="@color/purple"
+                >
+                	
                 <ImageButton
                     android:id="@+id/textDirectionsButton"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@color/purple"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+
+                    android:background="@drawable/letsgo_button"
                     android:contentDescription="@string/directions"
                     android:src="@drawable/white_ic_action_storage" />
+                </LinearLayout>
 
                 <Button
                     android:id="@+id/routebutton1"
@@ -116,29 +127,6 @@
                     android:textColor="@color/buttondarkgrey" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/routeZoomOutButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignLeft="@+id/routeZoomInButton"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:text="-"
-                android:paddingBottom="10dp"
-                android:layout_marginBottom="50dp"
-                android:layout_marginRight="10dp"
-                android:textColor="@color/buttondarkgreytransparent"
-                android:textSize="40sp" />
-
-            <ImageView
-                android:id="@+id/routeZoomInButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/routeZoomOutButton"
-                android:layout_alignParentRight="true"
-                android:paddingRight="10dp"
-                android:src="@drawable/ic_action_new" />
             
             <ImageView
                     android:id="@+id/routemylocationbutton"
@@ -147,7 +135,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:layout_margin="10dp"
-                    android:src="@drawable/ic_action_location_found"
+                    android:src="@drawable/map_zoom_in"
 
                      />
 

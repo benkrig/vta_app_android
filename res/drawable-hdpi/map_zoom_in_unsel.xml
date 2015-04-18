@@ -2,25 +2,10 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
         
-       
-<item>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-
-   <solid 
-       android:color="@color/transparent"/>
-
-   <size 
-       android:width="38dp"
-        android:height="38dp"/>
-</shape>
-
-   </item>
  	<item>
             <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_action_new_black" />
+            android:src="@drawable/ic_action_location_found" />
             </item>       
 
 </layer-list>
