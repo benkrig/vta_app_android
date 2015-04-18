@@ -146,7 +146,8 @@ public class LocationSearchFragment extends Fragment
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
-		
+        map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
+
 		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
 		myLocationButton.setOnClickListener(new OnClickListener()
 		{
@@ -170,7 +171,6 @@ public class LocationSearchFragment extends Fragment
 			private RelativeLayout bluelayout = new RelativeLayout(getActivity());
 			private boolean purple = false;
 			private boolean blue = false;
-			private boolean grey = false;
 			
 			private Runnable r = new Runnable()
 			{
@@ -190,8 +190,6 @@ public class LocationSearchFragment extends Fragment
 					float purpleLayoutY = 0;
 					float blueLayoutX = 0;
 					float blueLayoutY = 0;
-					float greyLayoutX = 0;
-					float greyLayoutY = 0;
 
 					if(event.getY()*event.getYPrecision() >= oh)
 					{
@@ -205,9 +203,6 @@ public class LocationSearchFragment extends Fragment
 
 				            blueLayoutX = event.getX()*event.getXPrecision() - dpToPx(90);
 				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(130);
-
-				            greyLayoutX = event.getX()*event.getXPrecision() - dpToPx(110);
-				            greyLayoutY = event.getY()*event.getYPrecision() - dpToPx(50);
 						}
 						else
 						{
@@ -218,9 +213,6 @@ public class LocationSearchFragment extends Fragment
 
 				            blueLayoutX = event.getX()*event.getXPrecision() + dpToPx(40);
 				            blueLayoutY = event.getY()*event.getYPrecision() - dpToPx(130);
-
-				            greyLayoutX = event.getX()*event.getXPrecision() + dpToPx(47);
-				            greyLayoutY = event.getY()*event.getYPrecision() - dpToPx(50);
 						}
 					}
 					else
@@ -292,7 +284,6 @@ public class LocationSearchFragment extends Fragment
 					this.v = v;
 					this.event = event;	
 					purple = false;
-					grey = false;
 					blue = false;
 					
 					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
@@ -328,7 +319,6 @@ public class LocationSearchFragment extends Fragment
 						go.setVisibility(View.VISIBLE);
 						
 						purple = true;
-						grey = false;
 						blue = false;
 						return false;
 					}
@@ -341,11 +331,9 @@ public class LocationSearchFragment extends Fragment
 						near.setVisibility(View.VISIBLE);
 						
 						purple = false;
-						grey = false;
 						blue = true;
 			            return false;
 					}
-					grey = false;
 					blue = false;
 					purple = false;
 					go.setVisibility(View.GONE);
@@ -371,10 +359,7 @@ public class LocationSearchFragment extends Fragment
 
 						GetMarkerFromTouch goTo = new GetMarkerFromTouch(getActivity(), point);
 						goTo.execute();
-						Log.e("", point.toString());
 						comm.returnRoutes(point);
-						
-						
 					}
 					else if(isPointInsideView(event.getRawX(), event.getRawY(), bluelayout))
 					{
@@ -402,7 +387,6 @@ public class LocationSearchFragment extends Fragment
 		});
 		
 		
-        map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
         
 		//center map on user
 		gps = new GPSTracker(getActivity());
@@ -484,14 +468,12 @@ public class LocationSearchFragment extends Fragment
 	                }  
 					return true;
 				}
-				// TODO Auto-generated method stub
 				return false;
 			}
 		});
 		
 		searchBar.setOnItemClickListener(new OnItemClickListener()
 		{
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) 
@@ -518,7 +500,6 @@ public class LocationSearchFragment extends Fragment
 		clearSearchBarButton = (ImageButton) getActivity().findViewById(R.id.clearSearchBarButton);
 		clearSearchBarButton.setOnClickListener(new OnClickListener()
 		{
-
 			@Override
 			public void onClick(View v) 
 			{
@@ -551,8 +532,8 @@ public class LocationSearchFragment extends Fragment
 	    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	    final View layout = layoutInflater.inflate(R.layout.status_popup_layout, null);
 	    
-	    TextView food = (TextView) layout.findViewById(R.id.foodTextView);
 	    
+	    TextView food = (TextView) layout.findViewById(R.id.foodTextView);
 	    food.setOnTouchListener(new OnTouchListener()
 	    {
 			@Override

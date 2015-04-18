@@ -101,7 +101,7 @@
                     android:textSize="20dp"
                     android:paddingTop="10dp"
                     android:visibility="gone"
-                    android:text="Go To Touch" />
+                    android:text="Go Here" />
                 <TextView
                     android:id="@+id/nearTextView"
                     android:layout_width="wrap_content"
