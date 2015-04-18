@@ -497,6 +497,7 @@ public class LocationSearchFragment extends Fragment
 					int position, long id) 
 			{
 				searchString = (String) ((TextView)view).getText();
+				hideKeyBoard();
 				//AsyncTask can only execute ONCE
                 //Status.FINISHED, create a new instance : this sets mStatus to PENDING
                 //Status.PENDING, execute.
@@ -526,6 +527,7 @@ public class LocationSearchFragment extends Fragment
 				if(geoTask != null)
 					geoTask.cancel(true);
 				
+				hideKeyBoard();
 				searchBar.setText("");
 			}
 		});
