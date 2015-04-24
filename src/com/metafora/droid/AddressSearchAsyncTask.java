@@ -172,7 +172,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	        		markerOptions.position(markerLatLng);
 	        		markerOptions.title("Let's go to " + address.getFeatureName());
 	        		markerOptions.snippet(address.getAddressLine(0));
-	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
+	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place_dropshadow));
 	           		markerOptions.flat(true);
 	        		map.addMarker(markerOptions);
 	        		
