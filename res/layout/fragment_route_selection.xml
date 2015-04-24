@@ -41,9 +41,10 @@
                 android:id="@+id/routeProgressBar"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
-                android:visibility="gone"                
                 android:layout_weight="2"
+                android:paddingRight="6dp"
                 android:background="@color/purple"
+                android:visibility="gone"                
                 android:indeterminate="true" />
             
             <Button
@@ -53,8 +54,6 @@
                 android:layout_weight="2"
                 android:background="@color/purple"
 			 	/>
-
-				 />
         </LinearLayout>
 
         <RelativeLayout
@@ -104,7 +103,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
-                    android:text="@string/route1"
+                    android:text="@string/generic_route_button_string"
                     android:textSize="14sp"
                     android:textColor="@color/buttondarkgrey" />
 
@@ -115,9 +114,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
-                    android:text="@string/route2"
+                    android:text="@string/generic_route_button_string"
                     android:textSize="14sp"
-                    
                     android:textColor="@color/buttondarkgrey" />
 
                 <Button
@@ -127,7 +125,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
-                    android:text="@string/route3"
+                    android:text="@string/generic_route_button_string"
                     android:textSize="14sp"
                     android:textColor="@color/buttondarkgrey" />
             </LinearLayout>
@@ -139,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:layout_margin="14dp"
+                    android:layout_margin="11dp"
                     android:src="@drawable/map_zoom_in"
 
                      />

@@ -322,8 +322,6 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 						JSONObject arrival_stop = transit_details.getJSONObject("arrival_stop");
 						JSONObject arrival_location = arrival_stop.getJSONObject("location");
 
-
-
 						MarkerOptions markerOptions = new MarkerOptions();
 						markerOptions.position(new LatLng(arrival_location.getDouble("lat"), arrival_location.getDouble("lng")));
 						markerOptions.title("Stop name: " + arrival_stop.getString("name"));

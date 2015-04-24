@@ -92,10 +92,7 @@ public class GetBusLocationTask extends TimerTask
 				vehicleIdArray = new String[buses.length()];
 				gps.getLocation();
 				for(int c = 0; c < buses.length(); c ++)
-				{
-					//buses.getJSONObject(c);
-					//returns the current bus object in the loop
-					
+				{	
 					JSONObject location = buses.getJSONObject(c).getJSONObject("location");
 					LatLng position = new LatLng(Double.parseDouble(location.getString("lat")), Double.parseDouble(location.getString("lng")));
 					

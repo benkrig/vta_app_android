@@ -321,6 +321,7 @@ int string accept 0x7f080002
 int string action_settings 0x7f080027
 int string app_name 0x7f080026
 int string app_version 0x7f080038
+int string app_version_string 0x7f080039
 int string choose_time 0x7f080033
 int string common_android_wear_notification_needs_update_text 0x7f080009
 int string common_android_wear_update_text 0x7f080016
@@ -360,9 +361,13 @@ int string desc 0x7f080032
 int string directions 0x7f080030
 int string directions_page_string 0x7f08002c
 int string emptystring 0x7f080037
+int string generic_route_button_string 0x7f08003e
+int string lets_go_string 0x7f08003d
+int string llc_startup_screen_string 0x7f08003b
 int string menu_about_string 0x7f080028
 int string menu_website_string 0x7f080029
 int string metaforaString 0x7f080031
+int string metafora_startup_screen_string 0x7f08003a
 int string placeDetailsCallString 0x7f080036
 int string placeDetailsWebsiteString 0x7f080035
 int string route1 0x7f08002d
@@ -373,6 +378,7 @@ int string searchBarText 0x7f080034
 int string search_field 0x7f08002a
 int string store_picture_message 0x7f080001
 int string store_picture_title 0x7f080000
+int string transportation_simplified_string 0x7f08003c
 int string wallet_buy_button_place_holder 0x7f080025
 int style AppBaseTheme 0x7f070005
 int style AppTheme 0x7f070006

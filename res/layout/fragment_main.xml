@@ -7,8 +7,6 @@
     android:id="@+id/linearLayout1"
     android:orientation="vertical" >
 
-    
-    
         <com.metafora.droid.CustomRelativeLayout
             android:id="@+id/relid"
             android:layout_width="match_parent"
@@ -20,7 +18,7 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                 />
+                />
             
             
             <RelativeLayout
@@ -31,11 +29,8 @@
             android:background="@android:color/transparent"
             android:clickable="false"
             android:visibility="gone"
-
-             >
-
-              
-
+			>
+			
             </RelativeLayout>
 
 
@@ -43,17 +38,20 @@
                 android:id="@+id/barid"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:background="@drawable/white_search_button"
                 android:visibility="visible"
-                 >
+                >
 
                 <ImageView
                     android:id="@+id/imageView1"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
                     android:background="@color/transparent"
-                    android:src="@drawable/app_icon" />
+                    android:src="@drawable/app_icon" 
+                    />
 
                 <AutoCompleteTextView
                     android:id="@+id/searchBar"
@@ -105,7 +103,8 @@
                     android:textSize="20dp"
                     android:paddingTop="10dp"
                     android:visibility="gone"
-                    android:text="Go Here" />
+                    android:text="Go Here" 
+                    />
                 <TextView
                     android:id="@+id/nearTextView"
                     android:layout_width="wrap_content"
@@ -116,20 +115,20 @@
                     android:textSize="20dp"
                     android:paddingTop="10dp"
                     android:visibility="gone"
-                    android:text="Nearby Places" />
-
+                    android:text="Nearby Places" 
+                    />
 		<ImageView
-                    android:id="@+id/locmylocationbutton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginRight="20dp"
-                    android:background="@drawable/map_zoom_in"
-                    android:visibility="gone"
-                    android:clickable="true"
-                     />
+        	android:id="@+id/locmylocationbutton"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+  			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_marginBottom="20dp"
+			android:layout_marginRight="20dp"
+			android:background="@drawable/map_zoom_in"
+			android:visibility="gone"
+			android:clickable="true"
+			/>
 
 		<RelativeLayout
 		    android:id="@+id/startupid"
@@ -149,23 +148,21 @@
 				    android:layout_weight="2.5"
 				    android:background="@color/purple"
 				    android:orientation="vertical" >
-
 					<TextView
 					    android:id="@+id/textView2"
 					    android:layout_width="match_parent"
 					    android:layout_height="0dp"
 					    android:layout_weight="1"
 					    android:gravity="center|top"
-					    android:text="ver 0.0.7"
+					    android:text="@string/app_version_string"
 					    android:textSize="12sp"
 					    android:textColor="@color/white" />
-
 				    <TextView
 				        android:id="@+id/textView1"
 				        android:layout_width="match_parent"
 				        android:layout_height="0dp"
 				        android:layout_weight="1"
-				        android:text="METAFORA"
+				        android:text="@string/metafora_startup_screen_string"
 				        android:gravity="center|bottom"
 				        android:textColor="@color/white"
 				        android:textSize="40sp" />
@@ -177,7 +174,7 @@
 				        android:layout_weight=".5"
 				        android:textColor="@color/white"
 				        android:gravity="center|top"
-				        android:text="LLC" />
+				        android:text="@string/llc_startup_screen_string" />
 
 				    <TextView
 				        android:id="@+id/textView3"
@@ -186,7 +183,7 @@
 				        android:layout_weight="2"
 				        android:textColor="@color/white"
 				        android:gravity="center|top"
-				        android:text="Transportation. Simplified" />
+				        android:text="@string/transportation_simplified_string" />
 
 				</LinearLayout>
 
@@ -206,7 +203,7 @@
                 android:background="@drawable/letsgo_button"
                 android:paddingLeft="40dp"
                 android:paddingRight="40dp"
-                android:text="let&apos;s go"
+                android:text="@string/lets_go_string"
                 android:layout_centerInParent="true"
                 android:textColor="@color/white"
                 android:textSize="30sp" />
