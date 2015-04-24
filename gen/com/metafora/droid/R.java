@@ -559,13 +559,14 @@ containing a value of this type.
         public static final int touchsearchbackground=0x7f020056;
         public static final int touchsearchbackgroundsel=0x7f020057;
         public static final int transit_icon=0x7f020058;
-        public static final int vta=0x7f020059;
-        public static final int walking_man=0x7f02005a;
-        public static final int white_ic_action_place=0x7f02005b;
-        public static final int white_ic_action_remove=0x7f02005c;
-        public static final int white_ic_action_storage=0x7f02005d;
-        public static final int white_search_button=0x7f02005e;
-        public static final int whitebackbtn=0x7f02005f;
+        public static final int transit_icon_dropshadow=0x7f020059;
+        public static final int vta=0x7f02005a;
+        public static final int walking_man=0x7f02005b;
+        public static final int white_ic_action_place=0x7f02005c;
+        public static final int white_ic_action_remove=0x7f02005d;
+        public static final int white_ic_action_storage=0x7f02005e;
+        public static final int white_search_button=0x7f02005f;
+        public static final int whitebackbtn=0x7f020060;
     }
     public static final class id {
         public static final int address=0x7f090051;

@@ -637,7 +637,7 @@ public class RouteSelectionFragment extends Fragment
 	        MarkerOptions markerOptions = new MarkerOptions();
     		markerOptions.position(eloc);
     		markerOptions.title("Destination");
-    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place));
+    		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place_dropshadow));
     		markerOptions.flat(true);
     		map.addMarker(markerOptions);	     
     		

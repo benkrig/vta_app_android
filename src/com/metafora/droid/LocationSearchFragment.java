@@ -902,9 +902,9 @@ public class LocationSearchFragment extends Fragment
 	{
 		MarkerOptions markerOptions = new MarkerOptions();
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
-		markerOptions.title("Let's go here!");
+		markerOptions.title("Go here!");
 		markerOptions.snippet(address.getAddressLine(0));
-		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_place));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place_dropshadow));
    		markerOptions.flat(true);
    		
 		map.addMarker(markerOptions);
