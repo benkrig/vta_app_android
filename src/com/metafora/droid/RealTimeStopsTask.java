@@ -18,11 +18,9 @@ import android.app.Activity;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
-
 
 
 public class RealTimeStopsTask extends TimerTask 
@@ -38,7 +36,6 @@ public class RealTimeStopsTask extends TimerTask
 		this.row = row;
 		this.main = main;
 	}
-	
 	
 	public void init(LatLng stopLocations) throws JSONException
 	{

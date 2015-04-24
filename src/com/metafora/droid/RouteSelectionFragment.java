@@ -13,9 +13,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -39,7 +36,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -56,7 +52,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 public class RouteSelectionFragment extends Fragment
@@ -129,6 +124,9 @@ public class RouteSelectionFragment extends Fragment
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
     	
+        gps.getLocation();
+		map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));
+		
     	route1Button = (Button) getActivity().findViewById(R.id.routebutton1);
         route2Button = (Button) getActivity().findViewById(R.id.routebutton2);
         route3Button = (Button) getActivity().findViewById(R.id.routebutton3);
@@ -254,11 +252,9 @@ public class RouteSelectionFragment extends Fragment
         else if (datetime.get(Calendar.AM_PM) == Calendar.PM)
             am_pm = "PM";
         
-        final String finam_pm = am_pm;
     	final String strTimeToShow = String.format(Locale.US, "%02d:%02d", (datetime.get(Calendar.HOUR) == 0) ? 12 : datetime.get(Calendar.HOUR), datetime.get(Calendar.MINUTE));;
     	routeTimeButton.setText(strTimeToShow + " "+ am_pm);
 
-        
         routeTimeButton.setOnClickListener(new OnClickListener()
         {
 			@Override
@@ -817,7 +813,7 @@ public class RouteSelectionFragment extends Fragment
 	        
 	        PolylineOptions t= new PolylineOptions()
 	        .width(px)
-	        .color(Color.argb(180, 80, 73, 137));
+	        .color(Color.argb(255, 80, 73, 137));
 	        for (PolylineOptions temp : polyies) 
 	        {
 	        		t.addAll(temp.getPoints());

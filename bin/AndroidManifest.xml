@@ -15,7 +15,7 @@
         android:required="true" />
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:targetSdkVersion="22" />
     <application
         android:name="com.metafora.droid.Metafora"
         android:allowBackup="true"

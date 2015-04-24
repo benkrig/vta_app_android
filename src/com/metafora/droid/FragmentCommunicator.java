@@ -14,8 +14,6 @@ public interface FragmentCommunicator
 
 	public void getPlaceDetails(LatLng location, String place, String address);
 
-	public void startupSlide();
-
 	public void gotoRouteSelection();
 
 	public void goToPlaceDetails();

@@ -1,7 +1,6 @@
 package com.metafora.droid;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -23,8 +21,6 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
-
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -43,7 +39,6 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	protected void onCreate(Bundle savedInstanceState) 
 	{
 		super.onCreate(savedInstanceState);
-		
 		
 		setContentView(R.layout.activity_main);
 		//Ensure keyboard is not showing on startup
@@ -86,8 +81,6 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	{
 		super.onRestoreInstanceState(s);
 	
-		((MyAdapter) viewPager.getAdapter()).startFrag = (StartupFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":0");
 		((MyAdapter) viewPager.getAdapter()).locationsearchFrag = (LocationSearchFragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:"+R.id.pager+":1");
 		((MyAdapter) viewPager.getAdapter()).routeFrag = (RouteSelectionFragment) getSupportFragmentManager().findFragmentByTag(
@@ -162,15 +155,15 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    	//route selection fragment, goes to placedetails
 	    	else if(viewPager.getCurrentItem() == 2)
 	    	{
-	    		viewPager.setCurrentItem(1, false);
+	    		viewPager.setCurrentItem(0, false);
 	    	}
 	    	else if(viewPager.getCurrentItem() == 3)
 	    	{
-	    		viewPager.setCurrentItem(2, false);
+	    		viewPager.setCurrentItem(1, false);
 	    	}
 	    	else if(viewPager.getCurrentItem() == 4)
 	    	{
-	    		viewPager.setCurrentItem(1, false);
+	    		viewPager.setCurrentItem(0, false);
 	    	}
 	      return true;
 	    } 
@@ -189,48 +182,11 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		DirectionsFragment dFrag = ((MyAdapter) viewPager.getAdapter()).directionsFrag;
 		dFrag.cancelTimers();
 	}
-	@Override
-	public void startupSlide()
-	{
-		viewPager.setCurrentItem(1, true);
-		if(showHelp)
-		{
-			View checkBoxView = View.inflate(this, R.layout.checkbox, null);
-			CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.checkbox);
-			checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() 
-			{
-
-			    @Override
-			    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) 
-			    {
-			    	showHelp = !isChecked;
-					SharedPreferences.Editor editor = sf.edit();
-					editor.putBoolean("showHelp", showHelp).commit();
-
-			    }
-			});
-			checkBox.setTextSize(14);
-			checkBox.setText("(Don't tell me again!)");
-
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			    builder.setTitle("Welcome to Metafora!");
-			    builder.setMessage("Press anywhere on the map to get started!")
-			           .setView(checkBoxView)
-			           .setCancelable(false)
-			           .setPositiveButton("Ok", new DialogInterface.OnClickListener() 
-			           {
-			               public void onClick(DialogInterface dialog, int id) 
-			               {
-			                                         
-			               }
-			           }).show();
-		}
-	}
 	
 	@Override
 	public void goToLocationSearch()
 	{
-		viewPager.setCurrentItem(1, false);
+		viewPager.setCurrentItem(0, false);
 	}
 	
 	@Override
@@ -240,21 +196,21 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		
 		rtFrag.updateFragment(destination);
 		
-		viewPager.setCurrentItem(2, false);
+		viewPager.setCurrentItem(1, false);
 
 	}
 
 	@Override
 	public void gotoTextDirections()
 	{
-		viewPager.setCurrentItem(3, false);
+		viewPager.setCurrentItem(2, false);
 	}
 	@Override
 	public void getPlaceDetails(LatLng location, String place, String address)
 	{	
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place, address);
-		viewPager.setCurrentItem(4, false);
+		viewPager.setCurrentItem(3, false);
 
 	}
 	
@@ -269,7 +225,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	@Override 
 	public void gotoRouteSelection()
 	{
-		viewPager.setCurrentItem(2, false);
+		viewPager.setCurrentItem(1, false);
 	}
 
 	@Override
@@ -282,7 +238,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	@Override
 	public void goToPlaceDetails() 
 	{
-		viewPager.setCurrentItem(4, false);
+		viewPager.setCurrentItem(3, false);
 	}
 }
 
@@ -294,7 +250,7 @@ class MyAdapter extends FragmentPagerAdapter
 	public MyAdapter(FragmentManager fm) 
 	{
 		super(fm);
-		mFragmentManager = fm;
+		this.mFragmentManager = fm;
 	}
 	
 	//slick as fuuuuuuuuu
@@ -303,14 +259,9 @@ class MyAdapter extends FragmentPagerAdapter
 	public RouteSelectionFragment routeFrag;
 	public DirectionsFragment directionsFrag;
 	public PlaceFragment placeFrag;
-	public StartupFragment startFrag;
 
 
 	
-	public StartupFragment getStartFragment()
-	{
-		return startFrag;
-	}
     public LocationSearchFragment getMainFragment() 
     {
         return locationsearchFrag;
@@ -333,27 +284,23 @@ class MyAdapter extends FragmentPagerAdapter
 	public Fragment getItem(int arg0) 
 	{
 		Fragment fragment = null;
+		
 		if(arg0 == 0)
-		{
-			fragment = new StartupFragment();
-			startFrag = (StartupFragment) fragment;
-		}
-		if(arg0 == 1)
 		{
 			fragment = new LocationSearchFragment();
 			locationsearchFrag = (LocationSearchFragment) fragment;
 		}
-		if(arg0 == 2)
+		if(arg0 == 1)
 		{
 			fragment = new RouteSelectionFragment();
 			routeFrag = (RouteSelectionFragment) fragment;
 		}
-		if(arg0 == 3)
+		if(arg0 == 2)
 		{
 			fragment = new DirectionsFragment();
 			directionsFrag = (DirectionsFragment) fragment;
 		}
-		if(arg0 == 4)
+		if(arg0 == 3)
 		{
 			fragment = new PlaceFragment();
 			placeFrag = (PlaceFragment) fragment;
@@ -365,6 +312,6 @@ class MyAdapter extends FragmentPagerAdapter
 	@Override
 	public int getCount() 
 	{
-		return 5;
+		return 4;
 	}
 }

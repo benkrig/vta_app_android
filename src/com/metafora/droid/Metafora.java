@@ -22,7 +22,8 @@ public class Metafora extends Application
 		super();
 	}
 
-	public synchronized Tracker getTracker(TrackerName appTracker) {
+	public synchronized Tracker getTracker(TrackerName appTracker) 
+	{
 		if (!mTrackers.containsKey(appTracker)) {
 			GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
 			Tracker t = (appTracker == TrackerName.APP_TRACKER) ? analytics.newTracker(PROPERTY_ID) : (appTracker == TrackerName.GLOBAL_TRACKER) ? analytics.newTracker(R.xml.global_tracker) : analytics.newTracker(R.xml.ecommerce_tracker);

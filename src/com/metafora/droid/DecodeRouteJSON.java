@@ -205,7 +205,7 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 				{
 					PolylineOptions t= new PolylineOptions()
 			        .width(lineWidth)
-			        .color(Color.argb(180, 80, 73, 137));
+			        .color(Color.argb(255, 80, 73, 137));
 					for (PolylineOptions temp : polyies) 
 					{
 						t.addAll(temp.getPoints());
@@ -312,7 +312,7 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 						polyies.add(new PolylineOptions()
 						.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
 						.width(lineWidth)
-						.color(Color.argb(190, 121, 14, 189)).geodesic(true));
+						.color(Color.argb(255, 121, 14, 189)).geodesic(true));
 					}
 
 					if(step.has("transit_details"))

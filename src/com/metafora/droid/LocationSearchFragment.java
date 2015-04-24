@@ -25,12 +25,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
@@ -49,6 +43,9 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -61,7 +58,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
 public class LocationSearchFragment extends Fragment
@@ -103,7 +99,7 @@ public class LocationSearchFragment extends Fragment
 	    {
 	        //map is already there, just return view as it is
 	    }
-        
+	    
         return rootView;
     }
 	
@@ -141,13 +137,14 @@ public class LocationSearchFragment extends Fragment
 		touchLayout = (RelativeLayout) getActivity().findViewById(R.id.touchlayout);
 		go = (TextView)getActivity().findViewById(R.id.goTextView);
 		near = (TextView)getActivity().findViewById(R.id.nearTextView);
+		
 
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
-
+        
 		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
 		myLocationButton.setOnClickListener(new OnClickListener()
 		{
@@ -160,6 +157,48 @@ public class LocationSearchFragment extends Fragment
 			}
 			
 		});
+		
+		final RelativeLayout re = (RelativeLayout) rootView.findViewById(R.id.startupid);
+
+		Button letsgo = (Button) rootView.findViewById(R.id.letsgoButton); 
+	    letsgo.setOnClickListener(new OnClickListener()
+	    {
+
+			@Override
+			public void onClick(View v) 
+			{
+	            Animation slideDown = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down);
+	            slideDown.setAnimationListener(new AnimationListener()
+	            {
+
+					@Override
+					public void onAnimationStart(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+
+					@Override
+					public void onAnimationEnd(Animation animation) {
+						re.setVisibility(View.GONE);
+						touchLayout.setVisibility(View.VISIBLE);
+						myLocationButton.setVisibility(View.VISIBLE);						
+					}
+
+					@Override
+					public void onAnimationRepeat(Animation animation) {
+						// TODO Auto-generated method stub
+						
+					}
+	            	
+	            });
+                re.startAnimation(slideDown);
+	            
+
+				
+			}
+	    	
+	    });
+	    
 		
 		
 		touchLayout.setOnTouchListener(new OnTouchListener()
@@ -387,7 +426,7 @@ public class LocationSearchFragment extends Fragment
 		});
 		
 		
-        
+		
 		//center map on user
 		gps = new GPSTracker(getActivity());
 		if(gps.canGetLocation())
@@ -400,6 +439,8 @@ public class LocationSearchFragment extends Fragment
 			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
 					37.3333, -121.9000), 12.0f));
 		}
+		gps.getLocation();
+		map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 13));				
 		
 		map.setOnMapClickListener(new OnMapClickListener()
 		{

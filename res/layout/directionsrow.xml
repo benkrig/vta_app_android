@@ -20,8 +20,8 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:paddingTop="4dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:layout_gravity="center"
             android:orientation="vertical" >
 
@@ -30,6 +30,7 @@
                 android:layout_width="wrap_content"
             	android:layout_gravity="center"
                 android:layout_height="wrap_content"
+                android:padding="8dp"
                 android:src="@drawable/bus" />
 
             <TextView
@@ -48,6 +49,8 @@
                 android:layout_gravity="center"   
                 android:textSize="12sp"             
                 android:text="30 mins"
+            	android:paddingBottom="6dp"
+                
                 android:textColor="@color/purple" />
 
 
@@ -80,8 +83,8 @@
         <LinearLayout
             android:id="@+id/clickableDirectionLayout"
             android:clickable="true"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
             android:layout_width="0dp"
             android:layout_weight="4"
             android:layout_height="match_parent"
@@ -91,6 +94,8 @@
                 android:id="@+id/directionsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+            	android:paddingLeft="8dp"
+                
                 android:paddingRight="4dp"
                 android:gravity="center_vertical"
                 android:layout_weight="1"
@@ -103,6 +108,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingLeft="8dp"
+                android:paddingTop="4dp"
                 android:visibility="gone"
                 android:gravity="center_vertical"
                 android:text="this bus will be here at 2:11pm"
@@ -114,11 +121,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:paddingLeft="8dp"
+            	android:paddingBottom="6dp"
+                
                 android:textSize="11sp"
                 android:visibility="gone"
                 android:gravity="center_vertical"
                 android:text="Fetching arrivals..."
-                android:textColor="@color/buttondarkgrey" />
+                android:textColor="@color/buttondarkgrey"
+                 />
 
         </LinearLayout>
 

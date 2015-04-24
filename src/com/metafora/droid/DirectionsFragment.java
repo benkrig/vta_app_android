@@ -2,13 +2,10 @@ package com.metafora.droid;
 
 import java.util.ArrayList;
 import java.util.Timer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.google.android.gms.maps.model.LatLng;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -61,7 +58,6 @@ public class DirectionsFragment extends Fragment
             {            	
             	//Return to home search screen
                 comm.gotoRouteSelection();
-                
             }
         });
 		return rootView;
@@ -124,9 +120,7 @@ public class DirectionsFragment extends Fragment
 			final LatLng[] locations = new LatLng[steps.length()];
 	           
 			for(int index = 0; index < steps.length(); index++)
-			{
-				//consider adding transit details in here as well.
-	        	
+			{	        	
 				JSONObject step = steps.getJSONObject(index);
 				String html_instructions = step.getString("html_instructions");
 				String travel_mode = step.getString("travel_mode");
@@ -178,11 +172,11 @@ public class DirectionsFragment extends Fragment
 				public void run() 
 				{
 					
-			    	try {
+			    	try 
+			    	{
 						footerEndAddressTextView.setText(lastleg.getString("end_address"));
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					} catch (JSONException e) 
+					{
 					}
 
 				}
@@ -214,12 +208,12 @@ public class DirectionsFragment extends Fragment
 	    		
 	    	});
 
-	    	//Get total Seconds
+	    	//Get total trip time in seconds
 	    	int secondCount = 0;
 	    	for(int c = 0; c < legs.length(); c++)
 	    	{
-	    		JSONObject curleg = legs.getJSONObject(c);
-	    		JSONObject duration = curleg.getJSONObject("duration");
+	    		JSONObject current_leg = legs.getJSONObject(c);
+	    		JSONObject duration = current_leg.getJSONObject("duration");
 	    		secondCount += duration.getInt("value");
 	    	}
 	    	final int seconds = secondCount;
@@ -301,9 +295,7 @@ public class DirectionsFragment extends Fragment
 				           
 			    		mainListView.setAdapter(new MobileArrayAdapter(getActivity(), instructions, travel_modes, distances, durations, transitArrivals, vehicleTypes, locations));
 					}
-	    			
 	    		});
-	    		
 	    	}
  	   	}
 		catch (JSONException e) 
@@ -345,9 +337,9 @@ public class DirectionsFragment extends Fragment
 	}
 	public void stopTimers()
 	{
-		for(Timer ite : timers)
+		for(Timer timerIterator : timers)
 		{
-			ite.cancel();
+			timerIterator.cancel();
 		}
 	}
  
