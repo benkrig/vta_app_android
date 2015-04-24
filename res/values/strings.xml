@@ -8,7 +8,7 @@
     <string name="search_field">Search</string>
     <string name="routes_button_string">FIND</string>
     <string name ="directions_page_string">DIRECTIONS</string>
-    <string name="route1">1</string>
+    <string name="route1">4 min</string>
     <string name="route2">2</string>
     <string name="route3">3</string>
     <string name="directions">Back</string>
@@ -19,7 +19,7 @@
     <string name="placeDetailsWebsiteString">WEBSITE</string>
     <string name="placeDetailsCallString">CALL</string>
     <string name="emptystring">(empty)</string>
-    <string name="app_version">Version 0.0.6</string>
+    <string name="app_version">Version 0.0.7</string>
     
     
     

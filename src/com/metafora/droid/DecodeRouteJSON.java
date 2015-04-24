@@ -203,14 +203,18 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 				@Override
 				public void run() 
 				{
+					PolylineOptions t= new PolylineOptions()
+			        .width(lineWidth)
+			        .color(Color.argb(180, 80, 73, 137));
 					for (PolylineOptions temp : polyies) 
 					{
-						map.addPolyline(temp);
+						t.addAll(temp.getPoints());
 					}
 					for (MarkerOptions temp : markers)
 					{
 						map.addMarker(temp);
 					}
+					map.addPolyline(t);
 				}
 				
 			});
@@ -279,6 +283,14 @@ public class DecodeRouteJSON extends AsyncTask<Void, Void, RouteDetails>
 
 			JSONArray legsArray = routes.getJSONArray("legs");
 			JSONObject legsObject = legsArray.getJSONObject(0);
+			//Get total Seconds
+	    	int secondCount = 0;
+	    	for(int c = 0; c < legsArray.length(); c++)
+	    	{
+	    		JSONObject curleg = legsArray.getJSONObject(c);
+	    		JSONObject duration = curleg.getJSONObject("duration");
+	    		secondCount += duration.getInt("value");
+	    	}
 
 			JSONArray stepsArray = legsObject.getJSONArray("steps");
 

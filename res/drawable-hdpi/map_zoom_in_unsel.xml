@@ -2,10 +2,25 @@
 
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
         
+       
+<item>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+
+   <solid 
+       android:color="@color/nwblue"/>
+
+   <size 
+       android:width="50dp"
+        android:height="50dp"/>
+</shape>
+
+   </item>
  	<item>
             <bitmap
             android:gravity="center"
-            android:src="@drawable/ic_action_location_found" />
+            android:src="@drawable/ic_action_locate" />
             </item>       
 
 </layer-list>

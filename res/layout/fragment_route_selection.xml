@@ -79,7 +79,7 @@
                 
                 <LinearLayout
                 android:animateLayoutChanges="true"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                	android:background="@color/purple"
@@ -96,34 +96,39 @@
                     android:src="@drawable/white_ic_action_storage" />
                 </LinearLayout>
 
+
                 <Button
                     android:id="@+id/routebutton1"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
                     android:text="@string/route1"
+                    android:textSize="14sp"
                     android:textColor="@color/buttondarkgrey" />
 
                 <Button
                     android:id="@+id/routebutton2"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
                     android:text="@string/route2"
+                    android:textSize="14sp"
+                    
                     android:textColor="@color/buttondarkgrey" />
 
                 <Button
                     android:id="@+id/routebutton3"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@color/whitetransparent"
                     android:text="@string/route3"
+                    android:textSize="14sp"
                     android:textColor="@color/buttondarkgrey" />
             </LinearLayout>
 

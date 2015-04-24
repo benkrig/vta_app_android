@@ -42,6 +42,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -60,6 +61,7 @@ import android.widget.TimePicker;
 
 public class RouteSelectionFragment extends Fragment
 {
+	int[] secondCount = new int[3];
 	//Global variables
 	public GoogleMap map;
     public LatLng destinationLatLng = new LatLng(0, 0);
@@ -120,7 +122,7 @@ public class RouteSelectionFragment extends Fragment
         comm = (FragmentCommunicator) getActivity();
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
-        px = Math.round(5 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
+        px = Math.round(7 * (displayMetrics.xdpi / DisplayMetrics.DENSITY_DEFAULT));       
         
         map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.routeselectionmap)).getMap();
         map.setMyLocationEnabled(true);
@@ -484,7 +486,6 @@ public class RouteSelectionFragment extends Fragment
 		List<PolylineOptions> polyies = new ArrayList<PolylineOptions>();
 		List<MarkerOptions> markers = new ArrayList<MarkerOptions>();
 		
-		
 	    try 
 	    {
 	    	//Tranform the String response RESULT into a JSON object
@@ -513,6 +514,7 @@ public class RouteSelectionFragment extends Fragment
 	        		String encodedString = polyline.getString("points");
 	        		List<LatLng> list = decodePoly(encodedString);
 	        		   
+	        		
 	        		for(int x = 0; x < list.size() - 1; x++)
 	    	        {
 	        			LatLng src = list.get(x);
@@ -712,6 +714,53 @@ public class RouteSelectionFragment extends Fragment
 	        JSONParser jParser = new JSONParser();
 	        //1 for directions api
 	        json = jParser.getDirectionApiJsonResponse(directionsurl);
+	        
+	        try {
+				JSONObject j = new JSONObject(json);
+				JSONArray routes = j.getJSONArray("routes");
+				
+				JSONObject route1 = routes.getJSONObject(0);
+				JSONArray legs = route1.getJSONArray("legs");
+				//Get total Seconds
+				secondCount[0] = 0;
+				for(int c = 0; c < legs.length(); c++)
+				{
+					JSONObject curleg = legs.getJSONObject(c);
+					JSONObject duration = curleg.getJSONObject("duration");
+					secondCount[0] += duration.getInt("value");
+				}
+				
+				Log.d("", ""+secondCount[0]);
+
+				
+				secondCount[1] = 0;
+				JSONObject route2 = routes.getJSONObject(1);
+				legs = route2.getJSONArray("legs");
+				for(int c = 0; c < legs.length(); c++)
+				{
+					JSONObject curleg = legs.getJSONObject(c);
+					JSONObject duration = curleg.getJSONObject("duration");
+					secondCount[1] += duration.getInt("value");
+				}
+
+				secondCount[2] = 0;
+				JSONObject route3 = routes.getJSONObject(2);
+				legs = route3.getJSONArray("legs");
+				for(int c = 0; c < legs.length(); c++)
+				{
+					JSONObject curleg = legs.getJSONObject(c);
+					JSONObject duration = curleg.getJSONObject("duration");
+					secondCount[2] += duration.getInt("value");
+				}
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+	           
+	        
+	        
 	        ResponseObject response = null;
 	        
 	        if(json!=null)
@@ -727,7 +776,34 @@ public class RouteSelectionFragment extends Fragment
 	    protected void onPostExecute(ResponseObject result) 
 	    {
 	        super.onPostExecute(result);  
+	        if(((int)((secondCount[0]/60)/60)) == 0)
+	    	{
+	        	route1Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[0]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
+	    	}
+	    	else
+	    	{
+	        	route1Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[0]/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((secondCount[0]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
+	    	}  
 	        
+	        if(((int)((secondCount[1]/60)/60)) == 0)
+	    	{
+	        	route2Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[1]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
+	    	}
+	    	else
+	    	{
+	        	route2Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[1]/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((secondCount[1]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
+	    	}
+	        
+	        if(((int)((secondCount[2]/60)/60)) == 0)
+	    	{
+	        	route3Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[2]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins</font></small>"));
+	    	}
+	    	else
+	    	{
+	        	route3Button.setText(Html.fromHtml("<b><font color=#790ebd>" + ((int)((secondCount[2]/60)/60)) + "</font></b>" + "<small><font color=#212121> hrs </font></small>" + "<b><font color=#790ebd>" + ((int)((secondCount[2]/60)%60)) + "</font></b>" + "<small><font color=#212121> mins </font></small>"));
+	    	}  
+	        
+
 	        showBottomBar();
 	        loadProgressButton.setVisibility(View.VISIBLE);
 	        loadProgress.setVisibility(View.GONE);
@@ -739,15 +815,19 @@ public class RouteSelectionFragment extends Fragment
 	        List<PolylineOptions> polyies = result.getpolyies();
 	        List<MarkerOptions> markers = result.getmarkers();
 	        
-	        
+	        PolylineOptions t= new PolylineOptions()
+	        .width(px)
+	        .color(Color.argb(180, 80, 73, 137));
 	        for (PolylineOptions temp : polyies) 
 	        {
-	        	map.addPolyline(temp);
+	        		t.addAll(temp.getPoints());
 	        }
 	        for (MarkerOptions temp : markers)
 	        {
 	        	map.addMarker(temp);
 	        }
+        	map.addPolyline(t);
+
 	    }
 	}
 	
