@@ -553,7 +553,7 @@ public class RouteSelectionFragment extends Fragment
 		        			}
 		        		}
 		        		
-		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.stop_sign_blue_dropshadow));
 		        		markerOptions.flat(true);
 		        		
 		        		markers.add(markerOptions);
@@ -565,7 +565,7 @@ public class RouteSelectionFragment extends Fragment
 		        		markerOptions.position(new LatLng(departure_location.getDouble("lat"), departure_location.getDouble("lng")));
 		        		markerOptions.title("Stop: " + departure_stop.getString("name"));
 		        		markerOptions.snippet("Line:  " + transit_details.getString("headsign"));
-		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.busstop));
+		        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.stop_sign_blue_dropshadow));
 		        		markerOptions.flat(true);
 		        		markers.add(markerOptions);
 		        	}

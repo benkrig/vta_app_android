@@ -184,12 +184,10 @@ public class GetBusLocationTask extends TimerTask
 					    }
 					}
 				}
-				
 			});
         }  
 	}
 	
-
     public void animateMarker(final Marker marker, final LatLng toPosition,
             final boolean hideMarker) 
     {
@@ -198,7 +196,9 @@ public class GetBusLocationTask extends TimerTask
         Projection proj = map.getProjection();
         Point startPoint = proj.toScreenLocation(marker.getPosition());
         final LatLng startLatLng = proj.fromScreenLocation(startPoint);
-        final long duration = 500;
+        
+        //Animation duration
+        final long duration = 1000;
 
         final Interpolator interpolator = new LinearInterpolator();
 

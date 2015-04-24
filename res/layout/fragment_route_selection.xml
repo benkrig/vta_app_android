@@ -1,5 +1,4 @@
 
-    
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
     	xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +23,8 @@
                 android:layout_weight="2"
                 android:background="@drawable/buttondarkgrey_button"
                 android:contentDescription="@string/desc"
-                android:src="@drawable/white_ic_action_remove" />
+                android:src="@drawable/white_ic_action_remove" 
+                />
 
             <Button
                 android:id="@+id/selectRouteDepartTime"
@@ -35,7 +35,8 @@
                 android:layout_weight="6"
                 android:background="@drawable/letsgo_button"
                 android:text="@string/choose_time"
-                android:textColor="@color/white" />
+                android:textColor="@color/white" 
+                />
 
             <ProgressBar
                 android:id="@+id/routeProgressBar"
@@ -45,7 +46,8 @@
                 android:paddingRight="6dp"
                 android:background="@color/purple"
                 android:visibility="gone"                
-                android:indeterminate="true" />
+                android:indeterminate="true" 
+                />
             
             <Button
                 android:id="@+id/routeProgressButton"
@@ -77,22 +79,23 @@
                 android:layout_alignParentLeft="true" >
                 
                 <LinearLayout
-                android:animateLayoutChanges="true"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-               	android:background="@color/purple"
-                >
+	                android:animateLayoutChanges="true"
+	                android:layout_width="0dp"
+	                android:layout_height="wrap_content"
+	                android:layout_weight="1"
+	               	android:background="@color/purple"
+                	>
                 	
-                <ImageButton
-                    android:id="@+id/textDirectionsButton"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-
-                    android:background="@drawable/letsgo_button"
-                    android:contentDescription="@string/directions"
-                    android:src="@drawable/white_ic_action_storage" />
+	                <ImageButton
+	                    android:id="@+id/textDirectionsButton"
+	                    style="?android:attr/buttonBarButtonStyle"
+	                    android:layout_width="fill_parent"
+	                    android:layout_height="fill_parent"
+	                    android:background="@drawable/letsgo_button"
+	                    android:contentDescription="@string/directions"
+	                    android:src="@drawable/white_ic_action_storage" 
+	                    />
+	                
                 </LinearLayout>
 
 
@@ -116,7 +119,8 @@
                     android:background="@color/whitetransparent"
                     android:text="@string/generic_route_button_string"
                     android:textSize="14sp"
-                    android:textColor="@color/buttondarkgrey" />
+                    android:textColor="@color/buttondarkgrey" 
+                    />
 
                 <Button
                     android:id="@+id/routebutton3"
@@ -127,10 +131,11 @@
                     android:background="@color/whitetransparent"
                     android:text="@string/generic_route_button_string"
                     android:textSize="14sp"
-                    android:textColor="@color/buttondarkgrey" />
+                    android:textColor="@color/buttondarkgrey" 
+                    />
+                
             </LinearLayout>
 
-            
             <ImageView
                     android:id="@+id/routemylocationbutton"
                     android:layout_width="wrap_content"
@@ -142,7 +147,6 @@
 
                      />
 
-            
         </RelativeLayout>
 
     </LinearLayout>
