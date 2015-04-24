@@ -8,9 +8,6 @@
     <string name="search_field">Search</string>
     <string name="routes_button_string">FIND</string>
     <string name ="directions_page_string">DIRECTIONS</string>
-    <string name="route1">4 min</string>
-    <string name="route2">2</string>
-    <string name="route3">3</string>
     <string name="directions">Back</string>
     <string name="metaforaString">METAFORA</string>
     <string name="desc">Route selection Button</string>
@@ -20,7 +17,6 @@
     <string name="placeDetailsCallString">CALL</string>
     <string name="emptystring">(empty)</string>
     <string name="app_version">Version 0.0.7</string>
-    
     <string name="app_version_string">ver 0.0.7</string>
     <string name="metafora_startup_screen_string">METAFORA</string>
     <string name="llc_startup_screen_string">LLC</string>
