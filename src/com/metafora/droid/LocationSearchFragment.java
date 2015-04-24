@@ -303,7 +303,6 @@ public class LocationSearchFragment extends Fragment
 		            		            		            
 		            ((RelativeLayout)v).addView(purplelayout);
 		            ((RelativeLayout)v).addView(bluelayout);
-		            //((RelativeLayout)v).addView(greylayout);
 			    }
 			};
 			

@@ -58,6 +58,12 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		
 		sf = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 		showHelp = sf.getBoolean("showHelp", true);
+		
+
+		if(showHelp)
+		{
+			//show popup dialog
+		}
 	}
 	
 
@@ -82,15 +88,15 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		super.onRestoreInstanceState(s);
 	
 		((MyAdapter) viewPager.getAdapter()).locationsearchFrag = (LocationSearchFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":1");
+                "android:switcher:"+R.id.pager+":0");
 		((MyAdapter) viewPager.getAdapter()).routeFrag = (RouteSelectionFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":2");
+                "android:switcher:"+R.id.pager+":1");
 		((MyAdapter) viewPager.getAdapter()).directionsFrag = (DirectionsFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":3");
+                "android:switcher:"+R.id.pager+":2");
 		((MyAdapter) viewPager.getAdapter()).placeFrag = (PlaceFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":4");
+                "android:switcher:"+R.id.pager+":3");
 		
-		viewPager.setCurrentItem(1, false);
+		viewPager.setCurrentItem(0, false);
 	}
 	@Override
 	protected void onSaveInstanceState(Bundle s)
@@ -259,8 +265,6 @@ class MyAdapter extends FragmentPagerAdapter
 	public RouteSelectionFragment routeFrag;
 	public DirectionsFragment directionsFrag;
 	public PlaceFragment placeFrag;
-
-
 	
     public LocationSearchFragment getMainFragment() 
     {
@@ -305,6 +309,7 @@ class MyAdapter extends FragmentPagerAdapter
 			fragment = new PlaceFragment();
 			placeFrag = (PlaceFragment) fragment;
 		}
+		
 		return fragment;
 	}
 	

@@ -31,7 +31,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 {
-	
     private final String LOG_TAG = "VTA";
     private final String PLACES_API_BASE = "https://maps.googleapis.com/maps/api/place";
     private final String TYPE_TEXT = "/textsearch";
@@ -55,6 +54,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 		this.map = map;
 		this.context = context;
 		this.gps = new GPSTracker(context);
+		this.gps.getLocation();
 		this.searchProgress = searchProgress;
 	}
 	
@@ -102,7 +102,6 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	            jsonObject.put("sdkversion", ""+android.os.Build.VERSION.SDK_INT);
 	            jsonObject.put("devicemodel", ""+android.os.Build.MODEL);
 	            jsonObject.put("product", android.os.Build.PRODUCT);
-	            
 	        }
 	        catch(JSONException e)
 	        {
@@ -149,7 +148,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     	
     	if(searchKeyword.isEmpty())
     	{
-            Toast.makeText(context, "Enter text to search or touch a location", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Enter text to search or press the map!", Toast.LENGTH_SHORT).show();
     	}
     	else
     	{
@@ -179,9 +178,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	        		
 	        		//center map on first location
 	        		if(index == 0)
-	        		{
 	        			map.animateCamera(CameraUpdateFactory.newLatLngZoom(markerLatLng, 13));
-	        		}	
 	        	}
 	        }
     	}

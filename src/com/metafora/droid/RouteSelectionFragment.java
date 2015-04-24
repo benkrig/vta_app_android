@@ -111,9 +111,10 @@ public class RouteSelectionFragment extends Fragment
 	public void onActivityCreated(Bundle savedInstanceState)
 	{
 		super.onActivityCreated(savedInstanceState);
-				
+		gps = new GPSTracker(getActivity());
+        gps.getLocation();
+        
     	bottomBar = (LinearLayout) getActivity().findViewById(R.id.routeBottomBar);
-    	gps = new GPSTracker(getActivity());
         comm = (FragmentCommunicator) getActivity();
 
         displayMetrics = getActivity().getResources().getDisplayMetrics();
@@ -124,7 +125,6 @@ public class RouteSelectionFragment extends Fragment
         map.getUiSettings().setZoomControlsEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
     	
-        gps.getLocation();
 		map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 15));
 		
     	route1Button = (Button) getActivity().findViewById(R.id.routebutton1);
@@ -169,7 +169,6 @@ public class RouteSelectionFragment extends Fragment
 		    @Override
 		    public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		    {
-		    	Log.d("lll", ""+view.isShown());
 		    	if(view.isShown())
 		    	{
 			    	String am_pm = "";
@@ -200,7 +199,6 @@ public class RouteSelectionFragment extends Fragment
 							drawRoute.cancel(true);
 						}
 						
-
 						route1Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
 			        	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
 			        	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
@@ -228,15 +226,11 @@ public class RouteSelectionFragment extends Fragment
 			{
 				if(which == DialogInterface.BUTTON_NEGATIVE)
 				{
-			    	Log.d("lll", "lklklk00");
-
 					dialog.cancel();
 					dialog.dismiss();
 				}
 				if(which == DialogInterface.BUTTON_POSITIVE)
 				{
-			    	Log.d("lll", "popopopop");
-
 				}
 				
 			}
@@ -284,7 +278,6 @@ public class RouteSelectionFragment extends Fragment
             	route3Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
             	if(googleDirectionsResultJSON != null)
             	{
-		            
                 	if(draw != null)
                 	{
                 		draw.cancel(true);
@@ -320,7 +313,6 @@ public class RouteSelectionFragment extends Fragment
 
             	if(googleDirectionsResultJSON != null)
             	{		            
-
                 	if(draw != null)
                 	{
                 		draw.cancel(true);
@@ -350,6 +342,7 @@ public class RouteSelectionFragment extends Fragment
             	{
             		return;          	
             	}
+            	
             	route3Button.setBackgroundColor(getResources().getColor(R.color.greytransparent));
             	route2Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
             	route1Button.setBackgroundColor(getResources().getColor(R.color.whitetransparent));
@@ -517,10 +510,11 @@ public class RouteSelectionFragment extends Fragment
 		       		   	LatLng dest = list.get(x+1);
 		       		   	
 		       		   	
-		       		 polyies.add(new PolylineOptions()
-		       		   		.add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
-			                .width(px)
-			                .color(Color.argb(190, 121, 14, 189)).geodesic(true));
+			       		 polyies
+			       		 .add(new PolylineOptions()
+			       		 .add(new LatLng(src.latitude, src.longitude), new LatLng(dest.latitude, dest.longitude))
+				         .width(px)
+				         .color(Color.argb(190, 121, 14, 189)).geodesic(true));
 	    	        }
 	        		
 
@@ -750,12 +744,8 @@ public class RouteSelectionFragment extends Fragment
 				}
 
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-	           
-	        
 	        
 	        ResponseObject response = null;
 	        
