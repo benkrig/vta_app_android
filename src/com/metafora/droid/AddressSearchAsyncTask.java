@@ -49,6 +49,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	String searchKeyword;
 	ProgressBar searchProgress;
 	
+	
 	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress)
 	{
 		this.map = map;

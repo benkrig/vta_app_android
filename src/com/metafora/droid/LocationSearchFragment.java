@@ -19,9 +19,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -138,7 +135,6 @@ public class LocationSearchFragment extends Fragment
 		go = (TextView)getActivity().findViewById(R.id.goTextView);
 		near = (TextView)getActivity().findViewById(R.id.nearTextView);
 		
-
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
@@ -206,7 +202,6 @@ public class LocationSearchFragment extends Fragment
 			private MotionEvent event;
 			private View v;
 			private RelativeLayout purplelayout = new RelativeLayout(getActivity());
-			private RelativeLayout greylayout = new RelativeLayout(getActivity());
 			private RelativeLayout bluelayout = new RelativeLayout(getActivity());
 			private boolean purple = false;
 			private boolean blue = false;
@@ -219,7 +214,6 @@ public class LocationSearchFragment extends Fragment
 			    	map.getUiSettings().setScrollGesturesEnabled(false);
 			    	
 					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
-					greylayout.setBackgroundResource(R.drawable.touchsearchbackground);
 					bluelayout.setBackgroundResource(R.drawable.touchnearbybackground);
 					
 					int oh = ((RelativeLayout)v).getHeight() / 2;
@@ -378,7 +372,6 @@ public class LocationSearchFragment extends Fragment
 					near.setVisibility(View.GONE);
 					
 					purplelayout.setBackgroundResource(R.drawable.touchgobackground);
-					greylayout.setBackgroundResource(R.drawable.touchsearchbackground);
 					bluelayout.setBackgroundResource(R.drawable.touchnearbybackground);
 
 					return false;
@@ -412,7 +405,6 @@ public class LocationSearchFragment extends Fragment
 					}
 					
 					((RelativeLayout)v).removeView(purplelayout);
-					((RelativeLayout)v).removeView(greylayout);
 					((RelativeLayout)v).removeView(bluelayout);
 					
 			    	map.getUiSettings().setScrollGesturesEnabled(true);
