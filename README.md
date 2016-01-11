@@ -1,3 +1,2 @@
-MetaforaLLC
-===========
-Transit Co
+Android application for public transportation in Silicon Valley
+
