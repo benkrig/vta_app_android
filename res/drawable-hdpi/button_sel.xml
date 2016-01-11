@@ -3,10 +3,10 @@
 <corners
 android:radius="1dp"
 />
-<stroke android:width="5dip" android:color="@color/purplehighlight" />
+<stroke android:width="5dip" android:color="@color/mfpurplesmallhighlight" />
 
 <solid
-android:color="@color/purplehighlight"
+android:color="@color/mfpurplesmallhighlight"
 />
 <padding
 android:left="0dp"

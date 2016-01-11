@@ -20,7 +20,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
@@ -28,6 +31,7 @@ import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -80,6 +84,7 @@ public class LocationSearchFragment extends Fragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState)
 	{
+	    
 		if (rootView != null) 
 		{
 			
@@ -95,6 +100,13 @@ public class LocationSearchFragment extends Fragment
 	    catch (InflateException e) 
 	    {
 	        //map is already there, just return view as it is
+	    }
+	    
+	    gps = new GPSTracker(getActivity());
+	    
+	    if(!gps.canGetLocation)
+	    {
+	    	gps.showSettingsAlert();
 	    }
 	    
         return rootView;
@@ -128,6 +140,12 @@ public class LocationSearchFragment extends Fragment
 	{
 		super.onActivityCreated(savedInstanceState);
 		
+		/*
+		 * Prompt User to turn on GPS
+		 * */
+		
+		
+		
 		comm = (FragmentCommunicator) getActivity();
 		runnableHandler = new Handler();			
 		hiddenSearchBar = (LinearLayout) getActivity().findViewById(R.id.barid);
@@ -138,8 +156,30 @@ public class LocationSearchFragment extends Fragment
 		map = ((SupportMapFragment) getFragmentManager().findFragmentById(R.id.mainmap)).getMap();
         map.setMyLocationEnabled(true);
         map.getUiSettings().setZoomControlsEnabled(false);
+        map.getUiSettings().setMapToolbarEnabled(false);
         map.getUiSettings().setMyLocationButtonEnabled(false);
+        map.getUiSettings().setTiltGesturesEnabled(false);
+        map.getUiSettings().setRotateGesturesEnabled(false);
+        map.getUiSettings().setCompassEnabled(false);
+        map.getUiSettings().setIndoorLevelPickerEnabled(false);
+        
         map.setOnInfoWindowClickListener(new InfoWindowClickAdapter(getActivity(), comm));
+        
+        //center map on user
+        if(gps.canGetLocation())
+        {
+        	gps.getLocation();
+        	LatLng updateLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
+        	map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 15));
+        }
+        else
+        {
+        	map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
+        			37.3333, -121.9000), 12.0f));
+        }
+
+
+        
         
 		myLocationButton = (ImageView) getActivity().findViewById(R.id.locmylocationbutton);
 		myLocationButton.setOnClickListener(new OnClickListener()
@@ -161,7 +201,7 @@ public class LocationSearchFragment extends Fragment
 	    {
 
 			@Override
-			public void onClick(View v) 
+			public void onClick(final View v) 
 			{
 	            Animation slideDown = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down);
 	            slideDown.setAnimationListener(new AnimationListener()
@@ -176,6 +216,7 @@ public class LocationSearchFragment extends Fragment
 					@Override
 					public void onAnimationEnd(Animation animation) {
 						re.setVisibility(View.GONE);
+						v.setVisibility(View.GONE);
 						touchLayout.setVisibility(View.VISIBLE);
 						myLocationButton.setVisibility(View.VISIBLE);						
 					}
@@ -318,11 +359,6 @@ public class LocationSearchFragment extends Fragment
 					purple = false;
 					blue = false;
 					
-					if(!isPointInsideView(event.getRawX(), event.getRawY(), hiddenSearchBar))
-					{
-						//hiddenSearchBar.setVisibility(View.GONE);
-						//addressSearchButton.setClickable(false);
-					}
 					
 					runnableHandler.removeCallbacks(r);
 					runnableHandler.postDelayed(r, TOUCH_WAIT);
@@ -418,20 +454,6 @@ public class LocationSearchFragment extends Fragment
 		
 		
 		
-		//center map on user
-		gps = new GPSTracker(getActivity());
-		if(gps.canGetLocation())
-		{
-			LatLng updateLatLng = new LatLng(gps.getLatitude(), gps.getLongitude());
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(updateLatLng, 10));
-		}
-		else
-		{
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(
-					37.3333, -121.9000), 12.0f));
-		}
-		gps.getLocation();
-		map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(), gps.getLongitude()), 13));				
 		
 		map.setOnMapClickListener(new OnMapClickListener()
 		{
@@ -495,7 +517,7 @@ public class LocationSearchFragment extends Fragment
 	                }
 	                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 	                {
-	                	geoTask.setLocation(searchString);
+	                	geoTask.setSearchString(searchString);
 	                	geoTask.execute();
 	                }  
 					return true;
@@ -521,7 +543,7 @@ public class LocationSearchFragment extends Fragment
                 }
                 if(geoTask.getStatus() == AsyncTask.Status.PENDING)
                 {
-                	geoTask.setLocation(searchString);
+                	geoTask.setSearchString(searchString);
                 	geoTask.execute();
                 }  
 			}
@@ -625,7 +647,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("asian food nearby");
+		                	geoTask.setSearchString("asian food nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -639,7 +661,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("fast food nearby");
+		                	geoTask.setSearchString("fast food nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -653,7 +675,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("thai food nearby");
+		                	geoTask.setSearchString("thai food nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -718,7 +740,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("clothes shopping nearby");
+		                	geoTask.setSearchString("clothes shopping nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -732,7 +754,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("shoes shopping nearby");
+		                	geoTask.setSearchString("shoes shopping nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -785,7 +807,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("cinema nearby");
+		                	geoTask.setSearchString("cinema nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -837,7 +859,7 @@ public class LocationSearchFragment extends Fragment
 		                }
 		                if(geoTask.getStatus() == AsyncTask.Status.PENDING)
 		                {
-		                	geoTask.setLocation("family fun nearby");
+		                	geoTask.setSearchString("family fun nearby");
 		                	geoTask.execute();
 		                }
 		                map.clear();
@@ -895,7 +917,7 @@ public class LocationSearchFragment extends Fragment
 		markerOptions.position(new LatLng(address.getLatitude(), address.getLongitude()));
 		markerOptions.title("Go here!");
 		markerOptions.snippet(address.getAddressLine(0));
-		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place_dropshadow));
+		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place));
    		markerOptions.flat(true);
    		
 		map.addMarker(markerOptions);

@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
-        
-       
-<item>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-
-   <solid 
-       android:color="@color/exitbluehighlight"/>
-
-   <size 
-       android:width="48dp"
-        android:height="48dp"/>
-</shape>
-
-   </item>
- 	<item>
-            <bitmap
-            android:gravity="center"
-            android:src="@drawable/ic_action_locate" />
-            </item>       
-
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >       
+	<item>
+		<shape
+			xmlns:android="http://schemas.android.com/apk/res/android"
+			android:shape="oval">
+			
+		   <solid 
+		       android:color="@color/highlight_blue_small"
+			/>
+		
+		   <size 
+		       android:width="48dp"
+		        android:height="48dp"
+			/>
+		</shape>
+	</item>
+	<item>
+		<bitmap
+			android:gravity="center"
+			android:src="@drawable/ic_action_locate" 
+		/>
+	</item>
 </layer-list>

@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		setContentView(R.layout.activity_main);
 		//Ensure keyboard is not showing on startup
 		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		
+		//getWindow().setStatusBarColor(getResources().getColor(R.color.status_bar_color));
 		Tracker t = ((Metafora) getApplication()).getTracker(TrackerName.APP_TRACKER);
 		t.setScreenName("Home");
 		t.send(new HitBuilders.AppViewBuilder().build());
@@ -91,10 +91,8 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
                 "android:switcher:"+R.id.pager+":0");
 		((MyAdapter) viewPager.getAdapter()).routeFrag = (RouteSelectionFragment) getSupportFragmentManager().findFragmentByTag(
                 "android:switcher:"+R.id.pager+":1");
-		((MyAdapter) viewPager.getAdapter()).directionsFrag = (DirectionsFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":2");
 		((MyAdapter) viewPager.getAdapter()).placeFrag = (PlaceFragment) getSupportFragmentManager().findFragmentByTag(
-                "android:switcher:"+R.id.pager+":3");
+                "android:switcher:"+R.id.pager+":2");
 		
 		viewPager.setCurrentItem(0, false);
 	}
@@ -159,15 +157,11 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	    		}
 	    	}
 	    	//route selection fragment, goes to placedetails
-	    	else if(viewPager.getCurrentItem() == 2)
+	    	else if(viewPager.getCurrentItem() == 1)
 	    	{
 	    		viewPager.setCurrentItem(0, false);
 	    	}
-	    	else if(viewPager.getCurrentItem() == 3)
-	    	{
-	    		viewPager.setCurrentItem(1, false);
-	    	}
-	    	else if(viewPager.getCurrentItem() == 4)
+	    	else if(viewPager.getCurrentItem() == 2)
 	    	{
 	    		viewPager.setCurrentItem(0, false);
 	    	}
@@ -183,9 +177,15 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	//Communicator methods
 	
 	@Override
+	public void chooseRoute()
+	{
+		
+	};
+	
+	@Override
 	public void cancelTimers()
 	{
-		DirectionsFragment dFrag = ((MyAdapter) viewPager.getAdapter()).directionsFrag;
+		RouteSelectionFragment dFrag = ((MyAdapter) viewPager.getAdapter()).routeFrag;
 		dFrag.cancelTimers();
 	}
 	
@@ -205,7 +205,6 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 		viewPager.setCurrentItem(1, false);
 
 	}
-
 	@Override
 	public void gotoTextDirections()
 	{
@@ -216,7 +215,7 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	{	
 		PlaceFragment placeFragment = ((MyAdapter) viewPager.getAdapter()).getPlaceFragment();
 		placeFragment.initialize(location, place, address);
-		viewPager.setCurrentItem(3, false);
+		viewPager.setCurrentItem(2, false);
 
 	}
 	
@@ -237,14 +236,14 @@ public class MainActivity extends FragmentActivity implements FragmentCommunicat
 	@Override
 	public void updateDirectionsList(String JSON, int routeNumber) 
 	{
-		DirectionsFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).getDirectionsFragment();
+		RouteSelectionFragment directionsFragment = ((MyAdapter) viewPager.getAdapter()).routeFrag;
 		directionsFragment.updateDirectionsList(JSON, routeNumber);
 	}
 
 	@Override
 	public void goToPlaceDetails() 
 	{
-		viewPager.setCurrentItem(3, false);
+		viewPager.setCurrentItem(2, false);
 	}
 }
 
@@ -263,7 +262,6 @@ class MyAdapter extends FragmentPagerAdapter
 	//create and maintain reference to each fragment dynamically
 	public LocationSearchFragment locationsearchFrag;
 	public RouteSelectionFragment routeFrag;
-	public DirectionsFragment directionsFrag;
 	public PlaceFragment placeFrag;
 	
     public LocationSearchFragment getMainFragment() 
@@ -273,10 +271,6 @@ class MyAdapter extends FragmentPagerAdapter
 	public RouteSelectionFragment getRouteFragment()
 	{
 		return routeFrag;
-	}
-	public DirectionsFragment getDirectionsFragment()
-	{
-		return directionsFrag;
 	}
 	public PlaceFragment getPlaceFragment()
 	{
@@ -301,11 +295,6 @@ class MyAdapter extends FragmentPagerAdapter
 		}
 		if(arg0 == 2)
 		{
-			fragment = new DirectionsFragment();
-			directionsFrag = (DirectionsFragment) fragment;
-		}
-		if(arg0 == 3)
-		{
 			fragment = new PlaceFragment();
 			placeFrag = (PlaceFragment) fragment;
 		}
@@ -317,6 +306,6 @@ class MyAdapter extends FragmentPagerAdapter
 	@Override
 	public int getCount() 
 	{
-		return 4;
+		return 3;
 	}
 }

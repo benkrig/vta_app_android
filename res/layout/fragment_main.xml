@@ -126,8 +126,8 @@
 			android:layout_marginBottom="20dp"
 			android:layout_marginRight="25dp"
 			android:background="@drawable/map_zoom_in"
-			android:visibility="gone"
 			android:clickable="true"
+			android:visibility="gone"
 			/>
 
 		<RelativeLayout

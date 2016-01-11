@@ -41,24 +41,16 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:background="@color/greytransparent"
- 		 >
-
         <ListView
             android:id="@+id/textDirectionsListView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-        	android:layout_margin="3dp"
         	android:background="@color/white"
             
             android:divider="@color/purple"
             android:dividerHeight="1dp"
             >
         </ListView>
-    </LinearLayout>
     
 
 </LinearLayout>

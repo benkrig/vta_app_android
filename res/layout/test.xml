@@ -1,18 +1,221 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    	xmlns:tools="http://schemas.android.com/tools"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	tools:context=".RouteSelectionFragment"
+        android:id="@+id/linearLayout1"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/purple"
+           	 >
+
+            <ImageButton
+                android:id="@+id/directionsBackButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
+                android:background="@drawable/buttondarkgrey_button"
+                android:contentDescription="@string/desc"
+                android:src="@drawable/white_ic_action_remove" 
+                />
+            
+            
+
+            <RelativeLayout
+                android:id="@+id/selectTimeLayout"
+                android:layout_width="0dp"
+                android:layout_weight="6"
+                android:layout_height="match_parent"
+                android:background="@drawable/letsgo_button" 
+                >
+
+                <Button
+                    android:id="@+id/selectRouteDepartTime"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/choose_time"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_toLeftOf="@+id/selectRouteDepartTime"
+                    android:src="@drawable/ic_action_time"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="1dp"
+                android:background="@color/buttondarkgrey"
+                android:layout_height="match_parent" >
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/routeProgressBar"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
+                android:paddingRight="6dp"
+                android:background="@color/purple"
+                android:visibility="gone"                
+                android:indeterminate="true" 
+                />
+            
+            <ImageButton
+                android:id="@+id/routeProgressButton"
+                android:layout_width="0dp"
+                android:layout_height="fill_parent"
+                android:layout_weight="2"
+                android:src="@drawable/ic_action_add_to_queue"
+                android:background="@color/purple"
+                
+			 	/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/heightid"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="11"
+            android:background="#00ffffff"
+            android:gravity="bottom" >
+
+            <fragment
+                android:id="@+id/routeselectionmap"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/routemylocationbutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="11dp"
+                android:src="@drawable/map_zoom_in" />
+            
+            <com.sothree.slidinguppanel.SlidingUpPanelLayout
+    xmlns:sothree="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sliding_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="bottom"
+    sothree:umanoPanelHeight="68dp"
+    sothree:umanoShadowHeight="4dp">
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:background="@drawable/drawable"
-        android:text="TextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:textColor="@color/buttondarkgrey" />
+        android:text="Main Content"
+        android:textSize="16sp" />
 
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/testid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true" >
+
+        <LinearLayout
+            android:id="@+id/routeBottomBar"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:clickable="true" >
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:animateLayoutChanges="true"
+                android:background="@color/purple" >
+
+                <ImageButton
+                    android:id="@+id/textDirectionsButton"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@drawable/letsgo_button"
+                    android:contentDescription="@string/directions"
+                    android:src="@drawable/white_ic_action_storage" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/routebutton1"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/whitetransparent"
+                android:text="@string/generic_route_button_string"
+                android:textColor="@color/textgrey"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/routebutton2"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/whitetransparent"
+                android:text="@string/generic_route_button_string"
+                android:textColor="@color/textgrey"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/routebutton3"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/whitetransparent"
+                android:text="@string/generic_route_button_string"
+                android:textColor="@color/textgrey"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/textDirectionLinear"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/routeBottomBar"
+            android:animateLayoutChanges="true"
+            android:background="@color/whitetransparent"
+            android:orientation="vertical" >
+
+            <ListView
+                android:id="@+id/textDirectionsListView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:background="@android:color/transparent"
+                android:divider="@color/purple"
+                android:dividerHeight="1dp" >
+            </ListView>
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+         
+
+        </RelativeLayout>
+
+    </LinearLayout>

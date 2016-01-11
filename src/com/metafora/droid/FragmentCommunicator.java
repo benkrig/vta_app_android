@@ -22,4 +22,6 @@ public interface FragmentCommunicator
 
 	public void cancelTimers();
 
+	public void chooseRoute();
+
 }

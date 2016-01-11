@@ -8,6 +8,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -29,6 +31,19 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
+/**
+ * 
+ * <p>
+ * AddressSearchAsyncTask inherits from {@link AsyncTask} and makes use of
+ * the Google Places API to return nearby places for a given search string
+ * 
+ * 
+ * </p>
+ * @author benkrig
+ * 
+ *
+ *
+ */
 class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 {
     private final String LOG_TAG = "VTA";
@@ -46,10 +61,14 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	GoogleMap map;
 	String markerString = "\nGet Route";
 	GPSTracker gps;
-	String searchKeyword;
+	String searchString;
 	ProgressBar searchProgress;
 	
 	
+	/**
+	 * Creates a new {@link AddressSearchAsyncTask}
+	 * 
+	 */
 	public AddressSearchAsyncTask(Context context, GoogleMap map, ProgressBar searchProgress)
 	{
 		this.map = map;
@@ -59,9 +78,16 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 		this.searchProgress = searchProgress;
 	}
 	
-	public void setLocation(String newKeyword)
+	/**
+	 * Sets the search string used to query Google Places API
+	 * 
+	 * @param searchString the search string to query into Google Places API
+	 * @return void
+	 * 
+	 * */
+	public void setSearchString(String searchString)
 	{
-		searchKeyword = newKeyword;
+		this.searchString = searchString;
 	}
 
     @Override
@@ -81,7 +107,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     protected List<Address> doInBackground(String... params)
     {
     	List<Address> addresses = null;
-    	if(gps.getLatitude() != 0 && gps.getLongitude() != 0 && !(searchKeyword.isEmpty()))
+    	if(gps.getLatitude() != 0 && gps.getLongitude() != 0 && !(searchString.isEmpty()))
     	{
 	        HttpClient httpclient = new DefaultHttpClient();
 	        
@@ -95,7 +121,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	            userloc.put("lat", gps.getLatitude());
 	            userloc.put("lng", gps.getLongitude());
 	            jsonObject.put("userlatlng", userloc);            
-	            jsonObject.put("searchstring", searchKeyword);
+	            jsonObject.put("searchstring", searchString);
 	            jsonObject.put("unixtimestamp", System.currentTimeMillis());
 	            jsonObject.put("manufacturer", android.os.Build.MANUFACTURER);
 	            jsonObject.put("brand", android.os.Build.BRAND);
@@ -137,7 +163,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 			}
 	        httpPost.abort();
 	        
-	        addresses = this.getAddresses(searchKeyword, gps);
+	        addresses = this.getAddresses(searchString, gps);
     	}
         return addresses;
     }
@@ -147,7 +173,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     {
     	searchProgress.setVisibility(View.INVISIBLE);
     	
-    	if(searchKeyword.isEmpty())
+    	if(searchString.isEmpty())
     	{
             Toast.makeText(context, "Enter text to search or press the map!", Toast.LENGTH_SHORT).show();
     	}
@@ -172,7 +198,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
 	        		markerOptions.position(markerLatLng);
 	        		markerOptions.title("Let's go to " + address.getFeatureName());
 	        		markerOptions.snippet(address.getAddressLine(0));
-	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place_dropshadow));
+	        		markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.purple_ic_action_place));
 	           		markerOptions.flat(true);
 	        		map.addMarker(markerOptions);
 	        		
@@ -185,7 +211,7 @@ class AddressSearchAsyncTask extends AsyncTask<String, Void, List<Address>>
     	}
     }
 
-    public List<Address> getAddresses(String keyword, GPSTracker gpsTracker) 
+    private List<Address> getAddresses(String keyword, GPSTracker gpsTracker) 
     {
     	List<Address> resultList = new ArrayList<Address>();
         HttpURLConnection conn = null;

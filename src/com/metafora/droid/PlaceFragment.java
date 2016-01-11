@@ -193,6 +193,7 @@ public class PlaceFragment extends Fragment
         	
     		placeLoc = new LatLng(location.latitude, location.longitude);
         	
+    		Log.d("", keyword);
     	    GetPlacesIDTask getPlace = new GetPlacesIDTask(location, keyword.substring(11));
     	    getPlace.execute();
     	}

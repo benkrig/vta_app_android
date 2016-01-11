@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	    <color name="white">#FFFFFF</color>
-	    <color name="purple">#790ebd</color>
+	    <color name="purple">#6D447F</color>
+	    <color name="mfpurple">#790ebd</color>
 	  	<color name="purpletransparent">#CC790ebd</color>
 	    <color name="rowpurple">#9575cd</color>
 	    <color name="purplehighlight">#8c00e6</color>
@@ -22,5 +23,28 @@
 	   	<color name="extrawhitetransparent">#AAffffff</color>
 	   	<color name="transparent">#FFFFFFFF</color>
 	   	<color name="nwblue">#504989</color>
-	   		    
+	   	
+	   	
+	   	<color name="mfpurplelargehightlight">#4C0A4C</color>
+	   	<color name="mfpurplemediumhighlight">#823C82</color>
+	   	<color name="mfpurplesmallhighlight">#8A6798</color>
+	   	
+	   	<color name="textgrey">#b7b7b7</color>
+	   	
+	   	
+	   	<color name="status_bar_color">#401652</color>
+	   	<color name="highlight_blue_small">#95A5B6</color>
+	   	
+	   	
+	   	<color name="highlight_pink_medium_transparent">#CC324675</color>
+	   	
+	   	<color name="highlight_pink_medium">#324675</color>
+	   	<color name="highlight_blue_small_transparent">#CC536691</color>
+	   	
+	   	<color name="highlight_orange_medium">#44607C</color>
+	   	<color name="highlight_orange_small">#D89F71</color>
+	   	<color name="highlight_orange_small_transparent">#CCD89F71</color>
+	   	
+	   	
+	   	
 </resources>
